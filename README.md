@@ -22,7 +22,7 @@ Aquí documento laboratorios prácticas reales como:
 
   ## 🌐 Sitio web
 
-👉 https://JLReyes.github.io/cybersec-blog
+👉 https://JLReyes13.github.io/cybersec-blog
 
   ## 🎯 Objetivo
 
