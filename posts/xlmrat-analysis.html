@@ -33,48 +33,48 @@
 
         <h4>Preguntas</h4>
 
-        <h4>El atacante ejecutó con éxito un comando para descargar la primera etapa del malware. ¿Cuál es la URL desde la que se ha instalado la primera etapa de malware?</h4>
-          <p>Primero, descargué el archivo .pcap y lo abrí en mi máquina Kali Linux utilizando Wireshark.
+        <h4 class="question" >El atacante ejecutó con éxito un comando para descargar la primera etapa del malware. ¿Cuál es la URL desde la que se ha instalado la primera etapa de malware?</h4>
+          <p class="answer" >Primero, descargué el archivo .pcap y lo abrí en mi máquina Kali Linux utilizando Wireshark.
           Como paso inicial, apliqué un filtro para visualizar únicamente el tráfico correspondiente al protocolo HTTP, con el objetivo de identificar posibles comunicaciones relevantes dentro de la captura.</p>
             <img class="img-post" src="../images/post1/foto_1.png" alt="imagen_filtrado">
 
-              <p>Se identificó, mediante el método GET del protocolo HTTP, la descarga de una imagen. 
+              <p class="answer" >Se identificó, mediante el método GET del protocolo HTTP, la descarga de una imagen. 
               Además, fue posible determinar la fuente de origen de dicha imagen, lo que permite responder a la primera pregunta del análisis.</p>
                 <img class="img-post" src="../images/post1/foto_2.png" alt="imagen_respuesta">
 
-        <h4>¿Qué proveedor de hosting posee la dirección IP asociada?</h4>
-          <p>Se consultó la dirección IP asociada a la URL utilizando una herramienta de análisis en línea, 
+        <h4 class="question" >¿Qué proveedor de hosting posee la dirección IP asociada?</h4>
+          <p class="answer" >Se consultó la dirección IP asociada a la URL utilizando una herramienta de análisis en línea, 
           lo que permitió identificar el proveedor de hosting correspondiente.</p>
             <img class="img-post" src="../images/post1/foto_3.png" alt="imagen_hosting">
 
-        <h4>Mediante el análisis de los scripts maliciosos, se identificaron dos cargas útiles: un cargador y un ejecutable secundario. 
+        <h4 class="question" >Mediante el análisis de los scripts maliciosos, se identificaron dos cargas útiles: un cargador y un ejecutable secundario. 
           ¿Qué es el SHA256 del ejecutable de malware?</h4>
-          <p>Al inspeccionar el tráfico HTTP, se observa la descarga de un archivo en texto plano (.txt), el cual contiene un cargador (loader) utilizado para preparar la ejecución del malware.</p>
+          <p class="answer" >Al inspeccionar el tráfico HTTP, se observa la descarga de un archivo en texto plano (.txt), el cual contiene un cargador (loader) utilizado para preparar la ejecución del malware.</p>
             <img class="img-post" src="../images/post1/foto_4.png" alt="imagen_cargador">
 
               <p>Se identifica la descarga de un archivo .jpg. Al revisar el contenido en el stream HTTP, se observa información en formato hexadecimal, lo cual es normal en archivos binarios, aunque podría ocultar datos maliciosos.</p>
                 <img class="img-post" src="../images/post1/foto_5.png" alt="imagen_ejectutable">
 
-                  <p>A continuación, se utilizo un pequeño script en Python para reconstruir el contenido hexadecimal extraído y analizar si corresponde a un archivo ejecutable.</p>
+                  <p class="answer" >A continuación, se utilizo un pequeño script en Python para reconstruir el contenido hexadecimal extraído y analizar si corresponde a un archivo ejecutable.</p>
                     <img class="img-post" src="../images/post1/foto_6.png" alt="imagen_script">
 
-                      <p>Al ejecutar el script, se reconstruye el archivo ejecutable y se calcula su hash SHA256 para su identificación.</p>
+                      <p class="answer" >Al ejecutar el script, se reconstruye el archivo ejecutable y se calcula su hash SHA256 para su identificación.</p>
                         <img class="img-post" src="../images/post1/foto_7.png" alt="imagen_sha256">
 
-        <h4>¿Cuál es la etiqueta de la familia de malware basada en Alibaba?</h4> 
-          <p>Al consultar el hash SHA256 en VirusTotal, se confirma que el archivo corresponde a un ejecutable malicioso, además de poder observar su clasificación.</p>
+        <h4 class="question" >¿Cuál es la etiqueta de la familia de malware basada en Alibaba?</h4> 
+          <p class="answer" >Al consultar el hash SHA256 en VirusTotal, se confirma que el archivo corresponde a un ejecutable malicioso, además de poder observar su clasificación.</p>
             <img class="img-post" src="../images/post1/foto_8.png" alt="imagen_analizado">
 
-        <h4>¿Cuál es la marca de tiempo de la creación del malware?</h4>
-          <p>Al consultar la sección de detalles en VirusTotal, se puede observar el historial del archivo.</p>
+        <h4 class="question" >¿Cuál es la marca de tiempo de la creación del malware?</h4>
+          <p class="answer" >Al consultar la sección de detalles en VirusTotal, se puede observar el historial del archivo.</p>
             <img class="img-post" src="../images/post1/foto_9.png" alt="imagen_historial">
 
-        <h4>¿Qué LOLBin se aprovecha para la ejecución de procesos sigilosos en este script? Proporcione el camino completo.</h4>
-          <p>Al analizar el script, se identifica el uso de un LOLBin para la ejecución del código, el cual se encuentra ofuscado mediante caracteres especiales que posteriormente son reemplazados durante la ejecución.</p>
+        <h4 class="question" >¿Qué LOLBin se aprovecha para la ejecución de procesos sigilosos en este script? Proporcione el camino completo.</h4>
+          <p class="answer" >Al analizar el script, se identifica el uso de un LOLBin para la ejecución del código, el cual se encuentra ofuscado mediante caracteres especiales que posteriormente son reemplazados durante la ejecución.</p>
             <img class="img-post" src="../images/post1/foto_10.png" alt="imagen_codigo">
 
-        <h4>El script está diseñado para soltar varios archivos. Enumere los nombres de los archivos eliminados por el script.</h4>
-            <p>Al analizando en la parte final del script, se identifican los archivos que serán generados en el sistema, entre ellos </p>
+        <h4 class="question" >El script está diseñado para soltar varios archivos. Enumere los nombres de los archivos eliminados por el script.</h4>
+            <p class="answer" >Al analizando en la parte final del script, se identifican los archivos que serán generados en el sistema, entre ellos </p>
               <img class="img-post" src="../images/post1/foto_11.png" alt="imagen_archivo_1">
                 <img class="img-post" src="../images/post1/foto_12.png" alt="imagen_archivo_2">
     </div>
