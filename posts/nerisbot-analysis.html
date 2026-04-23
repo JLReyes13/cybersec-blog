@@ -63,12 +63,10 @@
             <h4 class="question" >Qué es el hash SHA256 del archivo malicioso disfrado de archivo .txt ?</h4>
 
               <p class="answer" >Para este caso, fue necesario correlacionar eventos entre Splunk y Zeek. Para ello, se ejecutó la siguiente consulta:</p>
-    <pre class="code-block"><code>
-    index=* sourcetype=zeek:files tx_hosts="195.88.191.59"
-        | join left=L right=R where L.seen_bytes=R.bytes 
-           [search index=* sourcetype=suricata src_ip=147.32.84.165 dest_ip=195.88.191.59 url=* ]
-        | table L.md5, R.url
-                    </code></pre>
+              <pre class="code-block"><code>index=* sourcetype=zeek:files tx_hosts="195.88.191.59"
+                | join left=L right=R where L.seen_bytes=R.bytes 
+                   [search index=* sourcetype=suricata src_ip=147.32.84.165 dest_ip=195.88.191.59 url=* ]
+                | table L.md5, R.url</code></pre>
                 <p class="answer" >Mediante esta correlación, fue posible identificar el hash MD5 del archivo asociado a la actividad observada.</p>
                 <img class="img-post" src="../images/post4/foto_6.png" alt="imagen_log">
                 <p class="answer" >Posteriormente, el hash fue analizado en VirusTotal. En la sección de detalles, se puede obtener el hash SHA-256 correspondiente al archivo.</p>
