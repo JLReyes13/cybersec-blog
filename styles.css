@@ -80,7 +80,12 @@ p {
   font-family: 'Fira Code', monospace;
   font-size: 12px;
   max-width: 100%;
-  margin: px auto;
+}
+@media (max-width: 768px) {
+  .code-block {
+    white-space: pre-wrap;  
+    word-break: break-word;
+  }
 }
 .question {
   background: #1f2937;
