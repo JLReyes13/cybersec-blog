@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Jose Luis Reyes">
+  <meta name="description" content="Blog de ciberseguridad enfocado en análisis de malware, tráfico de red y SOC.">
+  <title>NerosBot | Jose Luis Reyes</title>
+  <link rel="icon" type="image/png" href="images/general/icono.png">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body class="scanlines">
+    <canvas id="bg"></canvas>
+    <header>
+        <div class="container header-content">
+            <h1 class="hacker-title-terminal" >Cybersecurity Blog</h1>
+            <nav>
+              <a href="../index.html">Inicio</a>
+              <a href="../about.html">Sobre mí</a>
+            </nav>
+          </div>
+    </header>
+    <main class="container">
+        <div class="post reveal">
+          <h3>🕵️ NerisBot Lab</h3>
+            <h4>Escenario</h4>
+
+              <p>Se ha detectado una actividad de red inusual en un entorno universitario, lo que indica una posible intención maliciosa. Estas anomalías, 
+                observadas hace seis horas, sugieren la presencia de comunicaciones de mando y control (C2) y otros comportamientos dañinos dentro de la red.</p>
+
+                <p>Su equipo ha sido encargado de analizar los últimos registros de tráfico de la red para investigar el alcance y el impacto de estas actividades.
+                    La investigación tiene como objetivo identificar servidores de comandos y control y descubrir interacciones maliciosas.</p>
+
+            <h4>Preguntas</h4>
+
+            <h4 class="question" >Durante la investigación del tráfico de la red, se observaron patrones inusuales de actividad en los registros de Suricata, lo que sugiere un posible acceso no autorizado. Una dirección IP externa inició intentos de acceso y posteriormente se vio descargando un archivo ejecutable sospechoso. Esta actividad indica con fuerza el origen del ataque.
+                Cuál es la dirección IP desde la que se originó el acceso no autorizado inicial?</h4>
+              <p class="answer" >Al ejecutar el siguiente comando en Splunk:</p>
+        <pre class="code-block"><code>
+            index=* sourcetype=suricata eventtype=suricata_eve_ids_attack 
+        | stats values(dest_ip) values(http.http_user_agent) values(http.url) by src_ip
+            </code></pre>
+                <p class="answer" >podemos observar eventos relacionados con alertas de Suricata, el cual es un IDS. Además, se identifica la descarga de archivos .exe desde una dirección IP específica.</p>
+                <img class="img-post" src="../images/post4/foto_1.png" alt="imagen_ip">
+                <p class="answer" >También se puede observar que toda la actividad se realizó de manera muy rápida, lo que sugiere que pudo haber sido automatizada.</p>
+                    <img class="img-post" src="../images/post4/foto_2.png" alt="imagen_pagina">
+
+            <h4 class="question" >Investigar el dominio de los atacantes ayuda a identificar la infraestructura utilizada para el ataque, evaluar sus conexiones con otras amenazas y tomar medidas para mitigar futuros ataques. 
+                Cuál es el nombre de dominio del servidor atacante?</h4>
+              <p class="answer" >Al revisar el listado de detalles en el campo <pre class="code-block">http.host.name</pre> es posible identificar el dominio utilizado durante el ataque.</p>
+              <img class="img-post" src="../images/post4/foto_3.png" alt="imagen_php">
+
+            <h4 class="question" >Conociendo la dirección IP del sistema específico ayuda a enfocar los esfuerzos de rehabilitación y evaluar el alcance del compromiso. 
+                Cuál es la dirección IP del sistema que fue blanco de esta brecha?</h4>
+              <p class="answer" >En los registros analizados, el campo <pre class="code-block">dest_ip</pre> permite identificar la dirección IP que recibe las conexiones asociadas a la actividad sospechosa.</p>
+                <img class="img-post" src="../images/post4/foto_4.png" alt="imagen_lenguaje">
+                  
+            <h4 class="question" >Identificar todos los archivos únicos descargados al host comprometido. Cuántos de estos archivos podrían ser potencialmente maliciosos?</h4> 
+              <p class="answer" >Con el mismo comando inicial, se observa la descarga de 5 archivos únicos potencialmente maliciosos: 4 archivos ejecutables .exe y un archivo de texto .txt.</p>
+                <img class="img-post" src="../images/post4/foto_5.png" alt="imagen_api">
+
+            <h4 class="question" >Qué es el hash SHA256 del archivo malicioso disfrado de archivo .txt ?</h4>
+
+              <p class="answer" >Para este caso, fue necesario correlacionar eventos entre Splunk y Zeek. Para ello, se ejecutó la siguiente consulta:</p>
+    <pre class="code-block"><code>
+    index=* sourcetype=zeek:files tx_hosts="195.88.191.59"
+        | join left=L right=R where L.seen_bytes=R.bytes 
+           [search index=* sourcetype=suricata src_ip=147.32.84.165 dest_ip=195.88.191.59 url=* ]
+        | table L.md5, R.url
+                    </code></pre>
+                <p class="answer" >Mediante esta correlación, fue posible identificar el hash MD5 del archivo asociado a la actividad observada.</p>
+                <img class="img-post" src="../images/post4/foto_6.png" alt="imagen_log">
+                <p class="answer" >Posteriormente, el hash fue analizado en VirusTotal. En la sección de detalles, se puede obtener el hash SHA-256 correspondiente al archivo.</p>
+                <img class="img-post" src="../images/post4/foto_7.png" alt="imagen_log">
+        </div>
+    </main>
+<footer>
+      <p> © 2026 Jose Luis Reyes | Cybersecurity Blog   🚀</p>
+    </footer>
+      
+    <script src="../script.js"></script>
+    
+</body>
+</html> 
