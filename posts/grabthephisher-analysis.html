@@ -36,49 +36,49 @@
 
             <h4>Preguntas</h4>
 
-            <h4>Qué billetera se usa para preguntar la frase de la semilla?</h4>
-              <p>Al explorar la carpeta proporcionada por CyberDefenders, se identificó un directorio llamado MetaMask, lo cual representa un indicio relevante dentro de la investigación.
+            <h4 class="question" >Qué billetera se usa para preguntar la frase de la semilla?</h4>
+              <p class="answer" >Al explorar la carpeta proporcionada por CyberDefenders, se identificó un directorio llamado MetaMask, lo cual representa un indicio relevante dentro de la investigación.
                 MetaMask es una billetera de criptomonedas comúnmente utilizada, frecuentemente objetivo de ataques de phishing debido al valor de la frase semilla.
                 Dentro de esta carpeta se encontró un archivo .html, lo que sugiere la presencia de una página fraudulenta diseñada para capturar credenciales del usuario.</p>
                 <img class="img-post" src="../images/post3/foto_1.png" alt="imagen_busqueda">
-                <p>Se abre el archivo .html en Mozilla Firefox y se observa que solicita la frase semilla para acceder a la billetera, confirmando que se trata de una página fraudulenta 
+                <p class="answer" >Se abre el archivo .html en Mozilla Firefox y se observa que solicita la frase semilla para acceder a la billetera, confirmando que se trata de una página fraudulenta 
                     diseñada para capturar credenciales.</p>
                     <img class="img-post" src="../images/post3/foto_2.png" alt="imagen_pagina">
 
-            <h4>Cuál es el nombre del archivo que tiene el código para el kit de phishing?</h4>
-              <p>En la misma carpeta se identificó un archivo .php, el cual contiene la lógica del ataque de phishing, encargado de procesar y capturar la información ingresada por la víctima.</p>
+            <h4 class="question" >Cuál es el nombre del archivo que tiene el código para el kit de phishing?</h4>
+              <p class="answer" >En la misma carpeta se identificó un archivo .php, el cual contiene la lógica del ataque de phishing, encargado de procesar y capturar la información ingresada por la víctima.</p>
               <img class="img-post" src="../images/post3/foto_3.png" alt="imagen_php">
 
-            <h4>En qué lenguaje estaba escrito el kit?</h4>
-              <p>Al analizar el archivo .php, se identificó que el kit de phishing está escrito en PHP.</p>
+            <h4 class="question" >En qué lenguaje estaba escrito el kit?</h4>
+              <p class="answer" >Al analizar el archivo .php, se identificó que el kit de phishing está escrito en PHP.</p>
                 <img class="img-post" src="../images/post3/foto_4.png" alt="imagen_lenguaje">
                   
-            <h4>Qué servicio utiliza el kit para recuperar la información de la máquina de la víctima?</h4> 
-              <p>Al analizar el archivo .php, se observa que los datos se obtienen a través de la API de Sypex Geo, utilizada para la geolocalización de la víctima.</p>
+            <h4 class="question" >Qué servicio utiliza el kit para recuperar la información de la máquina de la víctima?</h4> 
+              <p class="answer" >Al analizar el archivo .php, se observa que los datos se obtienen a través de la API de Sypex Geo, utilizada para la geolocalización de la víctima.</p>
                 <img class="img-post" src="../images/post3/foto_5.png" alt="imagen_api">
 
-            <h4>Cuántas frases de semilla ya fueron recogidas?</h4>
-              <p>Al continuar con el análisis, se identificó un archivo .txt donde se almacenan las frases de semilla capturadas.</p>
+            <h4 class="question" >Cuántas frases de semilla ya fueron recogidas?</h4>
+              <p class="answer" >Al continuar con el análisis, se identificó un archivo .txt donde se almacenan las frases de semilla capturadas.</p>
                 <img class="img-post" src="../images/post3/foto_6.png" alt="imagen_log">
 
-            <h4>Podrías por favor proporcionar la frase de semilla asociada con el incidente de phishing más reciente?</h4>
-              <p>Al revisar el archivo .txt, se identifica que la última entrada corresponde a la frase de semilla más reciente capturada.</p>
+            <h4 class="question" >Podrías por favor proporcionar la frase de semilla asociada con el incidente de phishing más reciente?</h4>
+              <p class="answer" >Al revisar el archivo .txt, se identifica que la última entrada corresponde a la frase de semilla más reciente capturada.</p>
                 <img class="img-post" src="../images/post3/foto_7.png" alt="imagen_frase">
             
-            <h4>Qué medio se utilizaba para el dumping de credenciales?</h4>
-              <p>Al analizar el script, se identifica que las credenciales son enviadas mediante un servicio de mensajería, utilizado como canal de exfiltración.</p>
+            <h4 class="question" >Qué medio se utilizaba para el dumping de credenciales?</h4>
+              <p class="answer" >Al analizar el script, se identifica que las credenciales son enviadas mediante un servicio de mensajería, utilizado como canal de exfiltración.</p>
                 <img class="img-post" src="../images/post3/foto_8.png" alt="imagen_mensajeria">
 
-            <h4>Cuál es la ficha para acceder al canal?</h4>
-              <p>Se identificó un token de autenticación en el script utilizado para acceder al canal.</p>
+            <h4 class="question" >Cuál es la ficha para acceder al canal?</h4>
+              <p class="answer" >Se identificó un token de autenticación en el script utilizado para acceder al canal.</p>
                 <img class="img-post" src="../images/post3/foto_9.png" alt="imagen_token">
 
-            <h4>Cuál es la identificación de Chat para el canal del phisher?</h4>
-              <p>En la misma función del script, se identifica el Chat ID utilizado para enviar la información al canal del atacante.</p>
+            <h4 class="question" >Cuál es la identificación de Chat para el canal del phisher?</h4>
+              <p class="answer" >En la misma función del script, se identifica el Chat ID utilizado para enviar la información al canal del atacante.</p>
                 <img class="img-post" src="../images/post3/foto_10.png" alt="imagen_id">
         
-            <h4>Cuáles son los aliados del desarrollador de kits de fáctiras?</h4>
-              <p>En el archivo .php se identifica firma y mensaje que revela al aliado del desarrollador.</p>
+            <h4 class="question" >Cuáles son los aliados del desarrollador de kits de fáctiras?</h4>
+              <p class="answer" >En el archivo .php se identifica firma y mensaje que revela al aliado del desarrollador.</p>
                 <img class="img-post" src="../images/post3/foto_11.png" alt="imagen_aliado">
                 
 
