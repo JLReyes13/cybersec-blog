@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Jose Luis Reyes">
+  <meta name="description" content="Blog de ciberseguridad enfocado en análisis de malware, tráfico de red y SOC.">
+  <title>JetBrains | Jose Luis Reyes</title>
+  <link rel="icon" type="image/png" href="images/general/icono.png">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body class="scanlines">
+    <canvas id="bg"></canvas>
+    <header>
+        <div class="container header-content">
+            <h1 class="hacker-title-terminal" >Cybersecurity Blog</h1>
+            <nav>
+              <a href="../index.html">Inicio</a>
+              <a href="../about.html">Sobre mí</a>
+            </nav>
+          </div>
+    </header>
+    <main class="container">
+        <div class="post reveal">
+          <h3>💥 JetBrains Lab</h3>
+            <h4>Escenario</h4>
+
+              <p>Durante un reciente incidente de seguridad, un atacante explotó con éxito una vulnerabilidad en nuestro servidor web, permitiéndoles cargar shells y 
+                obtener el control total sobre el sistema. El atacante utilizó el servidor web comprometido como punto de lanzamiento para actividades maliciosas, incluida la manipulación de datos.</p>
+
+                <p>Como parte de la investigación, se le proporciona una captura de paquetes (PCAP) del tráfico de la red durante el ataque para armar la línea de tiempo de 
+                    ataque e identificar los métodos utilizados por el atacante. El objetivo es determinar el punto de entrada inicial, las herramientas y técnicas del atacante, y la extensión del compromiso.</p>
+
+            <h4>Preguntas</h4>
+
+            <h4 class="question" >Identificar la dirección IP del atacante ayuda a rastrear la fuente y detener más ataques. Cuál es la dirección IP del atacante?</h4>
+              <p class="answer" >Analizando el .pcap, se identifican múltiples solicitudes POST repetitivas desde una misma dirección IP hacia la aplicación web, lo que sugiere un comportamiento automatizado.
+                 Además, una de las peticiones contiene un valor anómalo en el parámetro name “Imagine getting hacked by a kidd”, lo que refuerza la hipótesis de un intento de explotación.</p>
+                 <img class="img-post" src="../images/post5/foto_1.png" alt="imagen_sospecha">
+
+                <p class="answer" >Se confirma que la dirección IP corresponde al atacante, ya que se observan múltiples intentos de autenticación, interacción con la API REST, validación de credenciales y accesos a recursos sensibles de la aplicación.</p>
+                <img class="img-post" src="../images/post5/foto_2.png" alt="imagen_ip">
+
+            <h4 class="question" >Para identificar la posible explotación de vulnerabilidad, qué versión de nuestro servicio de servidor web se está ejecutando?</h4>
+              <p class="answer" >Una vez identificada la dirección IP del atacante, se localiza el paquete correspondiente a la comunicación con la API REST. Al analizar este paquete mediante Follow HTTP Stream, es posible identificar la versión del servidor.</p>
+              <img class="img-post" src="../images/post5/foto_3.png" alt="imagen_vulnarabilidad">
+
+            <h4 class="question" >Después de identificar la versión de nuestro servicio de servidor web, qué número de CVE corresponde a la vulnerabilidad que el atacante explotó?</h4>
+              <p class="answer" >Con base en la versión del servidor, se buscaron vulnerabilidades relacionadas y, en la página de NIST, se identificaron dos CVE asociados a bypass de autenticación y acceso a funcionalidades administrativas sin credenciales. 
+                Esto coincide con lo observado en nuestro caso, donde se detectan intentos de autenticación y acceso a endpoints administrativos.</p>
+                <img class="img-post" src="../images/post5/ foto_4.png" alt="imagen_servidor">
+                  
+            <h4 class="question" >El atacante explotó la vulnerabilidad para crear una cuenta de usuario. Qué credenciales estableció?</h4> 
+              <p class="answer" >Siguiendo la línea de tiempo, se observa que el atacante logró interactuar con el servidor para crear un nuevo usuario con privilegios administrativos. La respuesta HTTP 200 confirma que la acción fue exitosa, lo que indica un compromiso del sistema.</p>
+                <img class="img-post" src="../images/post5/foto_5.png" alt="imagen_user">
+
+            <h4 class="question" >El atacante subió una web shell para asegurar su acceso al sistema. ¿Cuál es el nombre del archivo que el atacante subió?</h4>
+              <p class="answer" >Siguiendo la misma línea de tiempo, en el análisis del HTTP Stream se observa una solicitud POST hacia la funcionalidad de carga de plugins, donde se sube un archivo .zip. Al inspeccionar su contenido, se identifica código malicioso que permite la ejecución de comandos(cmd), 
+                lo que indica que el atacante logró establecer acceso remoto al sistema.</p>
+                <img class="img-post" src="../images/post5/foto_6.png" alt="imagen_shell">
+            
+            <h4 class="question" >Cuando el atacante ejecutó su primer comando a través de la red de la red?</h4>
+                <p class="answer" >En la misma secuencia, se observa acceso al panel administrativo mediante un token válido, lo que sugiere que el atacante ya había logrado ejecutar código previamente y mantenía control sobre el sistema.</p>
+                <img class="img-post" src="../images/post5/foto_7.png" alt="imagen_comando">
+               
+            <h4 class="question" >El atacante manipulo un archivo de texto que contenía las credenciales del usuario de administración del servidor web. Qué nuevo nombre de usuario y contraseña escribió el atacante en el archivo?</h4>    
+                <p class="answer" >Al continuar con el análisis, se identifica la ejecución de un comando en el servidor mediante el parámetro cmd, el cual permite leer el archivo creds.txt. Como resultado, se obtienen credenciales en texto plano, lo que confirma la ejecución remota de comandos en el sistema.</p>
+                <img class="img-post" src="../images/post5/foto_8.png" alt="imagen_cred">
+
+            <h4 class="question" >Qué es el ID técnico de MITRE para la acción del atacante en la pregunta anterior  al manipular el archivo de texto?</h4>
+                <p class="answer" >Considerando los análisis y las evidencias, se puede consultar el portal de MITRE ATT&CK para identificar la técnica utilizada por el atacante y obtener más información al respecto.</p>
+                <img class="img-post" src="../images/post5/foto_9.png" alt="image_mitre">
+
+            <h4 class="question" >El atacante trató de escapar del contenedor, pero no tuvo éxito, cuál es el comando que usó para eso?</h4>
+                <p class="answer" >Al continuar con el análisis de los paquetes, se observa el uso de contenedores Docker por parte del atacante. Mediante el filtrado del tráfico, se identifica la ejecución de un comando orientado a escapar del contenedor.</p>
+                <img class="img-post" src="../images/post5/foto_10.png" alt="image_docker">
+            
+            <h4 class="question" >Conclusión</h4>
+                <p class="answer" >El análisis permitió identificar una serie de actividades maliciosas, incluyendo intentos de autenticación, acceso a funciones administrativas y explotación de vulnerabilidades. El atacante logró comprometer el sistema, crear una cuenta con privilegios elevados y ejecutar comandos de forma remota. 
+                    Aunque se detectó un intento de escape mediante Docker, no hay evidencia de que este haya sido exitoso.</p>
+
+        </div>
+    </main>
+<footer>
+      <p> © 2026 Jose Luis Reyes | Cybersecurity Blog   🚀</p>
+    </footer>
+      
+    <script src="../script.js"></script>
+    
+</body>
+</html> 
