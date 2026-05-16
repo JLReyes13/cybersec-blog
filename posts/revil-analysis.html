@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Jose Luis Reyes">
+    <meta name="description" content="Blog de ciberseguridad enfocado en análisis de malware, tráfico de red y SOC.">
+    <title>Revil - Gold Southfield | Jose Luis Reyes</title>
+    <link rel="icon" type="image/png" href="../images/general/icono.png">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="scanlines">
+    <canvas id="bg"></canvas>
+    <header>
+        <div class="container header-content">
+            <h1 class="hacker-title-terminal" >Cybersecurity Blog</h1>
+            <nav>
+              <a href="../index.html">Inicio</a>
+              <a href="../about.html">Sobre mí</a>
+            </nav>
+          </div>
+    </header>
+    <main class="container">
+        <div class="post reveal">
+          <h3>🛡️ Revil - Gold Southfield Lab</h3>
+            <h4>Escenario</h4>
+
+              <p>Eres un cazador de amenazas que trabaja para una firma de consultoría de ciberseguridad. Uno de sus clientes se ha visto afectado recientemente por un ataque de ransomware que causó el cifrado de múltiples máquinas de sus empleados. 
+                Los usuarios afectados han reportado encontrarse con una nota de rescate en su escritorio y un fondo de escritorio cambiado. Se le encarga el uso de Splunk SIEM que contiene registros de eventos de Sysmon de una de las máquinas cifradas para extraer la mayor cantidad de información posible.</p>
+
+            <h4>Preguntas</h4>
+
+            <h4 class="question" >Para comenzar su investigación, puede identificar el nombre del archivo de la nota que el ransomware dejó atrás?</h4>
+              <p class="answer" >Para empezar, como sabemos que normalmente el ransomware deja un mensaje en archivos .txt, empecé buscando archivos con esa extensión, encontrando aproximadamente 21 eventos relacionados con el mismo archivo. 
+                Posteriormente, al inspeccionar el archivo JSON, logré visualizar un .exe muy sospechoso llamado “facebook assistant.exe”, el cual creó el archivo .txt en una carpeta pública, por lo que podría tratarse del mensaje dejado por el ransomware.</p>
+                <img class="img-post" src="../images/post9/foto_1.png" alt="imagen_txt">
+
+            <h4 class="question" >Después de identificar la nota de rescate, el siguiente paso es identificar la fuente. Cuál es el proceso ID del ransomware que probablemente está involucrado?</h4>
+              <p class="answer" >Después de identificar la nota de rescate, se inspeccionó el archivo JSON del evento Sysmon para identificar el proceso responsable de crear dicho archivo. Dentro del apartado “ProcessId” se encontró el valor, correspondiente al proceso sospechoso “facebook assistant.exe”, 
+                el cual probablemente está relacionado con la actividad ransomware observada en el laboratorio.</p>
+              <img class="img-post" src="../images/post9/foto_2.png" alt="imagen_proceso">
+
+            <h4 class="question" >Habiendo determinado la identificación de proceso del ransomware, el siguiente paso lógico es localizar su origen. Dónde podemos encontrar el archivo ejecutable del ransomware?</h4>
+              <p class="answer" >Considerando los datos obtenidos del Process ID y del archivo txt, se logró identificar la ruta del ejecutable sospechoso asociado a la actividad ransomware.</p>
+                <img class="img-post" src="../images/post9/foto_3.png" alt="imagen_ubicacion">
+                  
+            <h4 class="question" >Ahora que has localizado la ubicación ejecutable del ransomware, vamos a cavar más profundo. Es una táctica común para el ransomware para interrumpir los métodos de recuperación del sistema. Puedes identificar el comando que se usó para este propósito?</h4> 
+              <p class="answer" >En el archivo JSON podemos observar que la alerta emitida por Sysmon muestra la ejecución de un comando en PowerShell. Además, el comando inicia con el parámetro “-e”, lo que indica que el contenido se encuentra codificado en Base64. </p>
+                <img class="img-post" src="../images/post9/foto_4.png" alt="imagen_base64">
+                <p class="answer" >Posteriormente, el contenido codificado fue ingresado en CyberChef para descifrar el script ejecutado. 
+                    Finalmente, se logró identificar un script encargado de buscar todas las instancias de la clase “Win32_Shadowcopy”, que representa las copias de sombra (instantáneas) del sistema, y posteriormente ejecutar la eliminación de cada una de ellas.
+                     Este comportamiento es comúnmente utilizado por ransomware para impedir la recuperación de archivos mediante copias de seguridad del sistema. </p>
+                     <img class="img-post" src="../images/post9/foto_5.png" alt="imagen_cyber">
+
+            <h4 class="question" >Mientras rastreamos los pasos del ransomware, se necesita una verificación más profunda. Puede proporcionar el hash sha256 del ejecutable del ransomware para cotej cómodo con firmas maliciosas conocidas?</h4>
+              <p class="answer" >Considerando que ya se tenía identificado el nombre del archivo sospechoso, se realizó un filtro basado en los eventos de creación de procesos de Sysmon utilizando event.code=1. El resultado mostró dos eventos relacionados con el ejecutable analizado.</p>
+              <p class="answer"  >Posteriormente, tomando como referencia el horario de ejecución, se analizó el hash correspondiente al primer evento en VirusTotal, logrando confirmar que el archivo estaba relacionado con actividad ransomware. </p>
+                <img class="img-post" src="../images/post9/foto_6.png" alt="imagen_archivo">
+                <img class="img-post" src="../images/post9/foto_7.png" alt="imagen_virus">
+
+            <h4 class="question" >Queda una pieza crucial: identificar el canal de comunicación del atacante. Puede aprovechar la inteligencia de amenazas y los indicadores conocidos de Compromiso (IoCs) para identificar el dominio de la cebolla del autor de ransomware?</h4>
+              <p class="answer" >Ya teniendo el hash del archivo origen del ransomware, este fue analizado en la plataforma Triage para obtener más información sobre su comportamiento. A través del análisis se logró identificar la comunicación Command and Control (C2) relacionada con el malware, 
+                donde también fue posible encontrar el dominio .onion asociado al autor del ransomware.</p>
+                <img class="img-post" src="../images/post9/foto_8.png" alt="imagen_triage">
+            
+                <h4 class="question" >Conclusión</h4>
+                <p class="answer" >Este análisis nos deja varias lecciones importantes que debemos tener en cuenta para prevenir ataques de ransomware. En primer lugar, se debe evitar descargar archivos ejecutables desde páginas no oficiales, ya que no se conoce realmente qué puede existir detrás de ellos. 
+                    Además, es recomendable verificar que el hash del archivo coincida con el oficial o incluso analizar previamente el ejecutable en plataformas como VirusTotal para asegurarnos de que se trata de software legítimo.</p>
+
+                <p class="answer"  >Este tipo de ataques puede resultar crítico y potencialmente dañino tanto para la infraestructura de una empresa como para equipos personales, debido a que la información sensible podría verse comprometida, cifrada o incluso filtrada por los atacantes.</p>
+
+        </div>
+      </main>
+    <footer>
+      <p> © 2026 Jose Luis Reyes | Cybersecurity Blog   🚀</p>
+    </footer>
+      
+    <script src="../script.js"></script>
+    
+</body>
+</html>
