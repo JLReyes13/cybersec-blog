@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Jose Luis Reyes">
+    <meta name="description" content="Blog de ciberseguridad enfocado en análisis de malware, tráfico de red y SOC.">
+    <title>XXE Infiltration | Jose Luis Reyes</title>
+    <link rel="icon" type="image/png" href="../images/general/icono.png">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="scanlines">
+    <canvas id="bg"></canvas>
+    <header>
+        <div class="container header-content">
+            <h1 class="hacker-title-terminal" >Cybersecurity Blog</h1>
+            <nav>
+              <a href="../index.html">Inicio</a>
+              <a href="../about.html">Sobre mí</a>
+            </nav>
+          </div>
+    </header>
+    <main class="container">
+        <div class="post reveal">
+          <h3>⚠️ XXE Infiltration Lab</h3>
+            <h4>Escenario</h4>
+
+              <p>Una alerta automatizada ha detectado datos XML inusuales que están siendo procesados por el servidor, lo que sugiere un potencial ataque de inyección de XXE (XML External Entity). 
+                Esto plantea preocupaciones sobre la integridad de los datos de los clientes y los sistemas internos de la compañía, lo que provoca una investigación inmediata.</p>
+
+                <p>Analizar el archivo PCAP proporcionado utilizando las herramientas de análisis de red disponibles para usted. 
+                    Su objetivo es identificar cómo el atacante obtuvo acceso y qué acciones tomaron.</p>
+
+            <h4>Preguntas</h4>
+
+            <h4 class="question" >Identificar los puertos abiertos descubiertos por un atacante nos ayuda a entender qué servicios están expuestos y potencialmente vulnerables. 
+                Puede identificar el puerto de más alto número que está abierto en el servidor web de la víctima?</h4>
+              <p class="answer" >Cuando un atacante desea identificar puertos abiertos, suele utilizar herramientas como Nmap. 
+                Estas herramientas realizan envíos de paquetes TCP con la bandera SYN activada y esperan una respuesta SYN-ACK por parte del servidor. Una respuesta SYN-ACK indica que el puerto se encuentra abierto.</p>
+                <img class="img-post" src="../images/post10/foto_1.png" alt="imagen_syn">
+
+            <h4 class="question" >Al identificar el vulnerable script PHP, los equipos de seguridad pueden abordar y mitigar directamente la vulnerabilidad. 
+                Cuál es el URI completo del script PHP vulnerable a XXE Injection?</h4>
+              <p class="answer" >Realizando un filtro de paquetes HTTP con el método POST, fue posible identificar varias solicitudes relacionadas con archivos PHP. Posteriormente, se seleccionó una de estas solicitudes para analizarla mediante la opción “Follow TCP Stream” en Wireshark.
+                En el flujo TCP se pudo observar el URI completo del script vulnerable, así como el contenido XML utilizado para realizar el ataque XXE Injection contra el archivo PHP.</p>
+              <img class="img-post" src="../images/post10/foto_2.png" alt="imagen_xml">
+
+            <h4 class="question" >Construir la línea de tiempo de ataque y determinar el punto inicial de compromiso. Cuál es el nombre del primer archivo XML malicioso subido por el atacante?</h4>
+              <p class="answer" >Utilizando el mismo filtro HTTP POST, se identificaron múltiples paquetes relacionados con la URI vulnerable. Posteriormente, se revisó la columna de tiempo para localizar la primera solicitud realizada por el atacante. 
+                Finalmente, al analizar ese paquete mediante TCP Stream en Wireshark, fue posible identificar el primer archivo XML malicioso subido.</p>
+                <img class="img-post" src="../images/post10/foto_3.png" alt="imagen_uri">
+                <img class="img-post" src="../images/post10/foto_4.png" alt="imagen_evidencia">
+
+                  
+            <h4 class="question" >Entender qué archivos sensibles fueron accedidos ayuda a evaluar el impacto potencial de la brecha. 
+                Cuál es el nombre del archivo de configuración de la aplicación web que el atacante lee?</h4> 
+              <p class="answer" >Analizando los paquetes mediante TCP Stream en Wireshark, fue posible observar que el atacante utilizó un ataque XXE para acceder a archivos sensibles del servidor. 
+                Dentro del contenido de la respuesta se identificó el archivo de configuración de la aplicación web leído por el atacante.</p>
+                <img class="img-post" src="../images/post10/foto_5.png" alt="imagen_aplicacion">
+
+            <h4 class="question" >Para evaluar el alcance de la infracción, cuál es la contraseña para el usuario comprometido de la base de datos?</h4>
+              <p class="answer" >Siguiendo la línea de tiempo del ataque, se identificó una respuesta HTTP 200 OK del servidor, indicando que la solicitud fue procesada correctamente. 
+                Al analizar el paquete mediante  TCP Stream en Wireshark, fue posible observar el contenido del archivo de configuración y encontrar las credenciales de la base de datos, incluida la contraseña del usuario comprometido.</p>
+                <img class="img-post" src="../images/post10/foto_6.png" alt="imagen_http">
+                <img class="img-post" src="../images/post10/foto_7.png" alt="imagen_user">
+
+            <h4 class="question" >Siguiendo el compromiso del usuario de la base de datos. 
+                Cuál es la marca de tiempo de la conexión inicial del atacante con el servidor MySQL usando las credenciales comprometidas después de la exposición?</h4>
+              <p class="answer" >Primero se identificó el momento en que las credenciales de la base de datos fueron expuestas mediante el análisis del tráfico HTTP. 
+                Posteriormente, aplicando filtros relacionados con autenticación de MySQL, fue posible localizar la primera conexión realizada por el atacante utilizando las credenciales comprometidas. 
+                A partir de ello se determinó la marca de tiempo de acceso inicial al servidor MySQL después de la exposición de credenciales.</p>
+                <img class="img-post" src="../images/post10/foto_8.png" alt="imagen_analisis">
+                <img class="img-post" src="../images/post10/foto_9.png" alt="imagen_hora">
+            
+            <h4 class="question" >Para eliminar la amenaza y evitar más acceso no autorizado, puede identificar el nombre de la shell web que el atacante subió para la ejecución de código remoto y la persistencia?</h4>
+              <p class="answer" >Finalmente, se revisaron nuevamente las solicitudes HTTP POST relacionadas con los archivos XML maliciosos. 
+                Al analizar el último paquete mediante TCP Stream en Wireshark, fue posible identificar un payload utilizado por el atacante para cargar una web shell y mantener persistencia en el servidor.</p>
+                <img class="img-post" src="../images/post10/foto_10.png" alt="imagen_shell">
+
+            <h4 class="question" >Conclusión</h4>
+              <p class="answer" >XML es de gran importancia para el manejo e intercambio de información, ya que permite reutilizar y estructurar datos de manera eficiente. 
+                Sin embargo, este caso demuestra que una mala configuración o la falta de actualizaciones en las aplicaciones puede generar vulnerabilidades como XXE Injection.</p>
+                <p class="answer" >Este análisis también deja como enseñanza la importancia de mantener actualizadas las aplicaciones y librerías, así como realizar revisiones constantes de 
+                    seguridad para evitar brechas que puedan ser aprovechadas por un atacante para acceder a información sensible o comprometer un sistema.</p>
+
+        </div>
+      </main>
+    <footer>
+      <p> © 2026 Jose Luis Reyes | Cybersecurity Blog   🚀</p>
+    </footer>
+      
+    <script src="../script.js"></script>
+    
+</body>
+</html> 
