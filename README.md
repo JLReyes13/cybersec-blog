@@ -1,34 +1,37 @@
 # Cybersecurity Blog
 
-Blog enfocado en análisis de seguridad, threat hunting y laboratorios SOC.
+Blog tecnico y portafolio personal enfocado en analisis SOC, investigacion de incidentes, analisis de trafico de red y documentacion de laboratorios de ciberseguridad.
 
-Aquí documento laboratorios prácticas reales como:
-- Análisis de logs
-- Detección de amenazas
-- Simulación de ataques
+En este proyecto documento practicas basadas en escenarios reales, incluyendo analisis de PCAP, deteccion de actividad maliciosa, revision de eventos SIEM y comportamiento basico de malware.
 
-  ## 📚 Contenido
+## Contenido
 
-- 🔍 Análisis de tráfico (PCAP)
-- 🧠 Casos SOC (detecciones)
-- 💻 Laboratorios con Wazuh
-- 🦠 Análisis básico de malware
+- Analisis de trafico de red con Wireshark
+- Casos SOC y deteccion de amenazas
+- Laboratorios con Wazuh, Suricata y Splunk
+- Analisis basico de malware y C2
+- Investigacion de phishing, ransomware y explotacion web
 
-  ## ⚙️ Tecnologías
+## Tecnologias y herramientas
 
-- Linux (Ubuntu)
-- Kali Linux
-- Python
+- HTML, CSS y JavaScript
+- Linux y Kali Linux
+- Wireshark
+- Splunk
+- Wazuh
+- Suricata
+- CyberDefenders
 
-  ## 🌐 Sitio web
+## Sitio web
 
-👉 https://JLReyes13.github.io/cybersec-blog
+https://JLReyes13.github.io/cybersec-blog
 
-  ## 🎯 Objetivo
+## Objetivo
 
-  Desarrollar habilidades como SOC Analyst mediante práctica real y documentación.
+Desarrollar habilidades practicas como analista SOC mediante laboratorios, investigacion tecnica y documentacion clara de hallazgos, evidencias y lecciones aprendidas.
 
-  ## 👨‍💻 Autor
+## Autor
 
-  Jose Luis Reyes  
-  Enfocado en ciberseguridad y análisis SOC
+Jose Luis Reyes  
+Enfocado en ciberseguridad, analisis SOC y respuesta a incidentes.
+
