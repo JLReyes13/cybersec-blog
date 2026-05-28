@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Jose Luis Reyes">
+    <meta name="description" content="Blog de ciberseguridad enfocado en análisis de malware, tráfico de red y SOC.">
+    <title>IcedID | Jose Luis Reyes</title>
+    <link rel="icon" type="image/png" href="../images/general/icono.png">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="scanlines">
+    <canvas id="bg"></canvas>
+    <header>
+        <div class="container header-content">
+            <h1 class="hacker-title-terminal" >Cybersecurity Blog</h1>
+            <nav>
+              <a href="../index.html">Inicio</a>
+              <a href="../about.html">Sobre mí</a>
+            </nav>
+          </div>
+    </header>
+    <main class="container">
+        <div class="post reveal">
+          <h2 class="post-title">🧬 IcedID Lab</h2>
+            <h4>Escenario</h4>
+
+              <p>Se identificó a un grupo de amenazas cibernéticas por iniciar campañas de phishing generalizadas para distribuir más cargas útiles maliciosas. 
+                Las cargas útiles más frecuentemente encontradas fueron IcedID. Se le ha dado un hash de una muestra de IcedID para analizar y monitorear las actividades de este grupo de amenaza persistente avanzada (APT).</p>
+
+            <h4>Preguntas</h4>
+
+            <h4 class="question" >¿Cuál es el nombre del archivo asociado con el hash dado?</h4>
+              <p class="answer" >Al analizar el hash proporcionado en VirusTotal, es posible obtener información detallada sobre el archivo. Dentro del apartado Details , se puede identificar el nombre original o los nombres asociados al archivo analizado.</p>
+                <img class="img-post" src="../images/post2/foto_1.png" alt="imagen_nombre">
+
+            <h4 class="question" >¿Puede identificar el nombre de archivo del archivo que se implementó?</h4>
+              <p class="answer" >Al realizar un análisis exhaustivo en el apartado de Relations y Dropped Files en VirusTotal, se puede observar un archivo cuyo tipo no coincide con su extensión, lo cual lo hace sospechoso y permite identificar el archivo implementado.</p>
+              <img class="img-post" src="../images/post2/foto_2.png" alt="imagen_extension">
+
+            <h4 class="question" >M¿Cuántos dominios se ve el malware para descargar el archivo de carga útil adicional en Q2Q2?</h4>
+              <p class="answer" >En el mismo apartado, es posible identificar las URLs que se comunicaron con el archivo analizado en la pregunta anterior. A partir de estas, se pueden extraer los dominios utilizados por el malware para descargar la carga útil adicional.</p>
+                <img class="img-post" src="../images/post2/foto_3.png" alt="imagen_url">
+                  
+            <h4 class="question" >De los dominios mencionados en el tercer trimestre, un registrador de DNS fue utilizado predominantemente por el actor de amenazas para alojar su contenido dañino, lo que permite la funcionalidad del malware. ¿Puede especificar el Registro INC?</h4> 
+              <p class="answer" >Al continuar el análisis en el apartado de dominios contactados, es posible identificar un registrador específico al filtrar los dominios correspondientes al tercer trimestre. Este registrador destaca por ser el más utilizado por el actor de amenazas para alojar contenido malicioso.</p>
+                <img class="img-post" src="../images/post2/foto_4.png" alt="imagen_registro">
+
+            <h4 class="question" >¿Podría especificar el actor de amenaza vinculado a la muestra proporcionada?</h4>
+              <p class="answer" >En este caso, se realiza una búsqueda en la base de datos de MITRE ATT&CK, tomando como referencia el malware IcedID. A partir de esta consulta, es posible identificar el actor de amenaza asociado a dicha familia de malware.</p>
+                <img class="img-post" src="../images/post2/foto_5.png" alt="imagen_mitre">
+
+            <h4 class="question" >En la fase de ejecución, ¿qué función emplea el malware para obtener cargas útiles adicionales en el sistema?</h4>
+              <p class="answer" >Utilizando una herramienta web como Recorded Future Triage, es posible analizar el comportamiento del malware y observar las funciones que emplea para descargar cargas útiles adicionales durante su ejecución.</p>
+                <img class="img-post" src="../images/post2/foto_6.png" alt="imagen_codigo">
+          <nav class="post-actions" aria-label="Navegacion del post">
+            <a href="../index.html">&larr; Volver al inicio</a>
+          </nav>
+
+        </div>
+      </main>
+    <footer>
+  <div class="footer-content">
+    <p>© 2026 Jose Luis Reyes | Cybersecurity Blog</p>
+    <nav class="footer-links" aria-label="Enlaces del sitio">
+      <a href="https://github.com/JLReyes13" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://www.linkedin.com/in/tu-perfil" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </nav>
+  </div>
+</footer>
+      
+    <script src="../script.js"></script>
+    
+</body>
+</html>

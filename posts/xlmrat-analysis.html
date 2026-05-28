@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Jose Luis Reyes">
+    <meta name="description" content="Blog de ciberseguridad enfocado en análisis de malware, tráfico de red y SOC.">
+    <title>XLMRat | Jose Luis Reyes</title>
+    <link rel="icon" type="image/png" href="../images/general/icono.png">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body class="scanlines">
+  <canvas id="bg"></canvas>
+  <header>
+    <div class="container header-content">
+      <h1 class="hacker-title-terminal" >Cybersecurity Blog</h1>
+      <nav>
+              <a href="../index.html">Inicio</a>
+              <a href="../about.html">Sobre mí</a>
+            </nav>
+    </div>
+  </header>
+  <main class="container">
+    <div class="post reveal">
+      <h2 class="post-title">🦠 XLMRat Lab</h2>
+
+        <h4>Escenario</h4>
+
+          <p>Una máquina comprometida ha sido marcada debido al tráfico de red sospechoso. 
+          Su tarea es analizar el archivo PCAP para determinar el método de ataque, identificar cualquier carga útil maliciosa y rastrear la línea de tiempo de los eventos. 
+          Enfócate en cómo el atacante obtuvo acceso, qué herramientas o técnicas se utilizaron y cómo funcionaba el malware después del compromiso.</p>
+
+        <h4>Preguntas</h4>
+
+        <h4 class="question" >El atacante ejecutó con éxito un comando para descargar la primera etapa del malware. ¿Cuál es la URL desde la que se ha instalado la primera etapa de malware?</h4>
+          <p class="answer" >Primero, descargué el archivo .pcap y lo abrí en mi máquina Kali Linux utilizando Wireshark.
+          Como paso inicial, apliqué un filtro para visualizar únicamente el tráfico correspondiente al protocolo HTTP, con el objetivo de identificar posibles comunicaciones relevantes dentro de la captura.</p>
+            <img class="img-post" src="../images/post1/foto_1.png" alt="imagen_filtrado">
+
+              <p class="answer" >Se identificó, mediante el método GET del protocolo HTTP, la descarga de una imagen. 
+              Además, fue posible determinar la fuente de origen de dicha imagen, lo que permite responder a la primera pregunta del análisis.</p>
+                <img class="img-post" src="../images/post1/foto_2.png" alt="imagen_respuesta">
+
+        <h4 class="question" >¿Qué proveedor de hosting posee la dirección IP asociada?</h4>
+          <p class="answer" >Se consultó la dirección IP asociada a la URL utilizando una herramienta de análisis en línea, 
+          lo que permitió identificar el proveedor de hosting correspondiente.</p>
+            <img class="img-post" src="../images/post1/foto_3.png" alt="imagen_hosting">
+
+        <h4 class="question" >Mediante el análisis de los scripts maliciosos, se identificaron dos cargas útiles: un cargador y un ejecutable secundario. 
+          ¿Qué es el SHA256 del ejecutable de malware?</h4>
+          <p class="answer" >Al inspeccionar el tráfico HTTP, se observa la descarga de un archivo en texto plano (.txt), el cual contiene un cargador (loader) utilizado para preparar la ejecución del malware.</p>
+            <img class="img-post" src="../images/post1/foto_4.png" alt="imagen_cargador">
+
+              <p>Se identifica la descarga de un archivo .jpg. Al revisar el contenido en el stream HTTP, se observa información en formato hexadecimal, lo cual es normal en archivos binarios, aunque podría ocultar datos maliciosos.</p>
+                <img class="img-post" src="../images/post1/foto_5.png" alt="imagen_ejectutable">
+
+                  <p class="answer" >A continuación, se utilizo un pequeño script en Python para reconstruir el contenido hexadecimal extraído y analizar si corresponde a un archivo ejecutable.</p>
+                    <img class="img-post" src="../images/post1/foto_6.png" alt="imagen_script">
+
+                      <p class="answer" >Al ejecutar el script, se reconstruye el archivo ejecutable y se calcula su hash SHA256 para su identificación.</p>
+                        <img class="img-post" src="../images/post1/foto_7.png" alt="imagen_sha256">
+
+        <h4 class="question" >¿Cuál es la etiqueta de la familia de malware basada en Alibaba?</h4> 
+          <p class="answer" >Al consultar el hash SHA256 en VirusTotal, se confirma que el archivo corresponde a un ejecutable malicioso, además de poder observar su clasificación.</p>
+            <img class="img-post" src="../images/post1/foto_8.png" alt="imagen_analizado">
+
+        <h4 class="question" >¿Cuál es la marca de tiempo de la creación del malware?</h4>
+          <p class="answer" >Al consultar la sección de detalles en VirusTotal, se puede observar el historial del archivo.</p>
+            <img class="img-post" src="../images/post1/foto_9.png" alt="imagen_historial">
+
+        <h4 class="question" >¿Qué LOLBin se aprovecha para la ejecución de procesos sigilosos en este script? Proporcione el camino completo.</h4>
+          <p class="answer" >Al analizar el script, se identifica el uso de un LOLBin para la ejecución del código, el cual se encuentra ofuscado mediante caracteres especiales que posteriormente son reemplazados durante la ejecución.</p>
+            <img class="img-post" src="../images/post1/foto_10.png" alt="imagen_codigo">
+
+        <h4 class="question" >El script está diseñado para soltar varios archivos. Enumere los nombres de los archivos eliminados por el script.</h4>
+            <p class="answer" >Al analizando en la parte final del script, se identifican los archivos que serán generados en el sistema, entre ellos </p>
+              <img class="img-post" src="../images/post1/foto_11.png" alt="imagen_archivo_1">
+                <img class="img-post" src="../images/post1/foto_12.png" alt="imagen_archivo_2">
+          <nav class="post-actions" aria-label="Navegacion del post">
+            <a href="../index.html">&larr; Volver al inicio</a>
+          </nav>
+    </div>
+  </main>
+<footer>
+  <div class="footer-content">
+    <p>© 2026 Jose Luis Reyes | Cybersecurity Blog</p>
+    <nav class="footer-links" aria-label="Enlaces del sitio">
+      <a href="https://github.com/JLReyes13" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://www.linkedin.com/in/tu-perfil" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </nav>
+  </div>
+</footer>
+  
+<script src="../script.js"></script>
+</body>
+</html>
