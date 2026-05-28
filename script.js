@@ -18,9 +18,11 @@ revealOnScroll();
 /* FONDO PRO */
 const canvas = document.getElementById("bg");
 const ctx = canvas.getContext("2d");
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 let stars = [];
 let meteors = [];
+let animationFrameId;
 
 /* RESIZE DINÁMICO */
 function resize() {
@@ -55,10 +57,16 @@ function createMeteor() {
   });
 }
 
-setInterval(createMeteor, 2000);
+let meteorInterval;
+
+if (!reduceMotion.matches) {
+  meteorInterval = setInterval(createMeteor, 2000);
+}
 
 /* ANIMACIÓN */
 function animate() {
+  if (reduceMotion.matches) return;
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // estrellas
@@ -92,7 +100,22 @@ function animate() {
     if (m.opacity <= 0) meteors.splice(i, 1);
   });
 
-  requestAnimationFrame(animate);
+  animationFrameId = requestAnimationFrame(animate);
 }
 
-animate();
+if (!reduceMotion.matches) {
+  animate();
+}
+
+reduceMotion.addEventListener("change", event => {
+  if (event.matches) {
+    clearInterval(meteorInterval);
+    cancelAnimationFrame(animationFrameId);
+    meteors = [];
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    return;
+  }
+
+  meteorInterval = setInterval(createMeteor, 2000);
+  animate();
+});
