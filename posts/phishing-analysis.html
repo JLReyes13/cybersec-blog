@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Jose Luis Reyes">
+    <meta name="description" content="Blog de ciberseguridad enfocado en análisis de malware, tráfico de red y SOC.">
+    <title>Phishing Analysis | Jose Luis Reyes</title>
+    <link rel="icon" type="image/png" href="../images/general/icono.png">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="scanlines">
+    <canvas id="bg"></canvas>
+    <header>
+        <div class="container header-content">
+            <h1 class="hacker-title-terminal" >Cybersecurity Blog</h1>
+            <nav>
+              <a href="../index.html">Inicio</a>
+              <a href="../about.html">Sobre mí</a>
+            </nav>
+          </div>
+    </header>
+    <main class="container">
+        <div class="post reveal">
+          <h2 class="post-title">Phishing Analysis</h2>
+            <h4>Escenario</h4>
+
+              <p>Un usuario ha recibido un correo electrónico de phishing y lo ha reenviado al SOC. ¿Puede investigar el correo electrónico y el archivo adjunto para recopilar artefactos útiles?</p>
+
+            <h4>Preguntas</h4>
+
+            <h4 class="question" >¿Quién es el principal destinatario de este correo electrónico?</h4>
+              <p class="answer" >Al examinar el archivo .eml en Thunderbird, se puede observar que el correo electrónico fue dirigido a johnsmith123@gmail.com, como se muestra en el campo "To" ubicado en la parte superior del mensaje.</p>
+                <img class="img-post" src="../images/post12/foto_1.png" alt="imagen_email">
+
+            <h4 class="question" >¿Cuál es el tema de este correo electrónico?</h4>
+              <p class="answer" >A continuación, podemos identificar el asunto del correo electrónico en el campo "Subject", donde se indica "Undeliverable: Website contact form submission".</p>
+              <img class="img-post" src="../images/post12/foto_2.png" alt="imagen_subject">
+
+            <h4 class="question" >¿Cuál es la fecha y hora en que se envió el correo electrónico?</h4>
+              <p class="answer" >En la misma sección de los encabezados del correo, podemos identificar la fecha y hora de envío en el campo "Sent", donde se muestra 18 March 2021 04:14.</p>
+                <img class="img-post" src="../images/post12/foto_3.png" alt="imagen_time">
+                  
+            <h4 class="question" >¿Cual es la IP originaria?</h4> 
+              <p class="answer" >Al revisar los encabezados del correo, se encontró la dirección IP 103.9.171.10 en el campo Received, lo que permitió identificar el origen del mensaje.</p>
+                <img class="img-post" src="../images/post12/foto_4.png" alt="imagen_ip">
+
+            <h4 class="question" >PRealice DNS inverso en esta dirección IP, ¿cuál es el host resuelto? (whois.domaintools.com)</h4>
+              <p class="answer" >Utilizando la herramienta DomainTools, se realizó una consulta de DNS inverso sobre la dirección IP 103.9.171.10. Como resultado, se identificó el nombre de host asociado a dicha dirección IP.</p>
+              <img class="img-post" src="../images/post12/foto_5.png" alt="imagen_dns">
+
+            <h4 class="question" >¿Cuál es el nombre del archivo adjunto? </h4>
+              <p class="answer" >Al revisar la sección de archivos adjuntos del correo, se identifica un archivo asociado al mensaje, cuyo nombre puede observarse directamente en la parte superior de la ventana.</p>
+                <img class="img-post" src="../images/post12/foto_6.png" alt="imagen_file">
+
+            <h4 class="question" >¿Cuál es la URL que se encuentra dentro del archivo adjunto?</h4>
+                <p class="answer" >En el contenido del archivo adjunto se observa una URL, la cual puede extraerse para continuar con el análisis del posible correo de phishing.</p>
+                     <img class="img-post" src="../images/post12/foto_7.png" alt="imagen_url">
+
+            <h4 class="question" >¿En qué servicio se aloja esta página web?</h4>
+                <p class="answer" >La URL utiliza el dominio Blogspot, el cual corresponde al servicio Blogger de Google. Esto permite concluir que la página web se encuentra alojada en dicha plataforma.</p>
+                     <img class="img-post" src="../images/post12/foto_8.png" alt="imagen_web">
+            
+            <h4 class="question" >Usando URL2PNG, ¿cuál es el texto del encabezado en esta página? (¡No importa si la página ha sido eliminada!)</h4>
+                <p>Utilizando la herramienta URL2PNG para obtener una vista previa del sitio web, se pudo comprobar que la página había sido eliminada. Aun así, fue posible identificar el texto principal del encabezado mostrado en la captura.</p>
+                     <img class="img-post" src="../images/post12/foto_9.png" alt="imagen_header">
+            
+                <h4 class="question" >Conclusión</h4>
+                <p class="answer" >El phishing sigue siendo una de las técnicas más utilizadas por los atacantes, ya que puede engañar a cualquier persona mediante correos que aparentan ser legítimos. Por ello, es importante verificar siempre el remitente, 
+                    los enlaces y los archivos adjuntos antes de interactuar con ellos. Además, debemos desconfiar de mensajes que prometan ganancias fáciles, generen urgencia o soliciten acciones inmediatas. La prevención y el análisis cuidadoso son fundamentales para reducir el riesgo de ser víctima de este tipo de ataques.</p>
+          
+                    <nav class="post-actions" aria-label="Navegacion del post">
+            <a href="../index.html">&larr; Volver al inicio</a>
+          </nav>
+
+        </div>
+      </main>
+    <footer>
+  <div class="footer-content">
+    <p>© 2026 Jose Luis Reyes | Cybersecurity Blog</p>
+    <nav class="footer-links" aria-label="Enlaces del sitio">
+      <a href="https://github.com/JLReyes13" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://www.linkedin.com/in/tu-perfil" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </nav>
+  </div>
+</footer>
+      
+    <script src="../script.js"></script>
+    
+</body>
+</html>
