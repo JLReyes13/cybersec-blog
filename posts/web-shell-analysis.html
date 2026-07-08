@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Jose Luis Reyes">
+    <meta name="description" content="Blog de ciberseguridad enfocado en análisis de malware, tráfico de red y SOC.">
+    <title>Análisis de intrusión: Network Analysis – Web Shell</title>
+    <link rel="icon" type="image/png" href="../images/general/icono.png">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="scanlines">
+    <canvas id="bg"></canvas>
+    <header>
+        <div class="container header-content">
+            <h1 class="hacker-title-terminal" >Cybersecurity Blog</h1>
+            <nav>
+              <a href="../index.html">Inicio</a>
+              <a href="../about.html">Sobre mí</a>
+            </nav>
+          </div>
+    </header>
+    <main class="container">
+        <div class="post reveal">
+          <h2 class="post-title">🕸️ Análisis de intrusión: Network Analysis – Web Shell</h2>
+            <h4>Escenario</h4>
+
+              <p>El SOC recibió una alerta en su SIEM para ‘Local to Local Port Scanning’, donde una IP privada interna comenzó a escanear otro sistema interno. ¿Puede investigar y determinar si esta actividad es maliciosa o no? Se le ha proporcionado un PCAP, investigar utilizando las herramientas que desee.  </p>
+
+            <h4>Preguntas</h4>
+
+            <h4 class="question" >¿Cuál es la IP responsable de realizar la actividad de escaneo de puertos?</h4>
+              <p class="answer" >Generalmente, los escaneos de puertos se realizan mediante el protocolo TCP, enviando solicitudes SYN y esperando una respuesta SYN/ACK para identificar puertos abiertos en el host destino.
+                  En la captura de Conversations se observan múltiples conexiones desde la IP 10.251.96.4 hacia distintos puertos de la IP 10.251.96.5, lo cual indica una actividad de escaneo.  </p>
+                <img class="img-post" src="../images/post14/foto_1.png" alt="imagen_ip">
+
+            <h4 class="question" >¿Cuál es el rango de puertos escaneado por el host sospechoso?</h4>
+              <p class="answer" >En el mismo apartado de Conversations, se ordenaron los puertos de menor a mayor. Ahí se observa que el host sospechoso realizó conexiones hacia múltiples puertos del destino, abarcando el rango del puerto 1 al 1024.</p>
+              <img class="img-post" src="../images/post14/foto_2.png" alt="imagen_puerto1">
+              <img class="img-post" src="../images/post14/foto_3.png" alt="imagen_puerto2">
+
+            <h4 class="question" >¿Cuál es el tipo de escaneo de puerto realizado?</h4>
+              <p class="answer" >Al filtrar las solicitudes de la IP sospechosa, se observa el envío de múltiples paquetes TCP SYN hacia distintos puertos del host destino, lo que indica un escaneo TCP SYN.</p>
+                <img class="img-post" src="../images/post14/foto_4.png" alt="imagen_escaneo">
+                  
+            <h4 class="question" >Se utilizaron dos herramientas más para realizar reconocimiento contra puertos abiertos, ¿qué eran? </h4>
+                <p class="answer" >Filtrando por la IP de origen y el User-Agent, se identificó en las solicitudes HTTP GET y POST el uso de las herramientas Gobuster y SQLMap. Gobuster se utiliza para realizar ataques de fuerza bruta sobre directorios y archivos, 
+                  mientras que SQLMap es una herramienta automatizada para detectar y explotar vulnerabilidades de SQL Injection..</p>
+                     <img class="img-post" src="../images/post14/foto_5.png" alt="imagen_gobuster">
+                     <img class="img-post" src="../images/post14/foto_6.png" alt="imagen_sql">
+
+            <h4 class="question" >¿Cuál es el nombre del archivo php a través del cual el atacante cargó un shell web? </h4>
+              <p class="answer" >Al filtrar las solicitudes HTTP POST que contienen archivos PHP, se observa que el atacante cargó un web shell a través del archivo editprofile.php.</p>
+                <img class="img-post" src="../images/post14/foto_7.png" alt="imagen_solicitud">
+                <img class="img-post" src="../images/post14/foto_8.png" alt="imagen_php">
+
+            <h4 class="question" >¿Cuál es el nombre del shell web que subió el atacante? </h4>
+              <p class="answer" >En el siguiente paquete del filtro aplicado, al seguir el TCP Stream, se observa que el atacante cargó el web shell llamado dbfunctions.php.</p>
+                  <img class="img-post" src="../images/post14/foto_9.png" alt="imagen_shell">
+
+            <h4 class="question" >¿Cuál es el parámetro utilizado en el shell web para ejecutar comandos?</h4>
+              <p class="img-post" >En el código del web shell se observa que el parámetro utilizado para ejecutar comandos es cmd, ya que el script obtiene su valor mediante $_REQUEST['cmd'].</p>
+                  <img class="img-post" src="../images/post14/foto_10.png" alt="imagen_parametro">
+
+            <h4 class="question" >¿Cuál es el primer comando ejecutado por el atacante?</h4>
+                <p class="answer" >Al aplicar un filtro para las solicitudes HTTP GET dirigidas a archivos PHP, se observa que el atacante accede al web shell dbfunctions.php utilizando el parámetro cmd.
+                   El primer comando ejecutado fue id, seguido posteriormente por whoami.</p>
+                   <img class="img-post" src="../images/post14/foto_11.png" alt="imagen_parametro">
+
+            <h4 class="question" >¿Cuál es el tipo de conexión de shell que el atacante obtiene a través de la ejecución de comandos? </h4>
+                <p class="answer" >Al analizar el TCP Stream, se observa que el atacante ejecutó un reverse shell en Python mediante el parámetro cmd del web shell. El script establece una conexión y redirige la entrada y salida de una shell /bin/sh.</p>
+                <img class="img-post" src="../images/post14/foto_12.png" alt="imagen_cmd">
+
+            <h4 class="question" >¿Cuál es el puerto que utiliza para la conexión de la cáscara?</h4>
+                <p class="answer" >En el código del reverse shell en Python se observa que la conexión se establece utilizando el puerto 4422, el cual permite al atacante obtener acceso remoto al sistema comprometido.</p>
+                <img class="img-post" src="../images/post14/foto_13.png" alt="imagen_conexion">
+
+            <h4 class="question" >Conclusión</h4>
+                <p class="answer" >Este laboratorio demuestra los riesgos que implica una mala configuración de los sistemas y la falta de controles de seguridad dentro de una red interna. Un atacante puede aprovechar estas debilidades para realizar reconocimiento, 
+                  explotar vulnerabilidades y obtener acceso remoto a los equipos. Por ello, es fundamental fortalecer la configuración de los activos, aplicar buenas prácticas de ciberseguridad, fomentar la concienciación del personal y mantener un monitoreo constante de la 
+                  infraestructura para reducir la superficie de ataque.</p>
+
+          <nav class="post-actions" aria-label="Navegacion del post">
+            <a href="../index.html">&larr; Volver al inicio</a>
+          </nav>
+
+        </div>
+      </main>
+    <footer>
+  <div class="footer-content">
+    <p>© 2026 Jose Luis Reyes | Cybersecurity Blog</p>
+    <nav class="footer-links" aria-label="Enlaces del sitio">
+      <a href="https://github.com/JLReyes13" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://www.linkedin.com/in/jos%C3%A9-luis-reyes-791198334" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </nav>
+  </div>
+</footer>
+      
+    <script src="../script.js"></script>
+    
+</body>
+</html>
