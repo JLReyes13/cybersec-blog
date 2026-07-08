@@ -33,5 +33,5 @@ Desarrollar habilidades practicas como analista SOC mediante laboratorios, inves
 ## Autor
 
 Jose Luis Reyes  
-Enfocado en ciberseguridad, analisis SOC y respuesta a incidentes.
+Enfocado en ciberseguridad, analisis SOC.
 
