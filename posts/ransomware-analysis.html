@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Jose Luis Reyes">
+    <meta name="description" content="Blog de ciberseguridad enfocado en análisis de malware, tráfico de red y SOC.">
+    <title>Network Analysis – Ransomware | Jose Luis Reyes</title>
+    <link rel="icon" type="image/png" href="../images/general/icono.png">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="scanlines">
+    <canvas id="bg"></canvas>
+    <header>
+        <div class="container header-content">
+            <h1 class="hacker-title-terminal" >Cybersecurity Blog</h1>
+            <nav>
+              <a href="../index.html">Inicio</a>
+              <a href="../about.html">Sobre mí</a>
+            </nav>
+          </div>
+    </header>
+    <main class="container">
+        <div class="post reveal">
+          <h2 class="post-title">🔐 Network Analysis – Ransomware</h2>
+            <h4>Escenario</h4>
+
+              <p>ABC Industries trabajó día y noche durante un mes para preparar un documento de licitación para un prestigioso proyecto que aseguraría el futuro financiero de la compañía. La compañía fue golpeada por ransomware, que se cree fue realizada por un competidor,
+                 y la versión final del documento de licitación fue cifrada. Ahora mismo necesitan un experto que pueda descifrar este documento crítico. Todo lo que tenemos es el tráfico de la red, la nota de rescate, y el documento de ender cifrado. Haz lo tuyo.</p>
+
+            <h4>Preguntas</h4>
+
+            <h4 class="question" >Cuál es el sistema operativo del huéspe desde el que fue capturado el tráfico de la red? (Mira Capture File Properties, copiar los detalles exactamente) </h4>
+              <p class="answer" >Al revisar las propiedades del archivo .pcap (Capture File Properties), se observa que el sistema operativo del host desde el que se realizó la captura es 32-bit Windows 7 Service Pack 1, build 7601. En las mismas propiedades también se indica que la captura fue realizada con Dumpcap (Wireshark) 3.4.3</p>
+                <img class="img-post" src="../images/post15/foto_1.png" alt="imagen_sistema">
+
+            <h4 class="question" >Cuál es la URL completa de la que se descargó el ejecutable de ransomware? </h4>
+              <p class="answer" >Se aplicó el filtro http.request.method == "GET" para visualizar únicamente las solicitudes HTTP GET. Entre los resultados se identificó una única petición correspondiente a la descarga de un archivo ejecutable. Al inspeccionar los detalles del paquete se observó el campo Full request URI, 
+                el cual indica que el ejecutable de ransomware fue descargado desde la siguiente URL: http://10.0.2.15:8000/safecrypt.exe.</p>
+              <img class="img-post" src="../images/post15/foto_2.png" alt="imagen_filtro">
+              <img class="img-post" src="../images/post15/foto_3.png" alt="imagen_get">
+
+            <h4 class="question" >Nombre el archivo ejecutable de ransomware? </h4>
+              <p class="answer" >Al analizar el flujo TCP mediante la opción TCP Stream, se observa que el archivo descargado es safecrypt.exe. Además, el contenido del flujo comienza con la firma MZ, característica de los archivos Portable Executable (PE) de Windows, lo que confirma que se trata de un archivo ejecutable.</p>
+                <img class="img-post" src="../images/post15/foto_4.png" alt="imagen_nombre">
+                  
+            <h4 class="question" >Qué es el hash MD5 del ransomware? </h4>
+                <p class="answer" >Para obtener el hash MD5 del ransomware, primero se exportó el archivo ejecutable desde File → Export Objects → HTTP, donde se identificó el archivo safecrypt.exe y se guardó en el sistema.</p>
+                     <img class="img-post" src="../images/post15/foto_5.png" alt="imagen_archivo">
+                     <p class="answer" >Posteriormente, desde la terminal se ejecutó el comando md5sum safecrypt.exe, el cual permitió calcular el hash MD5 del archivo.</p>
+                     <img class="img-post" src="../images/post15/foto_6.png" alt="imgaen_md5">
+
+            <h4 class="question" >Cómo se llama el ransomware? </h4>
+              <p class="answer" >Una vez obtenido el hash MD5 del archivo safecrypt.exe, se realizó una búsqueda en VirusTotal para identificar el malware. En la sección Threat label se observa que el archivo es identificado como TeslaCrypt, confirmando que el ejecutable pertenece a esta familia de ransomware.</p>
+                <img class="img-post" src="../images/post15/foto_7.png" alt="imagen_malware">
+
+            <h4 class="question" >Cuál es el algoritmo de cifrado utilizado por el ransomware, según la nota de rescate?</h4>
+                <p class="answer" >Al revisar la nota de rescate, se observa que el atacante indica que los archivos fueron cifrados mediante RSA-4096.</p>
+                <img class="img-post" src="../images/post15/foto_8.png" alt="imagen_algoritmo">
+
+            <h4 class="question" >Cuál es el dominio que empieza con el tráfico de ransomware?</h4>
+                <p class="answer" >Al filtrar el tráfico DNS correspondiente al host comprometido, se identificó una consulta para el dominio dunyamuzelerimuzesi.com. Esta consulta forma parte de la actividad de red observada durante la ejecución del ransomware y corresponde al dominio con el que inicia el tráfico asociado a la infección.</p>
+                <img class="img-post" src="../images/post15/foto_9.png" alt="imagen_dominio">
+
+            <h4 class="question" >Descifrar el documento de licitación y presentar la bandera</h4>
+                <p class="answer" >Una vez identificada la muestra como TeslaCrypt, se utilizó la herramienta ESET TeslaCrypt Decryptor en Windows para descifrar el archivo Tender.pdf.micro.</p>
+                <img class="img-post" src="../images/post15/foto_10.png" alt="imagen_herramienta">
+                <img class="img-post" src="../images/post15/foto_11.png" alt="imagen_bandera">
+
+            <h4 class="question" >Conclusión</h4>
+                <p class="answer" >Este tipo de ataques representa una de las amenazas más críticas para las organizaciones, ya que el ransomware cifra los archivos de los sistemas comprometidos y puede afectar gravemente la disponibilidad e integridad de la información. Por ello, una respuesta rápida y una adecuada gestión del incidente son 
+                    fundamentales para reducir el impacto y evitar ceder al chantaje de los atacantes. Asimismo, es indispensable mantener los sistemas actualizados, aplicar buenas prácticas de seguridad y fortalecer la concienciación de los usuarios para disminuir el riesgo de sufrir este tipo de ataques.</p>
+
+          <nav class="post-actions" aria-label="Navegacion del post">
+            <a href="../index.html">&larr; Volver al inicio</a>
+          </nav>
+
+        </div>
+      </main>
+    <footer>
+  <div class="footer-content">
+    <p>© 2026 Jose Luis Reyes | Cybersecurity Blog</p>
+    <nav class="footer-links" aria-label="Enlaces del sitio">
+      <a href="https://github.com/JLReyes13" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://www.linkedin.com/in/jos%C3%A9-luis-reyes-791198334" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </nav>
+  </div>
+</footer>
+      
+    <script src="../script.js"></script>
+    
+</body>
+</html>
