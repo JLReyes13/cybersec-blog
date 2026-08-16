@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Jose Luis Reyes">
+    <meta name="description" content="Blog de ciberseguridad enfocado en análisis de malware, tráfico de red y SOC.">
+    <title>ShadowRoast Lab | Jose Luis Reyes</title>
+    <link rel="icon" type="image/png" href="../images/general/icono.png">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+<body class="scanlines">
+    <canvas id="bg"></canvas>
+    <header>
+        <div class="container header-content">
+            <h1 class="hacker-title-terminal" >Cybersecurity Blog</h1>
+            <nav>
+              <a href="../index.html">Inicio</a>
+              <a href="../about.html">Sobre mí</a>
+            </nav>
+          </div>
+    </header>
+    <main class="container">
+        <div class="post reveal">
+          <h3>💻 ShadowRoast Lab</h3>
+            <h4>Escenario</h4>
+
+              <p>Como analista de ciberseguridad en TechSecure Corp, usted ha sido alertado de actividades inusuales dentro del entorno de Active Directory de la compañía. 
+                Los informes iniciales sugieren un acceso no autorizado y posibles intentos de escalada de privilegios.</p>
+
+            <h4>Preguntas</h4>
+
+            <h4 class="question" >¿Cuál es el nombre de archivo malicioso utilizado por el atacante para el acceso inicial?</h4>
+              <p class="answer" >Se realizó la búsqueda utilizando un filtro para el Event ID 1 de Sysmon, que corresponde a la creación de procesos en Windows. También se agregó el nombre del equipo sospechoso. 
+                De esta manera, se encontró un ejecutable llamado AdobeUpdater.exe, relacionado con la ejecución de procesos de PowerShell y CMD.</p>
+              <img class="img-post" src="../images/post17/foto_1.png" alt="imagen_archivo">
+               
+            <h4 class="question" >¿Cuál es el nombre de la clave de ejecución del registro creado por el atacante para mantener la persistencia?</h4>
+              <p class="answer" >Ahora relacionamos en el filtro los eventos asociados con los registros de Windows, específicamente el Event ID 13 de Sysmon. También tomamos en cuenta el equipo comprometido y revisamos el campo TargetObject, el cual nos proporciona la ruta de la clave modificada. 
+                De esta manera, encontramos una clave específica relacionada con AdobeUpdater.exe, que contiene un comando de PowerShell con código en Base64 utilizado para mantener la persistencia.</p>
+              <img class="img-post" src="../images/post17/foto_2.png" alt="imagen_ejecucion">
+
+            <h4 class="question" >¿Cuál es la ruta completa del directorio utilizado por el atacante para almacenar sus herramientas caídas?</h4>
+              <p class="answer" >En este caso, relacionamos el equipo comprometido con el archivo ejecutable y el Event ID 11 de Sysmon, que nos permite identificar la creación de archivos. De esta manera, pudimos encontrar el directorio donde el atacante almacenó sus herramientas y el ejecutable relacionado.</p>
+                <img class="img-post" src="../images/post17/foto_3.png" alt="imagen_ruta">
+                  
+            <h4 class="question" >¿Qué herramienta utilizó el atacante para la escalada de privilegios y la cosecha de credenciales?</h4> 
+              <p class="answer" >Para encontrar la herramienta, se utilizó el Event ID 1 de Sysmon, que corresponde a la creación de procesos. También se tomó en cuenta el directorio donde el atacante había almacenado sus herramientas. La consulta arrojó tres resultados y uno de ellos corresponde a una herramienta llamada Rubeus, 
+                utilizada para realizar ataques relacionados con la autenticación de Kerberos en entornos de Active Directory y obtener credenciales.</p>
+                <img class="img-post" src="../images/post17/foto_4.png" alt="imagen_herramienta">
+
+            <h4 class="question" >¿Fue exitosa la cosecha de credenciales del atacante? Si es así, ¿puede proporcionar el nombre de usuario de la cuenta de dominio comprometido?</h4>
+              <p class="answer" >Siguiendo la consulta anterior, se pudo detectar que el atacante logró comprometer otra cuenta. Además, se identificó el uso de la herramienta Mimikatz, y el usuario comprometido fue tcooper.</p>
+                <img class="img-post" src="../images/post17/foto_5.png" alt="imagen_credencial">
+
+            <h4 class="question" >¿Cuál es la herramienta utilizada por el atacante para registrar un controlador de dominio fraudulento para manipular los datos de Active Directory?</h4>
+                <p class="answer" >Para este caso, se utilizó un filtro relacionado con eventos de Windows asociados con Active Directory. En los resultados se encontró un evento relacionado con la replicación de Active Directory desde el equipo comprometido, comportamiento que puede estar asociado con la técnica DCShadow.</p>
+                <img class="img-post" src="../images/post17/foto_6.png" alt="imagen_active">
+                <p class="answer" >Al investigar esta técnica en MITRE ATT&CK, podemos observar que una de las herramientas que permite realizarla es Mimikatz.</p>
+                <img class="img-post" src="../images/post17/foto_7.png" alt="imagen_mitre">
+
+            <h4 class="question" >¿Cuál es el primer comando utilizado por el atacante para habilitar RDP en máquinas remotas para el movimiento lateral?</h4>
+                <p class="answer" >Realizando una investigación sobre RDP, se pudo identificar el valor relacionado con la habilitación de conexiones remotas. Posteriormente, se utilizó este valor como filtro junto con el Event ID 1 de Sysmon, correspondiente a la creación de procesos, lo que permitió encontrar el comando utilizado por el atacante.</p>
+                <img class="img-post"  src="../images/post17/foto_8.png" alt="imagen_comando">
+                <img class="img-post"  src="../images/post17/foto_9.png" alt="imagen_rdp">
+
+            <h4 class="question" >¿Cuál es el nombre del archivo creado por el atacante después de comprimir archivos confidenciales?</h4>
+                <p class="answer" >Para este caso, se filtró el Event ID 11 de Sysmon, relacionado con la creación de archivos, junto con la búsqueda de archivos con extensión .zip. De esta manera, se encontró un archivo relacionado con el equipo comprometido.</p>
+                  <img class="img-post" src="../images/post17/foto_10.png" alt="imagen_tarea">
+          
+            <h4 class="question" >Conclusión</h4>
+                <p class="answer" >Este tipo de incidentes nos deja como gran enseñanza que un pequeño error, como descargar una actualización no legítima de un programa, puede desencadenar un gran problema. No debemos olvidar descargar software y actualizaciones de sitios legítimos. Además, cuando el incidente ya ha escalado al punto de mantener persistencia en el sistema, 
+                  lo mejor será aislar el host comprometido y continuar con la investigación para determinar si otros equipos también fueron afectados.</p>
+
+        </div>
+    </main>
+    <footer>
+      <div class="footer-content">
+        <p>© 2026 Jose Luis Reyes | Cybersecurity Blog</p>
+        <nav class="footer-links" aria-label="Enlaces del sitio">
+          <a href="https://github.com/JLReyes13" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://www.linkedin.com/in/jos%C3%A9-luis-reyes-791198334" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </nav>
+      </div>
+    </footer>
+      
+    <script src="../script.js"></script>
+    
+</body>
+</html> 
