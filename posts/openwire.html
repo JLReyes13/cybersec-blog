@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Jose Luis Reyes">
+    <meta name="description" content="Blog de ciberseguridad enfocado en análisis de malware, tráfico de red y SOC.">
+    <title>📡 OpenWire Lab | Jose Luis Reyes</title>
+    <link rel="icon" type="image/png" href="../images/general/icono.png">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+<body class="scanlines">
+    <canvas id="bg"></canvas>
+    <header>
+        <div class="container header-content">
+            <h1 class="hacker-title-terminal" >Cybersecurity Blog</h1>
+            <nav>
+              <a href="../index.html">Inicio</a>
+              <a href="../about.html">Sobre mí</a>
+            </nav>
+          </div>
+    </header>
+    <main class="container">
+        <div class="post reveal">
+          <h3>📡 OpenWire Lab</h3>
+            <h4>Escenario</h4>
+
+              <p>Durante su turno como analista de SOC de nivel 2, recibe una escalada de un analista de nivel 1 con respecto a un servidor de cara al público. Este servidor ha sido marcado por hacer conexiones salientes a múltiples IP sospechosas. 
+                En respuesta, se inicia el protocolo de respuesta a incidentes estándar, que incluye aislar el servidor de la red para evitar el posible movimiento lateral o la exfiltración de datos y la obtención de una captura de paquetes de la utilidad NSM para su análisis. 
+                Su tarea es analizar el pcap y evaluar los signos de actividad maliciosa.</p>
+
+            <h4>Preguntas</h4>
+
+            <h4 class="question" >Al identificar la IP C2, podemos bloquear el tráfico hacia y desde esta IP, ayudando a contener la brecha y evitar una mayor exfiltración de datos o ejecución de comandos. ¿Puede proporcionar la IP del servidor C2 que se comunicaba con nuestro servidor?</h4>
+              <p class="answer" >Primero se revisó el apartado de Estadísticas → Conversaciones, donde se encontró que la IP 146.190.21.92 tenía una gran cantidad de paquetes intercambiados con el servidor, lo cual resultó sospechoso. Después, al analizar el tráfico relacionado con OpenWire y seguir el TCP Stream, se encontró
+                 una referencia a un archivo invoice.xml alojado en esta misma dirección IP. Al continuar con el análisis del contenido XML, también se observó la descarga de un archivo llamado docker desde otra dirección IP.</p>
+              <img class="img-post" src="../images/post19/foto_1.png" alt="imagen_c2.1">
+              <img class="img-post" src="../images/post19/foto_2.png" alt="imagen_c2.2">
+              <img class="img-post" src="../images/post19/foto_3.png" alt="imagen_c2.3">
+               
+            <h4 class="question" >Los puntos de entrada iniciales son críticos para rastrear el vector de ataque. ¿Cuál es el número de puerto del servicio que el adversario ha explotado?</h4>
+              <p class="answer" >Para este caso se dio seguimiento a los paquetes relacionados con OpenWire, donde se pudo observar que la comunicación se realizó a través del puerto 61616. Después, se aplicó un filtro sobre este puerto para analizar el tráfico y confirmar que fue el servicio utilizado por el atacante.</p>
+              <img class="img-post" src="../images/post19/foto_4.png" alt="imagen_puerto">
+              <img class="img-post" src="../images/post19/foto_5.png" alt="imagen_puerto2">
+
+            <h4 class="question" >Siguiendo la pregunta anterior, ¿cuál es el nombre del servicio que se encuentra vulnerable?</h4>
+              <p class="answer" >Considerando la pregunta anterior y los paquetes relacionados con OpenWire, se investigó a qué servicio pertenece este protocolo y se encontró que está relacionado con Apache ActiveMQ. Además, al examinar los paquetes mediante TCP Stream, podemos observar referencias a ActiveMQ, confirmando que este es el servicio vulnerable.</p>
+                <img class="img-post" src="../images/post19/foto_6.png" alt="imagen_servicio">
+                  
+            <h4 class="question" >La infraestructura del atacante a menudo involucra múltiples componentes. ¿Qué es la IP del segundo servidor C2?</h4> 
+              <p class="answer" >Al analizar los paquetes anteriores, se encontró un comando que utiliza curl para descargar un archivo llamado docker desde otra dirección IP y posteriormente darle permisos de ejecución. Después, al filtrar las conexiones HTTP del servidor comprometido, podemos observar comunicación con esta misma dirección IP, lo que permite identificarla como el segundo servidor C2.</p>
+                <img class="img-post" src="../images/post19/foto_7.png" alt="imagen_ip.1">
+                <img class="img-post" src="../images/post19/foto_8.png" alt="imagen_ip.2">
+
+            <h4 class="question" >Los atacantes suelen dejar huellas en el disco. ¿Cuál es el nombre del ejecutable de shell inverso que se ha caído en el servidor?</h4>
+              <p class="answer" >Con base en lo investigado en la pregunta anterior, podemos observar que se descarga un archivo llamado docker en el directorio /tmp/. Posteriormente, se le asignan permisos de ejecución y se ejecuta, por lo que podemos identificarlo como el ejecutable relacionado con el shell inverso.</p>
+                <img class="img-post" src="../images/post19/foto_9.png" alt="imagen_shell">
+
+            <h4 class="question" >¿Qué clase Java fue invocada por el archivo XML para ejecutar el exploit?</h4>
+                <p class="answer" >En el mismo paquete relacionado con invoice.xml podemos analizar el código y observar que se utiliza la clase java.lang.ProcessBuilder, una clase de Java que permite crear y ejecutar procesos del sistema operativo.</p>
+                <img class="img-post" src="../images/post19/foto_10.png" alt="imagen_xml">
+                
+            <h4 class="question" >Para comprender mejor la falla de seguridad específica explotada, ¿puede identificar el identificador CVE asociado con esta vulnerabilidad?</h4>
+                <p class="answer" >Buscando información sobre OpenWire y sus vulnerabilidades, se encontró en la base de datos de vulnerabilidades del NIST (NVD) una vulnerabilidad relacionada con Apache ActiveMQ. Esta permite la ejecución remota de código mediante el protocolo OpenWire, 
+                  lo que puede permitir que un atacante ejecute comandos de shell de manera arbitraria.</p>
+                <img class="img-post"  src="../images/post19/foto_11.png" alt="imagen_cve">
+
+            <h4 class="question" >El proveedor abordó la vulnerabilidad añadiendo un paso de validación para garantizar que solo fuera válido ThrowableLas clases pueden ser instanciadas, evitando la explotación. ¿En qué clase y método de Java se añadió este paso de validación?</h4>
+                <p class="answer" >Al revisar los cambios realizados en el código para corregir la vulnerabilidad, podemos observar que en la clase BaseDataStreamMarshaller se agregó una validación dentro del método createThrowable. Esta validación utiliza OpenWireUtil.validateIsThrowable(clazz) antes de crear una nueva instancia, evitando que se puedan utilizar clases no permitidas durante este proceso.</p>
+                  <img class="img-post" src="../images/post19/foto_12.png" alt="imagen_vulnerabilidad">
+          
+            <h4 class="question" >Conclusión</h4>
+                <p class="answer" ></p>
+
+        </div>
+    </main>
+    <footer>
+      <div class="footer-content">
+        <p>© 2026 Jose Luis Reyes | Cybersecurity Blog</p>
+        <nav class="footer-links" aria-label="Enlaces del sitio">
+          <a href="https://github.com/JLReyes13" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://www.linkedin.com/in/jos%C3%A9-luis-reyes-791198334" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </nav>
+      </div>
+    </footer>
+      
+    <script src="../script.js"></script>
+    
+</body>
+</html> 
