@@ -1,121 +1,165 @@
-/* SCROLL */
-const reveals = document.querySelectorAll(".reveal");
+/* Fondo compartido: estrellas discretas y sin movimiento al reducir animaciones. */
+(() => {
+  const canvas = document.getElementById('bg');
+  const ctx = canvas?.getContext('2d');
+  if (!ctx) return;
+  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let stars = [];
+  let frame;
+  let previous;
 
-function revealOnScroll() {
-  const windowHeight = window.innerHeight;
-
-  reveals.forEach(el => {
-    const top = el.getBoundingClientRect().top;
-    if (top < windowHeight - 100) {
-      el.classList.add("active");
+  function draw(time) {
+    const delta = previous === undefined ? 0 : Math.min((time - previous) / 1000, 0.05);
+    previous = time;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = 'rgba(190, 213, 243, 0.45)';
+    for (const star of stars) {
+      if (!motion.matches) star.y = (star.y + delta * star.speed) % canvas.height;
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+      ctx.fill();
     }
-  });
-}
-
-window.addEventListener("scroll", revealOnScroll);
-revealOnScroll();
-
-/* FONDO PRO */
-const canvas = document.getElementById("bg");
-const ctx = canvas.getContext("2d");
-const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-let stars = [];
-let meteors = [];
-let animationFrameId;
-
-/* RESIZE DINÁMICO */
-function resize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-
-  // regenerar estrellas según tamaño de pantalla
-  stars = [];
-  const STAR_COUNT = window.innerWidth < 768 ? 150 : 300;
-
-  for (let i = 0; i < STAR_COUNT; i++) {
-    stars.push({
+    if (!motion.matches && !document.hidden) frame = requestAnimationFrame(draw);
+  }
+  function restart() {
+    cancelAnimationFrame(frame);
+    previous = undefined;
+    draw(performance.now());
+  }
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    stars = Array.from({ length: window.innerWidth < 700 ? 25 : 55 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      size: Math.random() * 1.5,
-      speed: Math.random() * 0.4
+      size: Math.random() * 0.8 + 0.3,
+      speed: Math.random() * 3 + 1
+    }));
+    restart();
+  }
+  window.addEventListener('resize', resize);
+  document.addEventListener('visibilitychange', restart);
+  motion.addEventListener('change', restart);
+  resize();
+})();
+
+
+/* Orden cronológico y tipo de caso del catálogo. */
+(() => {
+  const form = document.getElementById('lab-filters');
+  if (!form) return;
+  const order = document.getElementById('lab-order');
+  const type = document.getElementById('lab-type');
+  const results = document.getElementById('lab-results');
+  const count = document.getElementById('lab-count');
+  const empty = document.getElementById('lab-empty');
+  const labs = [...results.querySelectorAll('.card')];
+  const types = [...new Set(labs.map(card => card.dataset.caseType))].sort((a, b) => a.localeCompare(b, 'es'));
+  for (const label of types) type.add(new Option(label, label));
+  function restore() {
+    const params = new URLSearchParams(location.search);
+    order.value = params.get('orden') === 'oldest' ? 'oldest' : 'newest';
+    type.value = types.includes(params.get('tipo')) ? params.get('tipo') : '';
+    update(false);
+  }
+  function update(save = true) {
+    const sorted = [...labs].sort((a, b) => {
+      const chronological = a.dataset.date.localeCompare(b.dataset.date);
+      return order.value === 'oldest' ? chronological : -chronological;
+    });
+    let visible = 0;
+    const fragment = document.createDocumentFragment();
+    for (const card of sorted) {
+      card.hidden = Boolean(type.value && card.dataset.caseType !== type.value);
+      if (!card.hidden) visible++;
+      fragment.append(card);
+    }
+    results.append(fragment);
+    count.textContent = `Mostrando ${visible} de ${labs.length} laboratorios`;
+    empty.hidden = visible !== 0;
+    form.querySelector('.filter-reset').hidden = !type.value && order.value === 'newest';
+    const url = new URL(location.href);
+    for (const [key, value] of [['orden', order.value === 'oldest' ? 'oldest' : ''], ['tipo', type.value]]) {
+      if (value) url.searchParams.set(key, value);
+      else url.searchParams.delete(key);
+    }
+    if (save || url.searchParams.has('q')) {
+      url.searchParams.delete('q');
+      history.replaceState(null, '', url);
+    }
+    document.querySelectorAll('a[href*="posts/"]').forEach(link => {
+      const target = new URL(link.href);
+      target.searchParams.set('catalogo', url.search);
+      link.href = target.href;
     });
   }
-}
+  form.addEventListener('submit', event => event.preventDefault());
+  order.addEventListener('change', () => update());
+  type.addEventListener('change', () => update());
+  form.addEventListener('reset', () => setTimeout(() => update(), 0));
+  window.addEventListener('popstate', restore);
+  restore();
+  form.hidden = false;
+  count.hidden = false;
+})();
 
-window.addEventListener("resize", resize);
-resize();
-
-/* METEOROS */
-function createMeteor() {
-  meteors.push({
-    x: Math.random() * canvas.width,
-    y: 0,
-    length: Math.random() * 80 + 50,
-    speed: Math.random() * 8 + 4,
-    opacity: 1
+/* Animar una sola vez al entrar en pantalla; el contenido siempre es visible. */
+(() => {
+  if (!('IntersectionObserver' in window)) return;
+  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (motion.matches) return;
+  const observer = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      if (!motion.matches) entry.target.classList.add('entered-view');
+      observer.unobserve(entry.target);
+    }
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.hero, .card, .credential-card, .about-profile, .about-text, .soc-hero, .post-heading')
+    .forEach(element => observer.observe(element));
+  motion.addEventListener('change', event => {
+    if (event.matches) observer.disconnect();
   });
-}
+})();
 
-let meteorInterval;
+/* Conservar el catálogo al regresar desde un análisis. */
+(() => {
+  const saved = new URLSearchParams(location.search).get('catalogo');
+  if (saved === null) return;
+  const params = new URLSearchParams(saved);
+  document.querySelectorAll('a[href="../laboratorios.html"]').forEach(link => {
+    const target = new URL(link.href);
+    for (const key of ['orden', 'tipo']) {
+      if (params.has(key)) target.searchParams.set(key, params.get(key));
+    }
+    link.href = target.href;
+  });
+})();
 
-if (!reduceMotion.matches) {
-  meteorInterval = setInterval(createMeteor, 2000);
-}
-
-/* ANIMACIÓN */
-function animate() {
-  if (reduceMotion.matches) return;
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // estrellas
-  ctx.fillStyle = "white";
-  stars.forEach(s => {
-    ctx.beginPath();
-    ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
-    ctx.fill();
-
-    s.y += s.speed;
-    s.x += s.speed * 1.5;
-
-    if (s.y > canvas.height || s.x > canvas.width) {
-      s.y = 0;
-      s.x = Math.random() * canvas.width;
+/* Menú móvil: la navegación permanece visible si JavaScript no carga. */
+(() => {
+  const nav = document.querySelector('body > header nav');
+  if (!nav) return;
+  const mobile = matchMedia('(max-width: 700px)');
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'nav-toggle';
+  button.textContent = 'Menú';
+  nav.id = 'primary-navigation';
+  button.setAttribute('aria-controls', nav.id);
+  nav.before(button);
+  function setOpen(open) {
+    button.setAttribute('aria-expanded', String(open));
+    nav.hidden = mobile.matches && !open;
+    button.textContent = open ? 'Cerrar menú' : 'Menú';
+  }
+  button.addEventListener('click', () => setOpen(button.getAttribute('aria-expanded') !== 'true'));
+  nav.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && mobile.matches) {
+      setOpen(false);
+      button.focus();
     }
   });
-
-  // meteoros
-  meteors.forEach((m, i) => {
-    ctx.strokeStyle = `rgba(255,255,255,${m.opacity})`;
-    ctx.beginPath();
-    ctx.moveTo(m.x, m.y);
-    ctx.lineTo(m.x + m.length, m.y + m.length / 2);
-    ctx.stroke();
-
-    m.x += m.speed;
-    m.y += m.speed / 2;
-    m.opacity -= 0.02;
-
-    if (m.opacity <= 0) meteors.splice(i, 1);
-  });
-
-  animationFrameId = requestAnimationFrame(animate);
-}
-
-if (!reduceMotion.matches) {
-  animate();
-}
-
-reduceMotion.addEventListener("change", event => {
-  if (event.matches) {
-    clearInterval(meteorInterval);
-    cancelAnimationFrame(animationFrameId);
-    meteors = [];
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    return;
-  }
-
-  meteorInterval = setInterval(createMeteor, 2000);
-  animate();
-});
+  mobile.addEventListener('change', () => setOpen(false));
+  setOpen(false);
+})();

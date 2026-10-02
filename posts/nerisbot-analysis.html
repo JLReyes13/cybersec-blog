@@ -4,75 +4,100 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="author" content="Jose Luis Reyes">
-  <meta name="description" content="Blog de ciberseguridad enfocado en análisis de malware, tráfico de red y SOC.">
+  <meta name="description" content="Investigación de NerisBot mediante tráfico de red y eventos IDS para identificar comunicaciones sospechosas y descargas maliciosas.">
   <title>NerisBot | Jose Luis Reyes</title>
-  <link rel="icon" type="image/png" href="images/general/icono.png">
+    <link rel="icon" type="image/png" href="../images/general/icono.png">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../styles.css">
+  <link rel="canonical" href="https://jlreyes13.github.io/cybersec-blog/posts/nerisbot-analysis.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Cybersecurity Blog | Jose Luis Reyes">
+  <meta property="og:locale" content="es_MX">
+  <meta property="og:title" content="NerisBot | Jose Luis Reyes">
+  <meta property="og:description" content="Investigación de NerisBot mediante tráfico de red y eventos IDS para identificar comunicaciones sospechosas y descargas maliciosas.">
+  <meta property="og:url" content="https://jlreyes13.github.io/cybersec-blog/posts/nerisbot-analysis.html">
+  <meta property="og:image" content="https://jlreyes13.github.io/cybersec-blog/images/post4/foto_1.png">
+  <meta property="og:image:width" content="969">
+  <meta property="og:image:height" content="116">
+  <meta property="og:image:alt" content="Captura del laboratorio: NerisBot | Jose Luis Reyes">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="NerisBot | Jose Luis Reyes">
+  <meta name="twitter:description" content="Investigación de NerisBot mediante tráfico de red y eventos IDS para identificar comunicaciones sospechosas y descargas maliciosas.">
+  <meta name="twitter:image" content="https://jlreyes13.github.io/cybersec-blog/images/post4/foto_1.png">
+  <meta name="twitter:image:alt" content="Captura del laboratorio: NerisBot | Jose Luis Reyes">
 </head>
 <body class="scanlines">
-    <canvas id="bg"></canvas>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <canvas id="bg" aria-hidden="true"></canvas>
     <header>
         <div class="container header-content">
-            <h1 class="hacker-title-terminal" >Cybersecurity Blog</h1>
-            <nav>
-              <a href="../index.html">Inicio</a>
-              <a href="../about.html">Sobre mí</a>
-            </nav>
+            <p class="site-brand"><a href="../index.html">Cybersecurity Blog<span aria-hidden="true">_</span></a></p>
+            <nav aria-label="Navegación principal">
+        <a href="../index.html">Inicio</a>
+        <a href="../laboratorios.html" aria-current="location">Laboratorios</a>
+        <a href="../personal-soc.html">SOC personal</a>
+        <a href="../about.html">Sobre mí</a>
+      </nav>
           </div>
     </header>
-    <main class="container">
+    <main id="contenido" class="container">
         <div class="post reveal">
-          <h2 class="post-title">🕵️ NerisBot Lab</h2>
-            <h4>Escenario</h4>
+      <div class="post-heading">
+        <p class="eyebrow">Análisis de laboratorio</p>
+        <h1 class="post-title">NerisBot Lab</h1>
+        <p class="date">21 Abr 2026</p>
+        <div class="tags" aria-label="Temas del análisis"><span>Network</span><span>IDS</span><span>Malware</span></div>
+      </div>
 
-              <p>Se ha detectado una actividad de red inusual en un entorno universitario, lo que indica una posible intención maliciosa. Estas anomalías, 
+            <h2>Escenario</h2>
+
+              <p>Se ha detectado una actividad de red inusual en un entorno universitario, lo que indica una posible intención maliciosa. Estas anomalías,
                 observadas hace seis horas, sugieren la presencia de comunicaciones de mando y control (C2) y otros comportamientos dañinos dentro de la red.</p>
 
                 <p>Su equipo ha sido encargado de analizar los últimos registros de tráfico de la red para investigar el alcance y el impacto de estas actividades.
                     La investigación tiene como objetivo identificar servidores de comandos y control y descubrir interacciones maliciosas.</p>
 
-            <h4>Preguntas</h4>
+            <h2>Preguntas</h2>
 
-            <h4 class="question" >Durante la investigación del tráfico de la red, se observaron patrones inusuales de actividad en los registros de Suricata, lo que sugiere un posible acceso no autorizado. Una dirección IP externa inició intentos de acceso y posteriormente se vio descargando un archivo ejecutable sospechoso. Esta actividad indica con fuerza el origen del ataque.
-                Cuál es la dirección IP desde la que se originó el acceso no autorizado inicial?</h4>
+            <h3 class="question" >Durante la investigación del tráfico de la red, se observaron patrones inusuales de actividad en los registros de Suricata, lo que sugiere un posible acceso no autorizado. Una dirección IP externa inició intentos de acceso y posteriormente se vio descargando un archivo ejecutable sospechoso. Esta actividad indica con fuerza el origen del ataque.
+                Cuál es la dirección IP desde la que se originó el acceso no autorizado inicial?</h3>
               <p class="answer" >Al ejecutar el siguiente comando en Splunk:</p>
         <pre class="code-block"><code>
-            index=* sourcetype=suricata eventtype=suricata_eve_ids_attack 
+            index=* sourcetype=suricata eventtype=suricata_eve_ids_attack
         | stats values(dest_ip) values(http.http_user_agent) values(http.url) by src_ip
             </code></pre>
                 <p class="answer" >podemos observar eventos relacionados con alertas de Suricata, el cual es un IDS. Además, se identifica la descarga de archivos .exe desde una dirección IP específica.</p>
-                <img class="img-post" src="../images/post4/foto_1.png" alt="imagen_ip">
+                <a class="evidence-link" href="../images/post4/foto_1.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 1 de NerisBot: Durante la investigación del tráfico de la red, se observaron patrones inusuales de actividad en los registros de Suricata, lo que sugiere un posible acceso no autorizado. Una dirección IP externa inició intentos de acceso y posteriormente se vio descargando un archivo ejecutable sospechoso. Esta actividad indica con fuerza el origen del ataque. Cuál es la dirección IP desde la que se originó el acceso no autorizado inicial?"><img class="img-post" src="../images/post4/foto_1.webp" alt="Captura 1 de NerisBot: Durante la investigación del tráfico de la red, se observaron patrones inusuales de actividad en los registros de Suricata, lo que sugiere un posible acceso no autorizado. Una dirección IP externa inició intentos de acceso y posteriormente se vio descargando un archivo ejecutable sospechoso. Esta actividad indica con fuerza el origen del ataque. Cuál es la dirección IP desde la que se originó el acceso no autorizado inicial?" width="969" height="116" decoding="async" loading="lazy"></a>
                 <p class="answer" >También se puede observar que toda la actividad se realizó de manera muy rápida, lo que sugiere que pudo haber sido automatizada.</p>
-                    <img class="img-post" src="../images/post4/foto_2.png" alt="imagen_pagina">
+                    <a class="evidence-link" href="../images/post4/foto_2.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 2 de NerisBot: Durante la investigación del tráfico de la red, se observaron patrones inusuales de actividad en los registros de Suricata, lo que sugiere un posible acceso no autorizado. Una dirección IP externa inició intentos de acceso y posteriormente se vio descargando un archivo ejecutable sospechoso. Esta actividad indica con fuerza el origen del ataque. Cuál es la dirección IP desde la que se originó el acceso no autorizado inicial?"><img class="img-post" src="../images/post4/foto_2.webp" alt="Captura 2 de NerisBot: Durante la investigación del tráfico de la red, se observaron patrones inusuales de actividad en los registros de Suricata, lo que sugiere un posible acceso no autorizado. Una dirección IP externa inició intentos de acceso y posteriormente se vio descargando un archivo ejecutable sospechoso. Esta actividad indica con fuerza el origen del ataque. Cuál es la dirección IP desde la que se originó el acceso no autorizado inicial?" width="1103" height="689" decoding="async" loading="lazy"></a>
 
-            <h4 class="question" >Investigar el dominio de los atacantes ayuda a identificar la infraestructura utilizada para el ataque, evaluar sus conexiones con otras amenazas y tomar medidas para mitigar futuros ataques. 
-                Cuál es el nombre de dominio del servidor atacante?</h4>
+            <h3 class="question" >Investigar el dominio de los atacantes ayuda a identificar la infraestructura utilizada para el ataque, evaluar sus conexiones con otras amenazas y tomar medidas para mitigar futuros ataques.
+                Cuál es el nombre de dominio del servidor atacante?</h3>
               <p class="answer" >Al revisar el listado de detalles en el campo <pre class="code-block">http.host.name</pre> es posible identificar el dominio utilizado durante el ataque.</p>
-              <img class="img-post" src="../images/post4/foto_3.png" alt="imagen_php">
+              <a class="evidence-link" href="../images/post4/foto_3.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 3 de NerisBot: Investigar el dominio de los atacantes ayuda a identificar la infraestructura utilizada para el ataque, evaluar sus conexiones con otras amenazas y tomar medidas para mitigar futuros ataques. Cuál es el nombre de dominio del servidor atacante?"><img class="img-post" src="../images/post4/foto_3.webp" alt="Captura 3 de NerisBot: Investigar el dominio de los atacantes ayuda a identificar la infraestructura utilizada para el ataque, evaluar sus conexiones con otras amenazas y tomar medidas para mitigar futuros ataques. Cuál es el nombre de dominio del servidor atacante?" width="914" height="326" decoding="async" loading="lazy"></a>
 
-            <h4 class="question" >Conociendo la dirección IP del sistema específico ayuda a enfocar los esfuerzos de rehabilitación y evaluar el alcance del compromiso. 
-                Cuál es la dirección IP del sistema que fue blanco de esta brecha?</h4>
+            <h3 class="question" >Conociendo la dirección IP del sistema específico ayuda a enfocar los esfuerzos de rehabilitación y evaluar el alcance del compromiso.
+                Cuál es la dirección IP del sistema que fue blanco de esta brecha?</h3>
               <p class="answer" >En los registros analizados, el campo <pre class="code-block">dest_ip</pre> permite identificar la dirección IP que recibe las conexiones asociadas a la actividad sospechosa.</p>
-                <img class="img-post" src="../images/post4/foto_4.png" alt="imagen_lenguaje">
-                  
-            <h4 class="question" >Identificar todos los archivos únicos descargados al host comprometido. Cuántos de estos archivos podrían ser potencialmente maliciosos?</h4> 
-              <p class="answer" >Con el mismo comando inicial, se observa la descarga de 5 archivos únicos potencialmente maliciosos: 4 archivos ejecutables .exe y un archivo de texto .txt.</p>
-                <img class="img-post" src="../images/post4/foto_5.png" alt="imagen_api">
+                <a class="evidence-link" href="../images/post4/foto_4.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 4 de NerisBot: Conociendo la dirección IP del sistema específico ayuda a enfocar los esfuerzos de rehabilitación y evaluar el alcance del compromiso. Cuál es la dirección IP del sistema que fue blanco de esta brecha?"><img class="img-post" src="../images/post4/foto_4.webp" alt="Captura 4 de NerisBot: Conociendo la dirección IP del sistema específico ayuda a enfocar los esfuerzos de rehabilitación y evaluar el alcance del compromiso. Cuál es la dirección IP del sistema que fue blanco de esta brecha?" width="749" height="215" decoding="async" loading="lazy"></a>
 
-            <h4 class="question" >Qué es el hash SHA256 del archivo malicioso disfrado de archivo .txt ?</h4>
+            <h3 class="question" >Identificar todos los archivos únicos descargados al host comprometido. Cuántos de estos archivos podrían ser potencialmente maliciosos?</h3>
+              <p class="answer" >Con el mismo comando inicial, se observa la descarga de 5 archivos únicos potencialmente maliciosos: 4 archivos ejecutables .exe y un archivo de texto .txt.</p>
+                <a class="evidence-link" href="../images/post4/foto_5.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 5 de NerisBot: Identificar todos los archivos únicos descargados al host comprometido. Cuántos de estos archivos podrían ser potencialmente maliciosos?"><img class="img-post" src="../images/post4/foto_5.webp" alt="Captura 5 de NerisBot: Identificar todos los archivos únicos descargados al host comprometido. Cuántos de estos archivos podrían ser potencialmente maliciosos?" width="279" height="113" decoding="async" loading="lazy"></a>
+
+            <h3 class="question" >Qué es el hash SHA256 del archivo malicioso disfrado de archivo .txt ?</h3>
 
               <p class="answer" >Para este caso, fue necesario correlacionar eventos entre Splunk y Zeek. Para ello, se ejecutó la siguiente consulta:</p>
               <pre class="code-block"><code>index=* sourcetype=zeek:files tx_hosts="195.88.191.59"
-                | join left=L right=R where L.seen_bytes=R.bytes 
+                | join left=L right=R where L.seen_bytes=R.bytes
                    [search index=* sourcetype=suricata src_ip=147.32.84.165 dest_ip=195.88.191.59 url=* ]
                 | table L.md5, R.url</code></pre>
                 <p class="answer" >Mediante esta correlación, fue posible identificar el hash MD5 del archivo asociado a la actividad observada.</p>
-                <img class="img-post" src="../images/post4/foto_6.png" alt="imagen_log">
+                <a class="evidence-link" href="../images/post4/foto_6.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 6 de NerisBot: Qué es el hash SHA256 del archivo malicioso disfrado de archivo .txt ?"><img class="img-post" src="../images/post4/foto_6.webp" alt="Captura 6 de NerisBot: Qué es el hash SHA256 del archivo malicioso disfrado de archivo .txt ?" width="1151" height="255" decoding="async" loading="lazy"></a>
                 <p class="answer" >Posteriormente, el hash fue analizado en VirusTotal. En la sección de detalles, se puede obtener el hash SHA-256 correspondiente al archivo.</p>
-                <img class="img-post" src="../images/post4/foto_7.png" alt="imagen_log">
+                <a class="evidence-link" href="../images/post4/foto_7.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 7 de NerisBot: Qué es el hash SHA256 del archivo malicioso disfrado de archivo .txt ?"><img class="img-post" src="../images/post4/foto_7.webp" alt="Captura 7 de NerisBot: Qué es el hash SHA256 del archivo malicioso disfrado de archivo .txt ?" width="1262" height="561" decoding="async" loading="lazy"></a>
           <nav class="post-actions" aria-label="Navegacion del post">
-            <a href="../index.html">&larr; Volver al inicio</a>
+            <a href="../laboratorios.html">← Volver a laboratorios</a>
           </nav>
         </div>
     </main>
@@ -81,12 +106,12 @@
     <p>© 2026 Jose Luis Reyes | Cybersecurity Blog</p>
     <nav class="footer-links" aria-label="Enlaces del sitio">
       <a href="https://github.com/JLReyes13" target="_blank" rel="noopener noreferrer">GitHub</a>
-      <a href="https://www.linkedin.com/in/tu-perfil" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="https://www.linkedin.com/in/jos%C3%A9-luis-reyes-791198334" target="_blank" rel="noopener noreferrer">LinkedIn</a>
     </nav>
   </div>
 </footer>
-      
+
     <script src="../script.js"></script>
-    
+
 </body>
-</html> 
+</html>

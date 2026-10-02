@@ -4,73 +4,100 @@
   <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Jose Luis Reyes">
-    <meta name="description" content="Blog de ciberseguridad enfocado en análisis de malware, tráfico de red y SOC.">
+    <meta name="description" content="Investigación de explotación de Apache ActiveMQ mediante OpenWire: servidores C2, descarga de malware y evidencias de CVE-2023-46604.">
     <title>OpenWire Lab | Jose Luis Reyes</title>
     <link rel="icon" type="image/png" href="../images/general/icono.png">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles.css">
+  <link rel="canonical" href="https://jlreyes13.github.io/cybersec-blog/posts/openwire.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Cybersecurity Blog | Jose Luis Reyes">
+  <meta property="og:locale" content="es_MX">
+  <meta property="og:title" content="OpenWire Lab | Jose Luis Reyes">
+  <meta property="og:description" content="Investigación de explotación de Apache ActiveMQ mediante OpenWire: servidores C2, descarga de malware y evidencias de CVE-2023-46604.">
+  <meta property="og:url" content="https://jlreyes13.github.io/cybersec-blog/posts/openwire.html">
+  <meta property="og:image" content="https://jlreyes13.github.io/cybersec-blog/images/post19/foto_1.png">
+  <meta property="og:image:width" content="893">
+  <meta property="og:image:height" content="679">
+  <meta property="og:image:alt" content="Captura del laboratorio: OpenWire Lab | Jose Luis Reyes">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="OpenWire Lab | Jose Luis Reyes">
+  <meta name="twitter:description" content="Investigación de explotación de Apache ActiveMQ mediante OpenWire: servidores C2, descarga de malware y evidencias de CVE-2023-46604.">
+  <meta name="twitter:image" content="https://jlreyes13.github.io/cybersec-blog/images/post19/foto_1.png">
+  <meta name="twitter:image:alt" content="Captura del laboratorio: OpenWire Lab | Jose Luis Reyes">
+</head>
 <body class="scanlines">
-    <canvas id="bg"></canvas>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <canvas id="bg" aria-hidden="true"></canvas>
     <header>
         <div class="container header-content">
-            <h1 class="hacker-title-terminal" >Cybersecurity Blog</h1>
-            <nav>
-              <a href="../index.html">Inicio</a>
-              <a href="../about.html">Sobre mí</a>
-            </nav>
+            <p class="site-brand"><a href="../index.html">Cybersecurity Blog<span aria-hidden="true">_</span></a></p>
+            <nav aria-label="Navegación principal">
+        <a href="../index.html">Inicio</a>
+        <a href="../laboratorios.html" aria-current="location">Laboratorios</a>
+        <a href="../personal-soc.html">SOC personal</a>
+        <a href="../about.html">Sobre mí</a>
+      </nav>
           </div>
     </header>
-    <main class="container">
+    <main id="contenido" class="container">
         <div class="post reveal">
-          <h3>📡 OpenWire Lab</h3>
-            <h4>Escenario</h4>
+      <div class="post-heading">
+        <p class="eyebrow">Análisis de laboratorio</p>
+        <h1 class="post-title">OpenWire Lab</h1>
+        <p class="date">31 Ago 2026</p>
+        <div class="tags" aria-label="Temas del análisis"><span>Wireshark</span><span>PCAP</span></div>
+      </div>
 
-              <p>Durante su turno como analista de SOC de nivel 2, recibe una escalada de un analista de nivel 1 con respecto a un servidor de cara al público. Este servidor ha sido marcado por hacer conexiones salientes a múltiples IP sospechosas. 
-                En respuesta, se inicia el protocolo de respuesta a incidentes estándar, que incluye aislar el servidor de la red para evitar el posible movimiento lateral o la exfiltración de datos y la obtención de una captura de paquetes de la utilidad NSM para su análisis. 
+            <h2>Escenario</h2>
+
+              <p>Durante su turno como analista de SOC de nivel 2, recibe una escalada de un analista de nivel 1 con respecto a un servidor de cara al público. Este servidor ha sido marcado por hacer conexiones salientes a múltiples IP sospechosas.
+                En respuesta, se inicia el protocolo de respuesta a incidentes estándar, que incluye aislar el servidor de la red para evitar el posible movimiento lateral o la exfiltración de datos y la obtención de una captura de paquetes de la utilidad NSM para su análisis.
                 Su tarea es analizar el pcap y evaluar los signos de actividad maliciosa.</p>
 
-            <h4>Preguntas</h4>
+            <h2>Preguntas</h2>
 
-            <h4 class="question" >Al identificar la IP C2, podemos bloquear el tráfico hacia y desde esta IP, ayudando a contener la brecha y evitar una mayor exfiltración de datos o ejecución de comandos. ¿Puede proporcionar la IP del servidor C2 que se comunicaba con nuestro servidor?</h4>
+            <h3 class="question" >Al identificar la IP C2, podemos bloquear el tráfico hacia y desde esta IP, ayudando a contener la brecha y evitar una mayor exfiltración de datos o ejecución de comandos. ¿Puede proporcionar la IP del servidor C2 que se comunicaba con nuestro servidor?</h3>
               <p class="answer" >Primero se revisó el apartado de Estadísticas → Conversaciones, donde se encontró que la IP 146.190.21.92 tenía una gran cantidad de paquetes intercambiados con el servidor, lo cual resultó sospechoso. Después, al analizar el tráfico relacionado con OpenWire y seguir el TCP Stream, se encontró
                  una referencia a un archivo invoice.xml alojado en esta misma dirección IP. Al continuar con el análisis del contenido XML, también se observó la descarga de un archivo llamado docker desde otra dirección IP.</p>
-              <img class="img-post" src="../images/post19/foto_1.png" alt="imagen_c2.1">
-              <img class="img-post" src="../images/post19/foto_2.png" alt="imagen_c2.2">
-              <img class="img-post" src="../images/post19/foto_3.png" alt="imagen_c2.3">
-               
-            <h4 class="question" >Los puntos de entrada iniciales son críticos para rastrear el vector de ataque. ¿Cuál es el número de puerto del servicio que el adversario ha explotado?</h4>
+              <a class="evidence-link" href="../images/post19/foto_1.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 1 de OpenWire Lab: Al identificar la IP C2, podemos bloquear el tráfico hacia y desde esta IP, ayudando a contener la brecha y evitar una mayor exfiltración de datos o ejecución de comandos. ¿Puede proporcionar la IP del servidor C2 que se comunicaba con nuestro servidor?"><img class="img-post" src="../images/post19/foto_1.webp" alt="Captura 1 de OpenWire Lab: Al identificar la IP C2, podemos bloquear el tráfico hacia y desde esta IP, ayudando a contener la brecha y evitar una mayor exfiltración de datos o ejecución de comandos. ¿Puede proporcionar la IP del servidor C2 que se comunicaba con nuestro servidor?" width="893" height="679" decoding="async" loading="lazy"></a>
+              <a class="evidence-link" href="../images/post19/foto_2.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 2 de OpenWire Lab: Al identificar la IP C2, podemos bloquear el tráfico hacia y desde esta IP, ayudando a contener la brecha y evitar una mayor exfiltración de datos o ejecución de comandos. ¿Puede proporcionar la IP del servidor C2 que se comunicaba con nuestro servidor?"><img class="img-post" src="../images/post19/foto_2.webp" alt="Captura 2 de OpenWire Lab: Al identificar la IP C2, podemos bloquear el tráfico hacia y desde esta IP, ayudando a contener la brecha y evitar una mayor exfiltración de datos o ejecución de comandos. ¿Puede proporcionar la IP del servidor C2 que se comunicaba con nuestro servidor?" width="518" height="131" decoding="async" loading="lazy"></a>
+              <a class="evidence-link" href="../images/post19/foto_3.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 3 de OpenWire Lab: Al identificar la IP C2, podemos bloquear el tráfico hacia y desde esta IP, ayudando a contener la brecha y evitar una mayor exfiltración de datos o ejecución de comandos. ¿Puede proporcionar la IP del servidor C2 que se comunicaba con nuestro servidor?"><img class="img-post" src="../images/post19/foto_3.webp" alt="Captura 3 de OpenWire Lab: Al identificar la IP C2, podemos bloquear el tráfico hacia y desde esta IP, ayudando a contener la brecha y evitar una mayor exfiltración de datos o ejecución de comandos. ¿Puede proporcionar la IP del servidor C2 que se comunicaba con nuestro servidor?" width="919" height="620" decoding="async" loading="lazy"></a>
+
+            <h3 class="question" >Los puntos de entrada iniciales son críticos para rastrear el vector de ataque. ¿Cuál es el número de puerto del servicio que el adversario ha explotado?</h3>
               <p class="answer" >Para este caso se dio seguimiento a los paquetes relacionados con OpenWire, donde se pudo observar que la comunicación se realizó a través del puerto 61616. Después, se aplicó un filtro sobre este puerto para analizar el tráfico y confirmar que fue el servicio utilizado por el atacante.</p>
-              <img class="img-post" src="../images/post19/foto_4.png" alt="imagen_puerto">
-              <img class="img-post" src="../images/post19/foto_5.png" alt="imagen_puerto2">
+              <a class="evidence-link" href="../images/post19/foto_4.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 4 de OpenWire Lab: Los puntos de entrada iniciales son críticos para rastrear el vector de ataque. ¿Cuál es el número de puerto del servicio que el adversario ha explotado?"><img class="img-post" src="../images/post19/foto_4.webp" alt="Captura 4 de OpenWire Lab: Los puntos de entrada iniciales son críticos para rastrear el vector de ataque. ¿Cuál es el número de puerto del servicio que el adversario ha explotado?" width="896" height="243" decoding="async" loading="lazy"></a>
+              <a class="evidence-link" href="../images/post19/foto_5.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 5 de OpenWire Lab: Los puntos de entrada iniciales son críticos para rastrear el vector de ataque. ¿Cuál es el número de puerto del servicio que el adversario ha explotado?"><img class="img-post" src="../images/post19/foto_5.webp" alt="Captura 5 de OpenWire Lab: Los puntos de entrada iniciales son críticos para rastrear el vector de ataque. ¿Cuál es el número de puerto del servicio que el adversario ha explotado?" width="596" height="110" decoding="async" loading="lazy"></a>
 
-            <h4 class="question" >Siguiendo la pregunta anterior, ¿cuál es el nombre del servicio que se encuentra vulnerable?</h4>
+            <h3 class="question" >Siguiendo la pregunta anterior, ¿cuál es el nombre del servicio que se encuentra vulnerable?</h3>
               <p class="answer" >Considerando la pregunta anterior y los paquetes relacionados con OpenWire, se investigó a qué servicio pertenece este protocolo y se encontró que está relacionado con Apache ActiveMQ. Además, al examinar los paquetes mediante TCP Stream, podemos observar referencias a ActiveMQ, confirmando que este es el servicio vulnerable.</p>
-                <img class="img-post" src="../images/post19/foto_6.png" alt="imagen_servicio">
-                  
-            <h4 class="question" >La infraestructura del atacante a menudo involucra múltiples componentes. ¿Qué es la IP del segundo servidor C2?</h4> 
+                <a class="evidence-link" href="../images/post19/foto_6.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 6 de OpenWire Lab: Siguiendo la pregunta anterior, ¿cuál es el nombre del servicio que se encuentra vulnerable?"><img class="img-post" src="../images/post19/foto_6.webp" alt="Captura 6 de OpenWire Lab: Siguiendo la pregunta anterior, ¿cuál es el nombre del servicio que se encuentra vulnerable?" width="826" height="135" decoding="async" loading="lazy"></a>
+
+            <h3 class="question" >La infraestructura del atacante a menudo involucra múltiples componentes. ¿Qué es la IP del segundo servidor C2?</h3>
               <p class="answer" >Al analizar los paquetes anteriores, se encontró un comando que utiliza curl para descargar un archivo llamado docker desde otra dirección IP y posteriormente darle permisos de ejecución. Después, al filtrar las conexiones HTTP del servidor comprometido, podemos observar comunicación con esta misma dirección IP, lo que permite identificarla como el segundo servidor C2.</p>
-                <img class="img-post" src="../images/post19/foto_7.png" alt="imagen_ip.1">
-                <img class="img-post" src="../images/post19/foto_8.png" alt="imagen_ip.2">
+                <a class="evidence-link" href="../images/post19/foto_7.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 7 de OpenWire Lab: La infraestructura del atacante a menudo involucra múltiples componentes. ¿Qué es la IP del segundo servidor C2?"><img class="img-post" src="../images/post19/foto_7.webp" alt="Captura 7 de OpenWire Lab: La infraestructura del atacante a menudo involucra múltiples componentes. ¿Qué es la IP del segundo servidor C2?" width="910" height="26" decoding="async" loading="lazy"></a>
+                <a class="evidence-link" href="../images/post19/foto_8.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 8 de OpenWire Lab: La infraestructura del atacante a menudo involucra múltiples componentes. ¿Qué es la IP del segundo servidor C2?"><img class="img-post" src="../images/post19/foto_8.webp" alt="Captura 8 de OpenWire Lab: La infraestructura del atacante a menudo involucra múltiples componentes. ¿Qué es la IP del segundo servidor C2?" width="806" height="160" decoding="async" loading="lazy"></a>
 
-            <h4 class="question" >Los atacantes suelen dejar huellas en el disco. ¿Cuál es el nombre del ejecutable de shell inverso que se ha caído en el servidor?</h4>
+            <h3 class="question" >Los atacantes suelen dejar huellas en el disco. ¿Cuál es el nombre del ejecutable de shell inverso que se ha caído en el servidor?</h3>
               <p class="answer" >Con base en lo investigado en la pregunta anterior, podemos observar que se descarga un archivo llamado docker en el directorio /tmp/. Posteriormente, se le asignan permisos de ejecución y se ejecuta, por lo que podemos identificarlo como el ejecutable relacionado con el shell inverso.</p>
-                <img class="img-post" src="../images/post19/foto_9.png" alt="imagen_shell">
+                <a class="evidence-link" href="../images/post19/foto_9.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 9 de OpenWire Lab: Los atacantes suelen dejar huellas en el disco. ¿Cuál es el nombre del ejecutable de shell inverso que se ha caído en el servidor?"><img class="img-post" src="../images/post19/foto_9.webp" alt="Captura 9 de OpenWire Lab: Los atacantes suelen dejar huellas en el disco. ¿Cuál es el nombre del ejecutable de shell inverso que se ha caído en el servidor?" width="1060" height="314" decoding="async" loading="lazy"></a>
 
-            <h4 class="question" >¿Qué clase Java fue invocada por el archivo XML para ejecutar el exploit?</h4>
+            <h3 class="question" >¿Qué clase Java fue invocada por el archivo XML para ejecutar el exploit?</h3>
                 <p class="answer" >En el mismo paquete relacionado con invoice.xml podemos analizar el código y observar que se utiliza la clase java.lang.ProcessBuilder, una clase de Java que permite crear y ejecutar procesos del sistema operativo.</p>
-                <img class="img-post" src="../images/post19/foto_10.png" alt="imagen_xml">
-                
-            <h4 class="question" >Para comprender mejor la falla de seguridad específica explotada, ¿puede identificar el identificador CVE asociado con esta vulnerabilidad?</h4>
-                <p class="answer" >Buscando información sobre OpenWire y sus vulnerabilidades, se encontró en la base de datos de vulnerabilidades del NIST (NVD) una vulnerabilidad relacionada con Apache ActiveMQ. Esta permite la ejecución remota de código mediante el protocolo OpenWire, 
-                  lo que puede permitir que un atacante ejecute comandos de shell de manera arbitraria.</p>
-                <img class="img-post"  src="../images/post19/foto_11.png" alt="imagen_cve">
+                <a class="evidence-link" href="../images/post19/foto_10.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 10 de OpenWire Lab: ¿Qué clase Java fue invocada por el archivo XML para ejecutar el exploit?"><img class="img-post" src="../images/post19/foto_10.webp" alt="Captura 10 de OpenWire Lab: ¿Qué clase Java fue invocada por el archivo XML para ejecutar el exploit?" width="671" height="60" decoding="async" loading="lazy"></a>
 
-            <h4 class="question" >El proveedor abordó la vulnerabilidad añadiendo un paso de validación para garantizar que solo fuera válido ThrowableLas clases pueden ser instanciadas, evitando la explotación. ¿En qué clase y método de Java se añadió este paso de validación?</h4>
+            <h3 class="question" >Para comprender mejor la falla de seguridad específica explotada, ¿puede identificar el identificador CVE asociado con esta vulnerabilidad?</h3>
+                <p class="answer" >Buscando información sobre OpenWire y sus vulnerabilidades, se encontró en la base de datos de vulnerabilidades del NIST (NVD) una vulnerabilidad relacionada con Apache ActiveMQ. Esta permite la ejecución remota de código mediante el protocolo OpenWire,
+                  lo que puede permitir que un atacante ejecute comandos de shell de manera arbitraria.</p>
+                <a class="evidence-link" href="../images/post19/foto_11.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 11 de OpenWire Lab: Para comprender mejor la falla de seguridad específica explotada, ¿puede identificar el identificador CVE asociado con esta vulnerabilidad?"><img class="img-post"  src="../images/post19/foto_11.webp" alt="Captura 11 de OpenWire Lab: Para comprender mejor la falla de seguridad específica explotada, ¿puede identificar el identificador CVE asociado con esta vulnerabilidad?" width="1229" height="528" decoding="async" loading="lazy"></a>
+
+            <h3 class="question" >El proveedor abordó la vulnerabilidad añadiendo un paso de validación para garantizar que solo fuera válido ThrowableLas clases pueden ser instanciadas, evitando la explotación. ¿En qué clase y método de Java se añadió este paso de validación?</h3>
                 <p class="answer" >Al revisar los cambios realizados en el código para corregir la vulnerabilidad, podemos observar que en la clase BaseDataStreamMarshaller se agregó una validación dentro del método createThrowable. Esta validación utiliza OpenWireUtil.validateIsThrowable(clazz) antes de crear una nueva instancia, evitando que se puedan utilizar clases no permitidas durante este proceso.</p>
-                  <img class="img-post" src="../images/post19/foto_12.png" alt="imagen_vulnerabilidad">
-          
-            <h4 class="question" >Conclusión</h4>
+                  <a class="evidence-link" href="../images/post19/foto_12.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 12 de OpenWire Lab: El proveedor abordó la vulnerabilidad añadiendo un paso de validación para garantizar que solo fuera válido ThrowableLas clases pueden ser instanciadas, evitando la explotación. ¿En qué clase y método de Java se añadió este paso de validación?"><img class="img-post" src="../images/post19/foto_12.webp" alt="Captura 12 de OpenWire Lab: El proveedor abordó la vulnerabilidad añadiendo un paso de validación para garantizar que solo fuera válido ThrowableLas clases pueden ser instanciadas, evitando la explotación. ¿En qué clase y método de Java se añadió este paso de validación?" width="1096" height="555" decoding="async" loading="lazy"></a>
+
+            <h2 class="question" >Conclusión</h2>
                 <p class="answer" ></p>
+          <nav class="post-actions" aria-label="Navegación del artículo"><a href="../laboratorios.html">← Volver a laboratorios</a></nav>
 
         </div>
     </main>
@@ -83,8 +110,8 @@
         </nav>
       </div>
     </footer>
-      
+
     <script src="../script.js"></script>
-    
+
 </body>
-</html> 
+</html>

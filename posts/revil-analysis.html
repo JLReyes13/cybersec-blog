@@ -4,74 +4,99 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Jose Luis Reyes">
-    <meta name="description" content="Blog de ciberseguridad enfocado en análisis de malware, tráfico de red y SOC.">
+    <meta name="description" content="Investigación de REvil con Splunk y Sysmon: notas de rescate, procesos sospechosos, eliminación de Shadow Copies e indicadores de compromiso.">
     <title>Revil - Gold Southfield | Jose Luis Reyes</title>
     <link rel="icon" type="image/png" href="../images/general/icono.png">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles.css">
+  <link rel="canonical" href="https://jlreyes13.github.io/cybersec-blog/posts/revil-analysis.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Cybersecurity Blog | Jose Luis Reyes">
+  <meta property="og:locale" content="es_MX">
+  <meta property="og:title" content="Revil - Gold Southfield | Jose Luis Reyes">
+  <meta property="og:description" content="Investigación de REvil con Splunk y Sysmon: notas de rescate, procesos sospechosos, eliminación de Shadow Copies e indicadores de compromiso.">
+  <meta property="og:url" content="https://jlreyes13.github.io/cybersec-blog/posts/revil-analysis.html">
+  <meta property="og:image" content="https://jlreyes13.github.io/cybersec-blog/images/post9/foto_1.png">
+  <meta property="og:image:width" content="1148">
+  <meta property="og:image:height" content="527">
+  <meta property="og:image:alt" content="Captura del laboratorio: Revil - Gold Southfield | Jose Luis Reyes">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Revil - Gold Southfield | Jose Luis Reyes">
+  <meta name="twitter:description" content="Investigación de REvil con Splunk y Sysmon: notas de rescate, procesos sospechosos, eliminación de Shadow Copies e indicadores de compromiso.">
+  <meta name="twitter:image" content="https://jlreyes13.github.io/cybersec-blog/images/post9/foto_1.png">
+  <meta name="twitter:image:alt" content="Captura del laboratorio: Revil - Gold Southfield | Jose Luis Reyes">
 </head>
 
 <body class="scanlines">
-    <canvas id="bg"></canvas>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <canvas id="bg" aria-hidden="true"></canvas>
     <header>
         <div class="container header-content">
-            <h1 class="hacker-title-terminal" >Cybersecurity Blog</h1>
-            <nav>
-              <a href="../index.html">Inicio</a>
-              <a href="../about.html">Sobre mí</a>
-            </nav>
+            <p class="site-brand"><a href="../index.html">Cybersecurity Blog<span aria-hidden="true">_</span></a></p>
+            <nav aria-label="Navegación principal">
+        <a href="../index.html">Inicio</a>
+        <a href="../laboratorios.html" aria-current="location">Laboratorios</a>
+        <a href="../personal-soc.html">SOC personal</a>
+        <a href="../about.html">Sobre mí</a>
+      </nav>
           </div>
     </header>
-    <main class="container">
+    <main id="contenido" class="container">
         <div class="post reveal">
-          <h2 class="post-title">🛡️ Revil - Gold Southfield Lab</h2>
-            <h4>Escenario</h4>
+      <div class="post-heading">
+        <p class="eyebrow">Análisis de laboratorio</p>
+        <h1 class="post-title">Revil - Gold Southfield Lab</h1>
+        <p class="date">16 May 2026</p>
+        <div class="tags" aria-label="Temas del análisis"><span>Ransomware</span><span>Splunk</span><span>Sysmon</span></div>
+      </div>
 
-              <p>Eres un cazador de amenazas que trabaja para una firma de consultoría de ciberseguridad. Uno de sus clientes se ha visto afectado recientemente por un ataque de ransomware que causó el cifrado de múltiples máquinas de sus empleados. 
+            <h2>Escenario</h2>
+
+              <p>Eres un cazador de amenazas que trabaja para una firma de consultoría de ciberseguridad. Uno de sus clientes se ha visto afectado recientemente por un ataque de ransomware que causó el cifrado de múltiples máquinas de sus empleados.
                 Los usuarios afectados han reportado encontrarse con una nota de rescate en su escritorio y un fondo de escritorio cambiado. Se le encarga el uso de Splunk SIEM que contiene registros de eventos de Sysmon de una de las máquinas cifradas para extraer la mayor cantidad de información posible.</p>
 
-            <h4>Preguntas</h4>
+            <h2>Preguntas</h2>
 
-            <h4 class="question" >Para comenzar su investigación, puede identificar el nombre del archivo de la nota que el ransomware dejó atrás?</h4>
-              <p class="answer" >Para empezar, como sabemos que normalmente el ransomware deja un mensaje en archivos .txt, empecé buscando archivos con esa extensión, encontrando aproximadamente 21 eventos relacionados con el mismo archivo. 
+            <h3 class="question" >Para comenzar su investigación, puede identificar el nombre del archivo de la nota que el ransomware dejó atrás?</h3>
+              <p class="answer" >Para empezar, como sabemos que normalmente el ransomware deja un mensaje en archivos .txt, empecé buscando archivos con esa extensión, encontrando aproximadamente 21 eventos relacionados con el mismo archivo.
                 Posteriormente, al inspeccionar el archivo JSON, logré visualizar un .exe muy sospechoso llamado “facebook assistant.exe”, el cual creó el archivo .txt en una carpeta pública, por lo que podría tratarse del mensaje dejado por el ransomware.</p>
-                <img class="img-post" src="../images/post9/foto_1.png" alt="imagen_txt">
+                <a class="evidence-link" href="../images/post9/foto_1.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 1 de Revil - Gold Southfield: Para comenzar su investigación, puede identificar el nombre del archivo de la nota que el ransomware dejó atrás?"><img class="img-post" src="../images/post9/foto_1.webp" alt="Captura 1 de Revil - Gold Southfield: Para comenzar su investigación, puede identificar el nombre del archivo de la nota que el ransomware dejó atrás?" width="1148" height="527" decoding="async" loading="lazy"></a>
 
-            <h4 class="question" >Después de identificar la nota de rescate, el siguiente paso es identificar la fuente. Cuál es el proceso ID del ransomware que probablemente está involucrado?</h4>
-              <p class="answer" >Después de identificar la nota de rescate, se inspeccionó el archivo JSON del evento Sysmon para identificar el proceso responsable de crear dicho archivo. Dentro del apartado “ProcessId” se encontró el valor, correspondiente al proceso sospechoso “facebook assistant.exe”, 
+            <h3 class="question" >Después de identificar la nota de rescate, el siguiente paso es identificar la fuente. Cuál es el proceso ID del ransomware que probablemente está involucrado?</h3>
+              <p class="answer" >Después de identificar la nota de rescate, se inspeccionó el archivo JSON del evento Sysmon para identificar el proceso responsable de crear dicho archivo. Dentro del apartado “ProcessId” se encontró el valor, correspondiente al proceso sospechoso “facebook assistant.exe”,
                 el cual probablemente está relacionado con la actividad ransomware observada en el laboratorio.</p>
-              <img class="img-post" src="../images/post9/foto_2.png" alt="imagen_proceso">
+              <a class="evidence-link" href="../images/post9/foto_2.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 2 de Revil - Gold Southfield: Después de identificar la nota de rescate, el siguiente paso es identificar la fuente. Cuál es el proceso ID del ransomware que probablemente está involucrado?"><img class="img-post" src="../images/post9/foto_2.webp" alt="Captura 2 de Revil - Gold Southfield: Después de identificar la nota de rescate, el siguiente paso es identificar la fuente. Cuál es el proceso ID del ransomware que probablemente está involucrado?" width="987" height="771" decoding="async" loading="lazy"></a>
 
-            <h4 class="question" >Habiendo determinado la identificación de proceso del ransomware, el siguiente paso lógico es localizar su origen. Dónde podemos encontrar el archivo ejecutable del ransomware?</h4>
+            <h3 class="question" >Habiendo determinado la identificación de proceso del ransomware, el siguiente paso lógico es localizar su origen. Dónde podemos encontrar el archivo ejecutable del ransomware?</h3>
               <p class="answer" >Considerando los datos obtenidos del Process ID y del archivo txt, se logró identificar la ruta del ejecutable sospechoso asociado a la actividad ransomware.</p>
-                <img class="img-post" src="../images/post9/foto_3.png" alt="imagen_ubicacion">
-                  
-            <h4 class="question" >Ahora que has localizado la ubicación ejecutable del ransomware, vamos a cavar más profundo. Es una táctica común para el ransomware para interrumpir los métodos de recuperación del sistema. Puedes identificar el comando que se usó para este propósito?</h4> 
+                <a class="evidence-link" href="../images/post9/foto_3.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 3 de Revil - Gold Southfield: Habiendo determinado la identificación de proceso del ransomware, el siguiente paso lógico es localizar su origen. Dónde podemos encontrar el archivo ejecutable del ransomware?"><img class="img-post" src="../images/post9/foto_3.webp" alt="Captura 3 de Revil - Gold Southfield: Habiendo determinado la identificación de proceso del ransomware, el siguiente paso lógico es localizar su origen. Dónde podemos encontrar el archivo ejecutable del ransomware?" width="1627" height="194" decoding="async" loading="lazy"></a>
+
+            <h3 class="question" >Ahora que has localizado la ubicación ejecutable del ransomware, vamos a cavar más profundo. Es una táctica común para el ransomware para interrumpir los métodos de recuperación del sistema. Puedes identificar el comando que se usó para este propósito?</h3>
               <p class="answer" >En el archivo JSON podemos observar que la alerta emitida por Sysmon muestra la ejecución de un comando en PowerShell. Además, el comando inicia con el parámetro “-e”, lo que indica que el contenido se encuentra codificado en Base64. </p>
-                <img class="img-post" src="../images/post9/foto_4.png" alt="imagen_base64">
-                <p class="answer" >Posteriormente, el contenido codificado fue ingresado en CyberChef para descifrar el script ejecutado. 
+                <a class="evidence-link" href="../images/post9/foto_4.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 4 de Revil - Gold Southfield: Ahora que has localizado la ubicación ejecutable del ransomware, vamos a cavar más profundo. Es una táctica común para el ransomware para interrumpir los métodos de recuperación del sistema. Puedes identificar el comando que se usó para este propósito?"><img class="img-post" src="../images/post9/foto_4.webp" alt="Captura 4 de Revil - Gold Southfield: Ahora que has localizado la ubicación ejecutable del ransomware, vamos a cavar más profundo. Es una táctica común para el ransomware para interrumpir los métodos de recuperación del sistema. Puedes identificar el comando que se usó para este propósito?" width="1075" height="468" decoding="async" loading="lazy"></a>
+                <p class="answer" >Posteriormente, el contenido codificado fue ingresado en CyberChef para descifrar el script ejecutado.
                     Finalmente, se logró identificar un script encargado de buscar todas las instancias de la clase “Win32_Shadowcopy”, que representa las copias de sombra (instantáneas) del sistema, y posteriormente ejecutar la eliminación de cada una de ellas.
                      Este comportamiento es comúnmente utilizado por ransomware para impedir la recuperación de archivos mediante copias de seguridad del sistema. </p>
-                     <img class="img-post" src="../images/post9/foto_5.png" alt="imagen_cyber">
+                     <a class="evidence-link" href="../images/post9/foto_5.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 5 de Revil - Gold Southfield: Ahora que has localizado la ubicación ejecutable del ransomware, vamos a cavar más profundo. Es una táctica común para el ransomware para interrumpir los métodos de recuperación del sistema. Puedes identificar el comando que se usó para este propósito?"><img class="img-post" src="../images/post9/foto_5.webp" alt="Captura 5 de Revil - Gold Southfield: Ahora que has localizado la ubicación ejecutable del ransomware, vamos a cavar más profundo. Es una táctica común para el ransomware para interrumpir los métodos de recuperación del sistema. Puedes identificar el comando que se usó para este propósito?" width="1441" height="614" decoding="async" loading="lazy"></a>
 
-            <h4 class="question" >Mientras rastreamos los pasos del ransomware, se necesita una verificación más profunda. Puede proporcionar el hash sha256 del ejecutable del ransomware para cotej cómodo con firmas maliciosas conocidas?</h4>
+            <h3 class="question" >Mientras rastreamos los pasos del ransomware, se necesita una verificación más profunda. Puede proporcionar el hash sha256 del ejecutable del ransomware para cotej cómodo con firmas maliciosas conocidas?</h3>
               <p class="answer" >Considerando que ya se tenía identificado el nombre del archivo sospechoso, se realizó un filtro basado en los eventos de creación de procesos de Sysmon utilizando event.code=1. El resultado mostró dos eventos relacionados con el ejecutable analizado.</p>
               <p class="answer"  >Posteriormente, tomando como referencia el horario de ejecución, se analizó el hash correspondiente al primer evento en VirusTotal, logrando confirmar que el archivo estaba relacionado con actividad ransomware. </p>
-                <img class="img-post" src="../images/post9/foto_6.png" alt="imagen_archivo">
-                <img class="img-post" src="../images/post9/foto_7.png" alt="imagen_virus">
+                <a class="evidence-link" href="../images/post9/foto_6.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 6 de Revil - Gold Southfield: Mientras rastreamos los pasos del ransomware, se necesita una verificación más profunda. Puede proporcionar el hash sha256 del ejecutable del ransomware para cotej cómodo con firmas maliciosas conocidas?"><img class="img-post" src="../images/post9/foto_6.webp" alt="Captura 6 de Revil - Gold Southfield: Mientras rastreamos los pasos del ransomware, se necesita una verificación más profunda. Puede proporcionar el hash sha256 del ejecutable del ransomware para cotej cómodo con firmas maliciosas conocidas?" width="987" height="417" decoding="async" loading="lazy"></a>
+                <a class="evidence-link" href="../images/post9/foto_7.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 7 de Revil - Gold Southfield: Mientras rastreamos los pasos del ransomware, se necesita una verificación más profunda. Puede proporcionar el hash sha256 del ejecutable del ransomware para cotej cómodo con firmas maliciosas conocidas?"><img class="img-post" src="../images/post9/foto_7.webp" alt="Captura 7 de Revil - Gold Southfield: Mientras rastreamos los pasos del ransomware, se necesita una verificación más profunda. Puede proporcionar el hash sha256 del ejecutable del ransomware para cotej cómodo con firmas maliciosas conocidas?" width="1171" height="842" decoding="async" loading="lazy"></a>
 
-            <h4 class="question" >Queda una pieza crucial: identificar el canal de comunicación del atacante. Puede aprovechar la inteligencia de amenazas y los indicadores conocidos de Compromiso (IoCs) para identificar el dominio de la cebolla del autor de ransomware?</h4>
-              <p class="answer" >Ya teniendo el hash del archivo origen del ransomware, este fue analizado en la plataforma Triage para obtener más información sobre su comportamiento. A través del análisis se logró identificar la comunicación Command and Control (C2) relacionada con el malware, 
+            <h3 class="question" >Queda una pieza crucial: identificar el canal de comunicación del atacante. Puede aprovechar la inteligencia de amenazas y los indicadores conocidos de Compromiso (IoCs) para identificar el dominio de la cebolla del autor de ransomware?</h3>
+              <p class="answer" >Ya teniendo el hash del archivo origen del ransomware, este fue analizado en la plataforma Triage para obtener más información sobre su comportamiento. A través del análisis se logró identificar la comunicación Command and Control (C2) relacionada con el malware,
                 donde también fue posible encontrar el dominio .onion asociado al autor del ransomware.</p>
-                <img class="img-post" src="../images/post9/foto_8.png" alt="imagen_triage">
-            
-                <h4 class="question" >Conclusión</h4>
-                <p class="answer" >Este análisis nos deja varias lecciones importantes que debemos tener en cuenta para prevenir ataques de ransomware. En primer lugar, se debe evitar descargar archivos ejecutables desde páginas no oficiales, ya que no se conoce realmente qué puede existir detrás de ellos. 
+                <a class="evidence-link" href="../images/post9/foto_8.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 8 de Revil - Gold Southfield: Queda una pieza crucial: identificar el canal de comunicación del atacante. Puede aprovechar la inteligencia de amenazas y los indicadores conocidos de Compromiso (IoCs) para identificar el dominio de la cebolla del autor de ransomware?"><img class="img-post" src="../images/post9/foto_8.webp" alt="Captura 8 de Revil - Gold Southfield: Queda una pieza crucial: identificar el canal de comunicación del atacante. Puede aprovechar la inteligencia de amenazas y los indicadores conocidos de Compromiso (IoCs) para identificar el dominio de la cebolla del autor de ransomware?" width="1336" height="687" decoding="async" loading="lazy"></a>
+
+                <h2 class="question" >Conclusión</h2>
+                <p class="answer" >Este análisis nos deja varias lecciones importantes que debemos tener en cuenta para prevenir ataques de ransomware. En primer lugar, se debe evitar descargar archivos ejecutables desde páginas no oficiales, ya que no se conoce realmente qué puede existir detrás de ellos.
                     Además, es recomendable verificar que el hash del archivo coincida con el oficial o incluso analizar previamente el ejecutable en plataformas como VirusTotal para asegurarnos de que se trata de software legítimo.</p>
 
                 <p class="answer"  >Este tipo de ataques puede resultar crítico y potencialmente dañino tanto para la infraestructura de una empresa como para equipos personales, debido a que la información sensible podría verse comprometida, cifrada o incluso filtrada por los atacantes.</p>
           <nav class="post-actions" aria-label="Navegacion del post">
-            <a href="../index.html">&larr; Volver al inicio</a>
+            <a href="../laboratorios.html">← Volver a laboratorios</a>
           </nav>
 
         </div>
@@ -81,12 +106,12 @@
     <p>© 2026 Jose Luis Reyes | Cybersecurity Blog</p>
     <nav class="footer-links" aria-label="Enlaces del sitio">
       <a href="https://github.com/JLReyes13" target="_blank" rel="noopener noreferrer">GitHub</a>
-      <a href="https://www.linkedin.com/in/tu-perfil" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="https://www.linkedin.com/in/jos%C3%A9-luis-reyes-791198334" target="_blank" rel="noopener noreferrer">LinkedIn</a>
     </nav>
   </div>
 </footer>
-      
+
     <script src="../script.js"></script>
-    
+
 </body>
 </html>

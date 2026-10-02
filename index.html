@@ -4,322 +4,63 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="author" content="Jose Luis Reyes">
-  <meta name="description" content="Blog de ciberseguridad enfocado en análisis de malware, tráfico de red y SOC.">
+  <meta name="description" content="Proyectos de Jose Luis Reyes: análisis SOC, tráfico de red, malware e investigación de incidentes con Wireshark, Splunk, Wazuh y Suricata.">
   <title>Cybersecurity Blog | Jose Luis Reyes</title>
   <link rel="icon" type="image/png" href="images/general/icono.png">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="canonical" href="https://jlreyes13.github.io/cybersec-blog/index.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Cybersecurity Blog | Jose Luis Reyes">
+  <meta property="og:locale" content="es_MX">
+  <meta property="og:title" content="Cybersecurity Blog | Jose Luis Reyes">
+  <meta property="og:description" content="Proyectos de Jose Luis Reyes: análisis SOC, tráfico de red, malware e investigación de incidentes con Wireshark, Splunk, Wazuh y Suricata.">
+  <meta property="og:url" content="https://jlreyes13.github.io/cybersec-blog/index.html">
+  <meta property="og:image" content="https://jlreyes13.github.io/cybersec-blog/images/general/personal_image.png">
+  <meta property="og:image:width" content="610">
+  <meta property="og:image:height" content="608">
+  <meta property="og:image:alt" content="Jose Luis Reyes">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Cybersecurity Blog | Jose Luis Reyes">
+  <meta name="twitter:description" content="Proyectos de Jose Luis Reyes: análisis SOC, tráfico de red, malware e investigación de incidentes con Wireshark, Splunk, Wazuh y Suricata.">
+  <meta name="twitter:image" content="https://jlreyes13.github.io/cybersec-blog/images/general/personal_image.png">
+  <meta name="twitter:image:alt" content="Jose Luis Reyes">
 </head>
 
 <body class="scanlines">
- 
-<canvas id="bg"></canvas>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+<canvas id="bg" aria-hidden="true"></canvas>
 
 <header>
   <div class="container header-content">
-    <h1 class="hacker-title-terminal" >Cybersecurity Blog</h1>
-    <nav>
-      <a href="index.html">Inicio</a>
-      <a href="about.html">Sobre mí</a>
-    </nav>
+    <p class="site-brand"><a href="index.html">Cybersecurity Blog<span aria-hidden="true">_</span></a></p>
+    <nav aria-label="Navegación principal">
+        <a href="index.html" aria-current="page">Inicio</a>
+        <a href="laboratorios.html">Laboratorios</a>
+        <a href="personal-soc.html">SOC personal</a>
+        <a href="about.html">Sobre mí</a>
+      </nav>
   </div>
 </header>
 
-<main class="container">
-  
+<main id="contenido" class="container">
+
   <section class="hero">
-    <h2>👨‍💻 Analista SOC Jr. (proyectos prácticos y blog técnico)</h2>
-    <p>🌐 Análisis de tráfico de red | 🦠 Comportamiento de malware | 🔍 Investigación de incidentes</p>
+    <p class="eyebrow">Jose Luis Reyes · Portafolio de ciberseguridad</p>
+    <h1>Análisis SOC e investigación de incidentes</h1>
+    <p>Laboratorios y proyectos documentados con evidencias de tráfico de red, eventos de seguridad y comportamiento de malware.</p>
+    <div class="hero-actions"><a class="button" href="#proyectos">Explorar proyectos</a><a class="text-link" href="about.html">Sobre mí y certificaciones →</a></div>
   </section>
 
-  <section class="posts">
-
-    <article class="card">
-  <h3>📡 Análisis de explotación: OpenWire</h3>
-  <p class="date">31 Ago 2026</p>
-  <div class="tags" aria-label="Temas del post">
-    <span>Wireshark</span>
-    <span>PCAP</span>
+<section class="featured" id="proyectos" aria-labelledby="featured-title"><div class="section-heading"><h2 id="featured-title">Proyectos destacados</h2></div><div class="posts">
+  <article class="card featured-card"><p class="eyebrow">Investigación · Laboratorio propio</p><h3><a href="posts/soc-escalamiento.html">Detección de intentos de acceso SSH</a></h3><p class="card-summary">Correlación de tráfico y registros: 70 intentos fallidos y documentación de los hallazgos en un ticket SOC.</p><a href="posts/soc-escalamiento.html">Ver investigación →</a></article>
+  <article class="card featured-card"><p class="eyebrow">Monitoreo · Wazuh y Suricata</p><h3><a href="posts/soc-simulation.html">Simulación de un entorno SOC</a></h3><p class="card-summary">Generación de actividad desde Kali Linux y análisis de las alertas del IDS y el SIEM en un laboratorio propio.</p><a href="posts/soc-simulation.html">Ver laboratorio →</a></article>
+  <article class="card featured-card"><p class="eyebrow">Investigación · Splunk</p><h3><a href="posts/shadowroast.html">Compromiso de Active Directory</a></h3><p class="card-summary">Análisis de ShadowRoast: persistencia, herramientas de credenciales y movimiento lateral a partir de eventos.</p><a href="posts/shadowroast.html">Ver análisis →</a></article>
+  </div></section>
+  <div class="catalog-link">
+    <a class="button" href="laboratorios.html">Ver todos los laboratorios →</a>
   </div>
-  <p>
-    Análisis de tráfico de red mediante Wireshark, identificando la explotación de una vulnerabilidad en Apache ActiveMQ
-    a través del protocolo OpenWire. Durante la investigación se localizaron servidores C2, la descarga de un ejecutable
-    malicioso, ejecución de comandos mediante un archivo XML y la vulnerabilidad CVE-2023-46604 relacionada con ejecución
-    remota de código.
-  </p>
-  <p class="source">Lab realizado en CyberDefenders</p>
-  <a href="posts/openwire.html">Leer más →</a>
-</article>
-
-    <article class="card">
-  <h3>🌐 Análisis de red: T1595</h3>
-  <p class="date">23 Ago 2026</p>
-  <div class="tags" aria-label="Temas del post">
-    <span>Wireshark</span>
-    <span>Network Analysis</span>
-    <span>PCAP</span>
-  </div>
-  <p>
-    Análisis de tráfico de red mediante Wireshark, identificando protocolos, direcciones IP, puertos y comunicaciones
-    entre diferentes equipos. Durante la investigación se detectó una dirección IP externa con múltiples conexiones
-    hacia la red interna, principalmente a los puertos 445 y 1433, además de analizar su origen y posible relación
-    con actividad maliciosa.
-  </p>
-  <p class="source">Lab realizado en CyberDefenders</p>
-  <a href="posts/t1595.html">Leer más →</a>
-</article>
-
-    <article class="card">
-  <h3>💻 Análisis de compromiso: ShadowRoast</h3>
-  <p class="date">15 Ago 2026</p>
-  <div class="tags" aria-label="Temas del post">
-    <span>Splunk</span>
-    <span>Sysmon</span>
-    <span>Active Directory</span>
-    <span>Threat Hunting</span>
-  </div>
-  <p>
-    Investigación de un compromiso en Active Directory mediante el análisis de eventos de Windows y Sysmon en Splunk,
-    identificando la ejecución de archivos maliciosos, persistencia mediante claves de registro, uso de Rubeus y Mimikatz,
-    escalada de privilegios, habilitación de RDP para movimiento lateral y preparación de archivos para la exfiltración.
-  </p>
-  <p class="source">Lab realizado en CyberDefenders</p>
-  <a href="posts/shadowroast.html">Leer más →</a>
-</article>
-
-    <article class="card">
-  <h3>🛡️ Threat Hunting: Golden Spray</h3>
-  <p class="date">03 Ago 2026</p>
-  <div class="tags" aria-label="Temas del post">
-    <span>Splunk</span>
-    <span>Windows</span>
-    <span>Threat Hunting</span>
-  </div>
-  <p>
-    Investigación de un ataque de <em>password spraying</em> mediante el análisis de eventos de Windows en Splunk,
-    identificando el acceso inicial, cuentas comprometidas, movimiento lateral, persistencia mediante tareas programadas,
-    uso de Mimikatz y la preparación de archivos para la exfiltración de información.
-  </p>
-  <p class="source">Lab realizado en CyberDefenders</p>
-  <a href="posts/golden-spray.html">Leer más →</a>
-</article>
-
-    <article class="card">
-  <h3>🔐 Análisis de ransomware: TeslaCrypt Infection</h3>
-  <p class="date">15 Jul 2026</p>
-  <div class="tags" aria-label="Temas del post">
-    <span>Network</span>
-    <span>Wireshark</span>
-    <span>Ransomware</span>
-  </div>
-  <p>
-    Análisis de una infección por TeslaCrypt mediante tráfico de red en Wireshark, identificando
-    la descarga del ransomware, el dominio asociado a la infección, indicadores de compromiso,
-    la validación de la muestra en VirusTotal y el descifrado del archivo afectado.
-  </p>
-  <p class="source">Lab realizado en Blue Team Labs</p>
-  <a href="posts/ransomware-analysis.html">Leer más →</a>
-</article>
-
-    <article class="card">
-      <h3>🕸️ Análisis de intrusión: Network Analysis – Web Shell</h3>
-      <p class="date">07 Jul 2026</p>
-      <div class="tags" aria-label="Temas del post">
-      <span>Network</span>
-      <span>Wireshark</span>
-      <span>Web Shell</span>
-      </div>
-        <p>
-          Investigación de una intrusión mediante análisis de tráfico en Wireshark, identificando un escaneo de puertos,
-          reconocimiento con Gobuster y SQLMap, carga de un web shell, ejecución remota de comandos y el establecimiento
-          de un reverse shell.
-        </p>
-        <p class="source">Lab realizado en Blue Team Labs</p>
-        <a href="posts/web-shell-analysis.html">Leer más →</a>
-      </article>
-
-      <article class="card">
-        <h3>🧬 Análisis de malware: Network Analysis – Malware Compromise</h3>
-        <p class="date">03 Jul 2026</p>
-        <div class="tags" aria-label="Temas del post">
-          <span>Network</span>
-          <span>Wireshark</span>
-          <span>Malware</span>
-        </div>
-        <p>
-          Investigación de una posible infección por malware mediante análisis de tráfico de red en Wireshark,
-          identificando conexiones hacia un dominio malicioso, actividad sospechosa del host comprometido,
-          indicadores de compromiso y comunicación asociada al malware.
-        </p>
-        <p class="source">Lab realizado en Blue Team Labs</p>
-        <a href="posts/malware-compromise-analysis.html">Leer más →</a>
-      </article>
-
-     <article class="card">
-      <h3>📧 Análisis de phishing: Website Contact Form Submission</h3>
-      <p class="date">08 Jun 2026</p>
-      <div class="tags" aria-label="Temas del post">
-        <span>Phishing</span>
-        <span>Email</span>
-        <span>OSINT</span>
-      </div>
-      <p>Investigación de un correo de phishing mediante el análisis de encabezados,
-        direcciones IP, dominios, archivos adjuntos y URLs maliciosas para
-        identificar el origen y los indicadores de compromiso asociados.
-      </p>
-      <p class="source">Lab realizado en Blue Team Labs Online</p>
-      <a href="posts/phishing-analysis.html">Leer más →</a>
-    </article>
-
-    <article class="card">
-      <h3>🌐💉 Análisis de SQL Injection: Web Investigation Lab </h3>
-      <p class="date">03 June 2026</p>
-      <div class="tags" aria-label="Temas del post">
-        <span>Wireshark</span>
-        <span>SQL Injection</span>
-        <span>Network</span>
-      </div>
-      <p>Investigación de una intrusión web mediante el análisis de tráfico de red en Wireshark,
-        identificando intentos de SQL Injection, enumeración de bases de datos, acceso al panel
-        administrativo y carga de archivos maliciosos.</p>
-      <p class="source">Lab realizado en CyberDefenders</p>
-      <a href="posts/web-investigation-analysis.html">Leer más →</a>
-    </article>
-
-    <article class="card">
-      <h3>⚠️ Análisis forense: XXE Infiltration Lab</h3>
-      <p class="date">23 May 2026</p>
-      <div class="tags" aria-label="Temas del post">
-        <span>Network</span>
-        <span>Wireshark</span>
-        <span>XXE</span>
-      </div>
-      <p>Investigación de un ataque XXE mediante análisis de tráfico HTTP y MySQL en Wireshark, identificando carga de archivos XML maliciosos, robo de credenciales, acceso a archivos sensibles y persistencia mediante web shell.</p>
-      <p class="source">Lab realizado en CyberDefenders</p>
-      <a href="posts/xxe-infiltration-analysis.html">Leer más →</a>
-    </article>
-
-    <article class="card">
-      <h3>🛡️ Análisis de ransomware: REvil - GOLD SOUTHFIELD</h3>
-      <p class="date">16 May 2026</p>
-      <div class="tags" aria-label="Temas del post">
-        <span>Ransomware</span>
-        <span>Splunk</span>
-        <span>Sysmon</span>
-      </div>
-      <p>Investigación de actividad ransomware mediante eventos Sysmon en Splunk, identificando notas de rescate, procesos sospechosos, eliminación de Shadow Copies y análisis de IoCs.</p>
-      <p class="source">Lab realizado en CyberDefenders</p>
-      <a href="posts/revil-analysis.html">Leer más →</a>
-    </article>
-
-    <article class="card">
-      <h3>☁️ Análisis de actividad maliciosa en: AWS Raid </h3>
-      <p class="date">9 May 2026</p>
-      <div class="tags" aria-label="Temas del post">
-        <span>Cloud</span>
-        <span>AWS</span>
-        <span>Splunk</span>
-      </div>
-      <p>Análisis de eventos en AWS utilizando Splunk, identificando accesos sospechosos, actividad en buckets S3 y acciones de persistencia realizadas por un usuario comprometido.</p>
-      <p class="source">Lab realizado en CyberDefenders</p>
-      <a href="posts/aws-raid-analysis.html">Leer más →</a>
-    </article>
-
-    <article class="card">
-      <h3>🖥️ Simulación de SOC: detección y análisis de amenazas</h3>
-      <p class="date">2 May 2026</p>
-      <div class="tags" aria-label="Temas del post">
-        <span>SOC</span>
-        <span>Wazuh</span>
-        <span>Suricata</span>
-      </div>
-      <p>Monitoreo de un entorno SOC utilizando Wazuh y Suricata, detectando y analizando actividad maliciosa generada desde Kali Linux.</p>
-      <p class="source">Lab realizado en entorno propio</p>
-      <a href="posts/soc-simulation.html">Leer más →</a>
-    </article>
-
-    <article class="card">
-      <h3>🐛 Análisis de incidente: Retail Breach</h3>
-      <p class="date">30 Abr 2026</p>
-      <div class="tags" aria-label="Temas del post">
-        <span>Network</span>
-        <span>Wireshark</span>
-        <span>XSS</span>
-      </div>
-      <p>Análisis de tráfico en Wireshark para identificar actividad maliciosa, incluyendo forzamiento bruto de directorios y explotación mediante XSS.</p>
-      <p class="source">Lab realizado en CyberDefenders</p>
-      <a href="posts/retail-breach-analysis.html">Leer más →</a>
-    </article>
-
-    
-    <article class="card">
-      <h3>💥 Explotación de vulnerabilidades: JetBrains</h3>
-      <p class="date">25 Abr 2026</p>
-      <div class="tags" aria-label="Temas del post">
-        <span>Exploit</span>
-        <span>Web</span>
-        <span>RCE</span>
-      </div>
-      <p>Análisis de tráfico web para identificar bypass de autenticación, creación de usuario administrador y ejecución remota de comandos.</p>
-      <p class="source">Lab realizado en CyberDefenders</p>
-      <a href="posts/jetbrains-analysis.html">Leer más →</a>
-    </article>
-
-    <article class="card">
-      <h3>🕵️ Detección de actividad maliciosa en tráfico de red: NerisBot</h3>
-      <p class="date">21 Abr 2026</p>
-      <div class="tags" aria-label="Temas del post">
-        <span>Network</span>
-        <span>IDS</span>
-        <span>Malware</span>
-      </div>
-      <p>Análisis de tráfico y correlación de eventos IDS para identificar actividad sospechosa y descargas maliciosas.</p>
-      <p class="source">Lab realizado en CyberDefenders</p>
-      <a href="posts/nerisbot-analysis.html">Leer más →</a>
-    </article>
-
-    <article class="card">
-      <h3>🎣 Análisis de campaña de phishing: GrabThePhisher</h3>
-      <p class="date">10 Abr 2026</p>
-      <div class="tags" aria-label="Temas del post">
-        <span>Phishing</span>
-        <span>OSINT</span>
-        <span>Credenciales</span>
-      </div>
-      <p>Análisis de phishing enfocado en robo de credenciales y detección de dominios maliciosos.</p>
-        <p class="source">Lab realizado en CyberDefenders</p>
-        <a href="posts/grabthephisher-analysis.html">Leer más →</a>
-    </article>
-
-    <article class="card">
-      <h3>🧬 Investigación de actividad maliciosa: IcedID</h3>
-      <p class="date">01 Abr 2026</p>
-      <div class="tags" aria-label="Temas del post">
-        <span>Malware</span>
-        <span>Network</span>
-        <span>IcedID</span>
-      </div>
-      <p>Investigación de incidente mediante análisis de tráfico, detectando comunicaciones sospechosas y 
-        descargas asociadas a malware bancario.</p>
-        <p class="source">Lab realizado en CyberDefenders</p>
-      <a href="posts/icedid-analysis.html">Leer más →</a>
-    </article>
-
-    <article class="card">
-      <h3>🦠 Detección de C2 en tráfico de red: XLMRat</h3>
-      <p class="date">02 Mar 2026</p>
-      <div class="tags" aria-label="Temas del post">
-        <span>C2</span>
-        <span>RAT</span>
-        <span>Network</span>
-      </div>
-      <p>Detección de actividad C2 mediante análisis de tráfico, identificando IoCs y comportamiento típico de un RAT.</p>
-      <p class="source">Lab realizado en CyberDefenders</p>
-      <a href="posts/xlmrat-analysis.html">Leer más →</a>
-    </article>
-
-  </section>
-
 </main>
 
 <footer>

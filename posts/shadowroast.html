@@ -4,73 +4,100 @@
   <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Jose Luis Reyes">
-    <meta name="description" content="Blog de ciberseguridad enfocado en análisis de malware, tráfico de red y SOC.">
+    <meta name="description" content="Investigación de un compromiso de Active Directory en Splunk: persistencia, Rubeus, Mimikatz, movimiento lateral y preparación de archivos.">
     <title>ShadowRoast Lab | Jose Luis Reyes</title>
     <link rel="icon" type="image/png" href="../images/general/icono.png">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles.css">
+  <link rel="canonical" href="https://jlreyes13.github.io/cybersec-blog/posts/shadowroast.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Cybersecurity Blog | Jose Luis Reyes">
+  <meta property="og:locale" content="es_MX">
+  <meta property="og:title" content="ShadowRoast Lab | Jose Luis Reyes">
+  <meta property="og:description" content="Investigación de un compromiso de Active Directory en Splunk: persistencia, Rubeus, Mimikatz, movimiento lateral y preparación de archivos.">
+  <meta property="og:url" content="https://jlreyes13.github.io/cybersec-blog/posts/shadowroast.html">
+  <meta property="og:image" content="https://jlreyes13.github.io/cybersec-blog/images/post17/foto_1.png">
+  <meta property="og:image:width" content="1106">
+  <meta property="og:image:height" content="664">
+  <meta property="og:image:alt" content="Captura del laboratorio: ShadowRoast Lab | Jose Luis Reyes">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ShadowRoast Lab | Jose Luis Reyes">
+  <meta name="twitter:description" content="Investigación de un compromiso de Active Directory en Splunk: persistencia, Rubeus, Mimikatz, movimiento lateral y preparación de archivos.">
+  <meta name="twitter:image" content="https://jlreyes13.github.io/cybersec-blog/images/post17/foto_1.png">
+  <meta name="twitter:image:alt" content="Captura del laboratorio: ShadowRoast Lab | Jose Luis Reyes">
+</head>
 <body class="scanlines">
-    <canvas id="bg"></canvas>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <canvas id="bg" aria-hidden="true"></canvas>
     <header>
         <div class="container header-content">
-            <h1 class="hacker-title-terminal" >Cybersecurity Blog</h1>
-            <nav>
-              <a href="../index.html">Inicio</a>
-              <a href="../about.html">Sobre mí</a>
-            </nav>
+            <p class="site-brand"><a href="../index.html">Cybersecurity Blog<span aria-hidden="true">_</span></a></p>
+            <nav aria-label="Navegación principal">
+        <a href="../index.html">Inicio</a>
+        <a href="../laboratorios.html" aria-current="location">Laboratorios</a>
+        <a href="../personal-soc.html">SOC personal</a>
+        <a href="../about.html">Sobre mí</a>
+      </nav>
           </div>
     </header>
-    <main class="container">
+    <main id="contenido" class="container">
         <div class="post reveal">
-          <h3>💻 ShadowRoast Lab</h3>
-            <h4>Escenario</h4>
+      <div class="post-heading">
+        <p class="eyebrow">Análisis de laboratorio</p>
+        <h1 class="post-title">ShadowRoast Lab</h1>
+        <p class="date">15 Ago 2026</p>
+        <div class="tags" aria-label="Temas del análisis"><span>Splunk</span><span>Sysmon</span><span>Active Directory</span><span>Threat Hunting</span></div>
+      </div>
 
-              <p>Como analista de ciberseguridad en TechSecure Corp, usted ha sido alertado de actividades inusuales dentro del entorno de Active Directory de la compañía. 
+            <h2>Escenario</h2>
+
+              <p>Como analista de ciberseguridad en TechSecure Corp, usted ha sido alertado de actividades inusuales dentro del entorno de Active Directory de la compañía.
                 Los informes iniciales sugieren un acceso no autorizado y posibles intentos de escalada de privilegios.</p>
 
-            <h4>Preguntas</h4>
+            <h2>Preguntas</h2>
 
-            <h4 class="question" >¿Cuál es el nombre de archivo malicioso utilizado por el atacante para el acceso inicial?</h4>
-              <p class="answer" >Se realizó la búsqueda utilizando un filtro para el Event ID 1 de Sysmon, que corresponde a la creación de procesos en Windows. También se agregó el nombre del equipo sospechoso. 
+            <h3 class="question" >¿Cuál es el nombre de archivo malicioso utilizado por el atacante para el acceso inicial?</h3>
+              <p class="answer" >Se realizó la búsqueda utilizando un filtro para el Event ID 1 de Sysmon, que corresponde a la creación de procesos en Windows. También se agregó el nombre del equipo sospechoso.
                 De esta manera, se encontró un ejecutable llamado AdobeUpdater.exe, relacionado con la ejecución de procesos de PowerShell y CMD.</p>
-              <img class="img-post" src="../images/post17/foto_1.png" alt="imagen_archivo">
-               
-            <h4 class="question" >¿Cuál es el nombre de la clave de ejecución del registro creado por el atacante para mantener la persistencia?</h4>
-              <p class="answer" >Ahora relacionamos en el filtro los eventos asociados con los registros de Windows, específicamente el Event ID 13 de Sysmon. También tomamos en cuenta el equipo comprometido y revisamos el campo TargetObject, el cual nos proporciona la ruta de la clave modificada. 
+              <a class="evidence-link" href="../images/post17/foto_1.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 1 de ShadowRoast Lab: ¿Cuál es el nombre de archivo malicioso utilizado por el atacante para el acceso inicial?"><img class="img-post" src="../images/post17/foto_1.webp" alt="Captura 1 de ShadowRoast Lab: ¿Cuál es el nombre de archivo malicioso utilizado por el atacante para el acceso inicial?" width="1106" height="664" decoding="async" loading="lazy"></a>
+
+            <h3 class="question" >¿Cuál es el nombre de la clave de ejecución del registro creado por el atacante para mantener la persistencia?</h3>
+              <p class="answer" >Ahora relacionamos en el filtro los eventos asociados con los registros de Windows, específicamente el Event ID 13 de Sysmon. También tomamos en cuenta el equipo comprometido y revisamos el campo TargetObject, el cual nos proporciona la ruta de la clave modificada.
                 De esta manera, encontramos una clave específica relacionada con AdobeUpdater.exe, que contiene un comando de PowerShell con código en Base64 utilizado para mantener la persistencia.</p>
-              <img class="img-post" src="../images/post17/foto_2.png" alt="imagen_ejecucion">
+              <a class="evidence-link" href="../images/post17/foto_2.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 2 de ShadowRoast Lab: ¿Cuál es el nombre de la clave de ejecución del registro creado por el atacante para mantener la persistencia?"><img class="img-post" src="../images/post17/foto_2.webp" alt="Captura 2 de ShadowRoast Lab: ¿Cuál es el nombre de la clave de ejecución del registro creado por el atacante para mantener la persistencia?" width="1014" height="593" decoding="async" loading="lazy"></a>
 
-            <h4 class="question" >¿Cuál es la ruta completa del directorio utilizado por el atacante para almacenar sus herramientas caídas?</h4>
+            <h3 class="question" >¿Cuál es la ruta completa del directorio utilizado por el atacante para almacenar sus herramientas caídas?</h3>
               <p class="answer" >En este caso, relacionamos el equipo comprometido con el archivo ejecutable y el Event ID 11 de Sysmon, que nos permite identificar la creación de archivos. De esta manera, pudimos encontrar el directorio donde el atacante almacenó sus herramientas y el ejecutable relacionado.</p>
-                <img class="img-post" src="../images/post17/foto_3.png" alt="imagen_ruta">
-                  
-            <h4 class="question" >¿Qué herramienta utilizó el atacante para la escalada de privilegios y la cosecha de credenciales?</h4> 
-              <p class="answer" >Para encontrar la herramienta, se utilizó el Event ID 1 de Sysmon, que corresponde a la creación de procesos. También se tomó en cuenta el directorio donde el atacante había almacenado sus herramientas. La consulta arrojó tres resultados y uno de ellos corresponde a una herramienta llamada Rubeus, 
+                <a class="evidence-link" href="../images/post17/foto_3.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 3 de ShadowRoast Lab: ¿Cuál es la ruta completa del directorio utilizado por el atacante para almacenar sus herramientas caídas?"><img class="img-post" src="../images/post17/foto_3.webp" alt="Captura 3 de ShadowRoast Lab: ¿Cuál es la ruta completa del directorio utilizado por el atacante para almacenar sus herramientas caídas?" width="829" height="648" decoding="async" loading="lazy"></a>
+
+            <h3 class="question" >¿Qué herramienta utilizó el atacante para la escalada de privilegios y la cosecha de credenciales?</h3>
+              <p class="answer" >Para encontrar la herramienta, se utilizó el Event ID 1 de Sysmon, que corresponde a la creación de procesos. También se tomó en cuenta el directorio donde el atacante había almacenado sus herramientas. La consulta arrojó tres resultados y uno de ellos corresponde a una herramienta llamada Rubeus,
                 utilizada para realizar ataques relacionados con la autenticación de Kerberos en entornos de Active Directory y obtener credenciales.</p>
-                <img class="img-post" src="../images/post17/foto_4.png" alt="imagen_herramienta">
+                <a class="evidence-link" href="../images/post17/foto_4.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 4 de ShadowRoast Lab: ¿Qué herramienta utilizó el atacante para la escalada de privilegios y la cosecha de credenciales?"><img class="img-post" src="../images/post17/foto_4.webp" alt="Captura 4 de ShadowRoast Lab: ¿Qué herramienta utilizó el atacante para la escalada de privilegios y la cosecha de credenciales?" width="890" height="560" decoding="async" loading="lazy"></a>
 
-            <h4 class="question" >¿Fue exitosa la cosecha de credenciales del atacante? Si es así, ¿puede proporcionar el nombre de usuario de la cuenta de dominio comprometido?</h4>
+            <h3 class="question" >¿Fue exitosa la cosecha de credenciales del atacante? Si es así, ¿puede proporcionar el nombre de usuario de la cuenta de dominio comprometido?</h3>
               <p class="answer" >Siguiendo la consulta anterior, se pudo detectar que el atacante logró comprometer otra cuenta. Además, se identificó el uso de la herramienta Mimikatz, y el usuario comprometido fue tcooper.</p>
-                <img class="img-post" src="../images/post17/foto_5.png" alt="imagen_credencial">
+                <a class="evidence-link" href="../images/post17/foto_5.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 5 de ShadowRoast Lab: ¿Fue exitosa la cosecha de credenciales del atacante? Si es así, ¿puede proporcionar el nombre de usuario de la cuenta de dominio comprometido?"><img class="img-post" src="../images/post17/foto_5.webp" alt="Captura 5 de ShadowRoast Lab: ¿Fue exitosa la cosecha de credenciales del atacante? Si es así, ¿puede proporcionar el nombre de usuario de la cuenta de dominio comprometido?" width="818" height="517" decoding="async" loading="lazy"></a>
 
-            <h4 class="question" >¿Cuál es la herramienta utilizada por el atacante para registrar un controlador de dominio fraudulento para manipular los datos de Active Directory?</h4>
+            <h3 class="question" >¿Cuál es la herramienta utilizada por el atacante para registrar un controlador de dominio fraudulento para manipular los datos de Active Directory?</h3>
                 <p class="answer" >Para este caso, se utilizó un filtro relacionado con eventos de Windows asociados con Active Directory. En los resultados se encontró un evento relacionado con la replicación de Active Directory desde el equipo comprometido, comportamiento que puede estar asociado con la técnica DCShadow.</p>
-                <img class="img-post" src="../images/post17/foto_6.png" alt="imagen_active">
+                <a class="evidence-link" href="../images/post17/foto_6.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 6 de ShadowRoast Lab: ¿Cuál es la herramienta utilizada por el atacante para registrar un controlador de dominio fraudulento para manipular los datos de Active Directory?"><img class="img-post" src="../images/post17/foto_6.webp" alt="Captura 6 de ShadowRoast Lab: ¿Cuál es la herramienta utilizada por el atacante para registrar un controlador de dominio fraudulento para manipular los datos de Active Directory?" width="984" height="448" decoding="async" loading="lazy"></a>
                 <p class="answer" >Al investigar esta técnica en MITRE ATT&CK, podemos observar que una de las herramientas que permite realizarla es Mimikatz.</p>
-                <img class="img-post" src="../images/post17/foto_7.png" alt="imagen_mitre">
+                <a class="evidence-link" href="../images/post17/foto_7.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 7 de ShadowRoast Lab: ¿Cuál es la herramienta utilizada por el atacante para registrar un controlador de dominio fraudulento para manipular los datos de Active Directory?"><img class="img-post" src="../images/post17/foto_7.webp" alt="Captura 7 de ShadowRoast Lab: ¿Cuál es la herramienta utilizada por el atacante para registrar un controlador de dominio fraudulento para manipular los datos de Active Directory?" width="1346" height="729" decoding="async" loading="lazy"></a>
 
-            <h4 class="question" >¿Cuál es el primer comando utilizado por el atacante para habilitar RDP en máquinas remotas para el movimiento lateral?</h4>
+            <h3 class="question" >¿Cuál es el primer comando utilizado por el atacante para habilitar RDP en máquinas remotas para el movimiento lateral?</h3>
                 <p class="answer" >Realizando una investigación sobre RDP, se pudo identificar el valor relacionado con la habilitación de conexiones remotas. Posteriormente, se utilizó este valor como filtro junto con el Event ID 1 de Sysmon, correspondiente a la creación de procesos, lo que permitió encontrar el comando utilizado por el atacante.</p>
-                <img class="img-post"  src="../images/post17/foto_8.png" alt="imagen_comando">
-                <img class="img-post"  src="../images/post17/foto_9.png" alt="imagen_rdp">
+                <a class="evidence-link" href="../images/post17/foto_8.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 8 de ShadowRoast Lab: ¿Cuál es el primer comando utilizado por el atacante para habilitar RDP en máquinas remotas para el movimiento lateral?"><img class="img-post"  src="../images/post17/foto_8.webp" alt="Captura 8 de ShadowRoast Lab: ¿Cuál es el primer comando utilizado por el atacante para habilitar RDP en máquinas remotas para el movimiento lateral?" width="694" height="448" decoding="async" loading="lazy"></a>
+                <a class="evidence-link" href="../images/post17/foto_9.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 9 de ShadowRoast Lab: ¿Cuál es el primer comando utilizado por el atacante para habilitar RDP en máquinas remotas para el movimiento lateral?"><img class="img-post"  src="../images/post17/foto_9.webp" alt="Captura 9 de ShadowRoast Lab: ¿Cuál es el primer comando utilizado por el atacante para habilitar RDP en máquinas remotas para el movimiento lateral?" width="1123" height="354" decoding="async" loading="lazy"></a>
 
-            <h4 class="question" >¿Cuál es el nombre del archivo creado por el atacante después de comprimir archivos confidenciales?</h4>
+            <h3 class="question" >¿Cuál es el nombre del archivo creado por el atacante después de comprimir archivos confidenciales?</h3>
                 <p class="answer" >Para este caso, se filtró el Event ID 11 de Sysmon, relacionado con la creación de archivos, junto con la búsqueda de archivos con extensión .zip. De esta manera, se encontró un archivo relacionado con el equipo comprometido.</p>
-                  <img class="img-post" src="../images/post17/foto_10.png" alt="imagen_tarea">
-          
-            <h4 class="question" >Conclusión</h4>
-                <p class="answer" >Este tipo de incidentes nos deja como gran enseñanza que un pequeño error, como descargar una actualización no legítima de un programa, puede desencadenar un gran problema. No debemos olvidar descargar software y actualizaciones de sitios legítimos. Además, cuando el incidente ya ha escalado al punto de mantener persistencia en el sistema, 
+                  <a class="evidence-link" href="../images/post17/foto_10.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Captura 10 de ShadowRoast Lab: ¿Cuál es el nombre del archivo creado por el atacante después de comprimir archivos confidenciales?"><img class="img-post" src="../images/post17/foto_10.webp" alt="Captura 10 de ShadowRoast Lab: ¿Cuál es el nombre del archivo creado por el atacante después de comprimir archivos confidenciales?" width="827" height="542" decoding="async" loading="lazy"></a>
+
+            <h2 class="question" >Conclusión</h2>
+                <p class="answer" >Este tipo de incidentes nos deja como gran enseñanza que un pequeño error, como descargar una actualización no legítima de un programa, puede desencadenar un gran problema. No debemos olvidar descargar software y actualizaciones de sitios legítimos. Además, cuando el incidente ya ha escalado al punto de mantener persistencia en el sistema,
                   lo mejor será aislar el host comprometido y continuar con la investigación para determinar si otros equipos también fueron afectados.</p>
+          <nav class="post-actions" aria-label="Navegación del artículo"><a href="../laboratorios.html">← Volver a laboratorios</a></nav>
 
         </div>
     </main>
@@ -83,8 +110,8 @@
         </nav>
       </div>
     </footer>
-      
+
     <script src="../script.js"></script>
-    
+
 </body>
-</html> 
+</html>

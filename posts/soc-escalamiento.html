@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Jose Luis Reyes">
+  <meta name="description" content="Investigación SSH en un laboratorio propio: correlación de PCAP y auth.log, 70 intentos fallidos y documentación de hallazgos en un ticket SOC.">
+  <title>Escalamiento de incidencia | SOC personal</title>
+  <link rel="icon" type="image/png" href="../images/general/icono.png">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="canonical" href="https://jlreyes13.github.io/cybersec-blog/posts/soc-escalamiento.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Cybersecurity Blog | Jose Luis Reyes">
+  <meta property="og:locale" content="es_MX">
+  <meta property="og:title" content="Escalamiento de incidencia | SOC personal">
+  <meta property="og:description" content="Investigación SSH en un laboratorio propio: correlación de PCAP y auth.log, 70 intentos fallidos y documentación de hallazgos en un ticket SOC.">
+  <meta property="og:url" content="https://jlreyes13.github.io/cybersec-blog/posts/soc-escalamiento.html">
+  <meta property="og:image" content="https://jlreyes13.github.io/cybersec-blog/images/images-SOC/post1/foto_1.png">
+  <meta property="og:image:width" content="1130">
+  <meta property="og:image:height" content="66">
+  <meta property="og:image:alt" content="Captura del laboratorio: Escalamiento de incidencia | SOC personal">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Escalamiento de incidencia | SOC personal">
+  <meta name="twitter:description" content="Investigación SSH en un laboratorio propio: correlación de PCAP y auth.log, 70 intentos fallidos y documentación de hallazgos en un ticket SOC.">
+  <meta name="twitter:image" content="https://jlreyes13.github.io/cybersec-blog/images/images-SOC/post1/foto_1.png">
+  <meta name="twitter:image:alt" content="Captura del laboratorio: Escalamiento de incidencia | SOC personal">
+</head>
+<body class="scanlines">
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <canvas id="bg" aria-hidden="true"></canvas>
+
+  <header>
+    <div class="container header-content">
+      <p class="site-brand"><a href="../index.html">Cybersecurity Blog<span aria-hidden="true">_</span></a></p>
+      <nav aria-label="Navegación principal">
+        <a href="../index.html">Inicio</a>
+        <a href="../laboratorios.html">Laboratorios</a>
+        <a href="../personal-soc.html" aria-current="location">SOC personal</a>
+        <a href="../about.html">Sobre mí</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido" class="container soc-page">
+    <article class="post reveal">
+      <div class="post-heading">
+        <p class="eyebrow">Laboratorio propio</p>
+        <h1 class="post-title">Investigación de actividad sospechosa en SSH</h1>
+        <p class="date">30 Sep 2026</p>
+        <div class="tags" aria-label="Temas del análisis"><span>Wireshark</span><span>SSH</span><span>PCAP</span></div>
+      </div>
+
+
+
+
+
+
+<h2>Objetivo</h2>
+
+<p>
+  Analizar un archivo PCAP generado en un entorno controlado para
+  identificar actividad sospechosa en la red. Durante la investigación
+  se analizará el tráfico con Wireshark y se correlacionará con los
+  registros de autenticación del servidor para determinar si existieron
+  intentos de acceso no autorizados.
+</p>
+
+  <section class="lab-environment">
+  <h2>Entorno del laboratorio</h2>
+
+  <p>
+    Para realizar el análisis se utilizó un entorno controlado compuesto
+    por una máquina Kali Linux y un servidor Ubuntu.
+  </p>
+
+  <div class="lab-diagram">
+
+    <div class="lab-device">
+      <span class="device-icon">💻</span>
+      <h3>Kali Linux</h3>
+      <p>192.168.100.174</p>
+      <small>Equipo de pruebas</small>
+    </div>
+
+    <div class="lab-arrow">
+      <span>Tráfico de red</span>
+      <strong>→</strong>
+    </div>
+
+    <div class="lab-device">
+      <span class="device-icon">🖥️</span>
+      <h3>Ubuntu Server</h3>
+      <p>192.168.100.177</p>
+      <small>Servidor SSH</small>
+    </div>
+
+    <div class="lab-arrow">
+      <span>Captura</span>
+      <strong>→</strong>
+    </div>
+
+    <div class="lab-device">
+      <span class="device-icon">🔎</span>
+      <h3>Wireshark</h3>
+      <p>Archivo PCAP</p>
+      <small>Análisis de tráfico</small>
+    </div>
+
+  </div>
+</section>
+      <h3>Investigación</h3>
+
+        <p class="answer" >Se recibió un archivo .pcap para realizar un análisis del tráfico de red. Durante la revisión de la sección de Conversaciones de Wireshark, se identificó una comunicación significativa entre las direcciones IP 192.168.100.174 y
+          192.168.100.177. La dirección 192.168.100.174 generó tráfico hacia el servidor interno 192.168.100.177, por lo que se decidió analizar con mayor detalle la actividad asociada a esta comunicación.</p>
+            <a class="evidence-link" href="../images/images-SOC/post1/foto_1.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Conversaciones entre Kali Linux y Ubuntu Server en Wireshark"><img class="img-post" src="../images/images-SOC/post1/foto_1.webp" alt="Conversaciones entre Kali Linux y Ubuntu Server en Wireshark" width="1130" height="66" decoding="async" loading="lazy"></a>
+
+        <p class="answer" >En la sección de Jerarquía de Protocolos se puede observar que la mayor parte del tráfico corresponde al protocolo TCP. También se identifica una cantidad importante de tráfico SSH, por lo que se decidió revisar con mayor detalle las conexiones relacionadas con este protocolo.</p>
+            <a class="evidence-link" href="../images/images-SOC/post1/foto_2.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Jerarquía de protocolos con tráfico TCP y SSH"><img class="img-post" src="../images/images-SOC/post1/foto_2.webp" alt="Jerarquía de protocolos con tráfico TCP y SSH" width="1135" height="198" decoding="async" loading="lazy"></a>
+
+        <p class="answer" >Indagando más sobre esta conexión, se aplicó un filtro para identificar paquetes SYN del protocolo TCP y comprobar si se había realizado un escaneo al servidor local. Se puede observar que la IP 192.168.100.174 realiza múltiples solicitudes de conexión hacia diferentes puertos de la IP 192.168.100.177,
+          utilizando el mismo puerto de origen 40794. Debido a este comportamiento, se puede considerar que existe evidencia de un posible escaneo de puertos al servidor.</p>
+            <a class="evidence-link" href="../images/images-SOC/post1/foto_3.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Paquetes SYN dirigidos a distintos puertos del servidor"><img class="img-post" src="../images/images-SOC/post1/foto_3.webp" alt="Paquetes SYN dirigidos a distintos puertos del servidor" width="1523" height="524" decoding="async" loading="lazy"></a>
+
+        <p class="answer" >También se puede observar que hubo múltiples intentos de conexión al puerto 22, realizados en periodos de tiempo muy cortos y provenientes de la misma dirección IP. Este comportamiento puede estar relacionado con un posible ataque de fuerza bruta o password spraying, por lo que es necesario revisar los registros de autenticación para determinar qué tipo de actividad se realizó.</p>
+            <a class="evidence-link" href="../images/images-SOC/post1/foto_4.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Conexiones repetidas al puerto SSH 22"><img class="img-post" src="../images/images-SOC/post1/foto_4.webp" alt="Conexiones repetidas al puerto SSH 22" width="1370" height="578" decoding="async" loading="lazy"></a>
+
+        <p class="answer" >Por último, en las gráficas se puede observar un incremento en la actividad de red durante los periodos en los que la IP 192.168.100.174 realizó conexiones con el servidor local 192.168.100.177.</p>
+            <a class="evidence-link" href="../images/images-SOC/post1/foto_5.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Gráfica de actividad de red durante las conexiones al servidor"><img class="img-post" src="../images/images-SOC/post1/foto_5.webp" alt="Gráfica de actividad de red durante las conexiones al servidor" width="1071" height="680" decoding="async" loading="lazy"></a>
+
+        <p class="answer" >Después se ingresó al servidor para comprobar si existía alguna correlación con la actividad observada en el tráfico de red. Al revisar el archivo /var/log/auth.log, se encontraron 70 intentos fallidos de autenticación SSH provenientes de la IP 192.168.100.174, la misma dirección identificada anteriormente en el archivo PCAP..</p>
+            <a class="evidence-link" href="../images/images-SOC/post1/foto_6.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Registros de auth.log con intentos fallidos de autenticación SSH"><img class="img-post" src="../images/images-SOC/post1/foto_6.webp" alt="Registros de auth.log con intentos fallidos de autenticación SSH" width="955" height="725" decoding="async" loading="lazy"></a>
+
+        <p class="answer" >Posteriormente, se filtró la IP 192.168.100.174 dentro del archivo auth.log para buscar posibles autenticaciones exitosas relacionadas con esta dirección. Sin embargo, no se encontraron accesos exitosos, únicamente intentos fallidos de autenticación SSH.</p>
+            <a class="evidence-link" href="../images/images-SOC/post1/foto_7.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Búsqueda de autenticaciones relacionadas con la IP investigada"><img class="img-post" src="../images/images-SOC/post1/foto_7.webp" alt="Búsqueda de autenticaciones relacionadas con la IP investigada" width="1220" height="847" decoding="async" loading="lazy"></a>
+
+        <p>Con la información obtenida del tráfico de red y los registros del servidor, se puede determinar que hubo múltiples intentos de autenticación SSH desde la IP 192.168.100.174, pero no se encontró evidencia de que alguno de estos intentos lograra acceder al servidor.</p>
+
+      <section class="ticket-evidence" aria-labelledby="ticket-title">
+        <h3 id="ticket-title">Ticket SOC</h3>
+        <p>Con base en la evidencia recopilada durante la investigación, se documentó el incidente en un ticket SOC para registrar los hallazgos, la clasificación y las acciones recomendadas.</p>
+        <figure class="ticket-preview">
+          <a href="../documents/ticket-1.pdf" target="_blank" rel="noopener noreferrer" aria-label="Abrir ticket de escalamiento en PDF">
+            <img src="../images/soc/ticket-1.png" alt="Vista previa del ticket de escalamiento de incidentes SOC" width="1132" height="1600" decoding="async" loading="lazy">
+          </a>
+          <figcaption>Vista previa del ticket de escalamiento. Selecciona el documento para verlo a tamaño completo.</figcaption>
+        </figure>
+
+      </section>
+
+      <div class="post-actions">
+        <a href="../personal-soc.html">← Volver a SOC personal</a>
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <p>© 2026 Jose Luis Reyes | Cybersecurity Blog</p>
+      <nav class="footer-links" aria-label="Enlaces del sitio">
+        <a href="https://github.com/JLReyes13" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://www.linkedin.com/in/jos%C3%A9-luis-reyes-791198334" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+</body>
+</html>

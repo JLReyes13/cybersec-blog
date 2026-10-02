@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Jose Luis Reyes">
+  <meta name="description" content="Laboratorio SOC de Jose Luis Reyes: investigaciones de incidentes, correlación de evidencias, clasificación y documentación de tickets.">
+  <title>SOC personal | Jose Luis Reyes</title>
+  <link rel="icon" type="image/png" href="images/general/icono.png">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="canonical" href="https://jlreyes13.github.io/cybersec-blog/personal-soc.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Cybersecurity Blog | Jose Luis Reyes">
+  <meta property="og:locale" content="es_MX">
+  <meta property="og:title" content="SOC personal | Jose Luis Reyes">
+  <meta property="og:description" content="Laboratorio SOC de Jose Luis Reyes: investigaciones de incidentes, correlación de evidencias, clasificación y documentación de tickets.">
+  <meta property="og:url" content="https://jlreyes13.github.io/cybersec-blog/personal-soc.html">
+  <meta property="og:image" content="https://jlreyes13.github.io/cybersec-blog/images/general/personal_image.png">
+  <meta property="og:image:width" content="610">
+  <meta property="og:image:height" content="608">
+  <meta property="og:image:alt" content="Jose Luis Reyes">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SOC personal | Jose Luis Reyes">
+  <meta name="twitter:description" content="Laboratorio SOC de Jose Luis Reyes: investigaciones de incidentes, correlación de evidencias, clasificación y documentación de tickets.">
+  <meta name="twitter:image" content="https://jlreyes13.github.io/cybersec-blog/images/general/personal_image.png">
+  <meta name="twitter:image:alt" content="Jose Luis Reyes">
+</head>
+<body class="scanlines">
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <canvas id="bg" aria-hidden="true"></canvas>
+
+  <header>
+    <div class="container header-content">
+      <p class="site-brand"><a href="index.html">Cybersecurity Blog<span aria-hidden="true">_</span></a></p>
+      <nav aria-label="Navegación principal">
+        <a href="index.html">Inicio</a>
+        <a href="laboratorios.html">Laboratorios</a>
+        <a href="personal-soc.html" aria-current="page">SOC personal</a>
+        <a href="about.html">Sobre mí</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido" class="container soc-page">
+    <section class="soc-hero reveal">
+      <p class="eyebrow">SECURITY OPERATIONS CENTER</p>
+      <h1>SOC personal</h1>
+      <p>
+        Este espacio forma parte de un SOC personal creado por mí para simular el proceso de investigación y gestión de incidentes de seguridad. Aquí documento los incidentes analizados,
+        las evidencias recopiladas, su clasificación, severidad y las acciones tomadas o recomendadas.
+      </p>
+    </section>
+
+    <section id="investigaciones" class="soc-investigations reveal" aria-labelledby="investigations-title">
+      <div class="section-heading">
+        <p class="eyebrow">Escenarios</p>
+        <h2 id="investigations-title">Investigaciones SOC</h2>
+      </div>
+      <div class="posts">
+        <article class="card soc-case-card">
+          <p class="eyebrow">Laboratorio propio · Caso 01</p>
+          <h3><a href="posts/soc-escalamiento.html">Investigación de actividad sospechosa en SSH</a></h3>
+          <p class="date">30 Sep 2026</p>
+          <div class="tags" aria-label="Temas de la investigación">
+            <span>Wireshark</span>
+            <span>SSH</span>
+            <span>PCAP</span>
+          </div>
+          <p>
+            Investigación de tráfico entre una máquina Kali Linux y un servidor Ubuntu. Se identificaron un posible escaneo de puertos y múltiples intentos fallidos
+            de autenticación SSH, correlacionados con los registros <code>auth.log</code> del servidor.
+          </p>
+          <p class="case-result"><strong>Resultado:</strong> 70 intentos fallidos de autenticación; no se encontraron accesos exitosos en los registros revisados.</p>
+          <a href="posts/soc-escalamiento.html" aria-label="Ver análisis: Investigación de actividad sospechosa en SSH">Ver análisis →</a>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <p>© 2026 Jose Luis Reyes | Cybersecurity Blog</p>
+      <nav class="footer-links" aria-label="Enlaces del sitio">
+        <a href="https://github.com/JLReyes13" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://www.linkedin.com/in/jos%C3%A9-luis-reyes-791198334" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

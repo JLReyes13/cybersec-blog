@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Jose Luis Reyes">
+  <meta name="description" content="Catálogo de laboratorios de Jose Luis Reyes: análisis de malware, phishing, tráfico de red y casos SOC. Filtra por tipo de caso y ordena por fecha.">
+  <title>Laboratorios | Jose Luis Reyes</title>
+  <link rel="icon" type="image/png" href="images/general/icono.png">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="canonical" href="https://jlreyes13.github.io/cybersec-blog/laboratorios.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Cybersecurity Blog | Jose Luis Reyes">
+  <meta property="og:locale" content="es_MX">
+  <meta property="og:title" content="Laboratorios | Jose Luis Reyes">
+  <meta property="og:description" content="Catálogo de laboratorios de Jose Luis Reyes: análisis de malware, phishing, tráfico de red y casos SOC. Filtra por tipo de caso y ordena por fecha.">
+  <meta property="og:url" content="https://jlreyes13.github.io/cybersec-blog/laboratorios.html">
+  <meta property="og:image" content="https://jlreyes13.github.io/cybersec-blog/images/general/personal_image.png">
+  <meta property="og:image:width" content="610">
+  <meta property="og:image:height" content="608">
+  <meta property="og:image:alt" content="Jose Luis Reyes">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Laboratorios | Jose Luis Reyes">
+  <meta name="twitter:description" content="Catálogo de laboratorios de Jose Luis Reyes: análisis de malware, phishing, tráfico de red y casos SOC. Filtra por tipo de caso y ordena por fecha.">
+  <meta name="twitter:image" content="https://jlreyes13.github.io/cybersec-blog/images/general/personal_image.png">
+  <meta name="twitter:image:alt" content="Jose Luis Reyes">
+</head>
+
+<body class="scanlines">
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+<canvas id="bg" aria-hidden="true"></canvas>
+
+<header>
+  <div class="container header-content">
+    <p class="site-brand"><a href="index.html">Cybersecurity Blog<span aria-hidden="true">_</span></a></p>
+    <nav aria-label="Navegación principal">
+        <a href="index.html">Inicio</a>
+        <a href="laboratorios.html" aria-current="page">Laboratorios</a>
+        <a href="personal-soc.html">SOC personal</a>
+        <a href="about.html">Sobre mí</a>
+      </nav>
+  </div>
+</header>
+
+<main id="contenido" class="container">
+  <section class="hero catalog-hero">
+    <p class="eyebrow">Bitácora técnica</p>
+    <h1 id="archive-title">Laboratorios</h1>
+  </section>
+  <form id="lab-filters" class="lab-filters" aria-label="Filtrar y ordenar laboratorios" hidden>
+    <div class="filter-field">
+      <label for="lab-order">Ordenar por fecha</label>
+      <select id="lab-order" aria-controls="lab-results">
+        <option value="newest">Más recientes</option>
+        <option value="oldest">Más antiguos</option>
+      </select>
+    </div>
+    <div class="filter-field">
+      <label for="lab-type">Tipo de caso</label>
+      <select id="lab-type" aria-controls="lab-results"><option value="">Todos los casos</option></select>
+    </div>
+    <button class="filter-reset" type="reset">Limpiar</button>
+  </form>
+  <p id="lab-count" class="filter-count" role="status" aria-live="polite" aria-atomic="true" hidden></p>
+  <section id="lab-results" class="posts" aria-labelledby="archive-title">
+
+    <article class="card" data-case-type="Explotación de vulnerabilidades" data-date="2026-08-31">
+  <h2><a href="posts/openwire.html">Análisis de explotación: OpenWire</a></h2>
+  <p class="date">31 Ago 2026</p>
+  <div class="tags" aria-label="Temas del post">
+    <span>Wireshark</span>
+    <span>PCAP</span>
+  </div>
+  <p class="card-summary">Investigación de explotación de Apache ActiveMQ mediante OpenWire: servidores C2, descarga de malware y evidencias de CVE-2023-46604.</p>
+  <p class="source">Lab realizado en CyberDefenders</p>
+  <a href="posts/openwire.html" aria-label="Ver análisis: Análisis de explotación: OpenWire">Ver análisis →</a>
+</article>
+
+    <article class="card" data-case-type="Reconocimiento de red" data-date="2026-08-23">
+  <h2><a href="posts/t1595.html">Análisis de red: T1595</a></h2>
+  <p class="date">23 Ago 2026</p>
+  <div class="tags" aria-label="Temas del post">
+    <span>Wireshark</span>
+    <span>Network Analysis</span>
+    <span>PCAP</span>
+  </div>
+  <p class="card-summary">Análisis de reconocimiento de red en Wireshark: protocolos, hosts, puertos y conexiones sospechosas hacia servicios internos.</p>
+  <p class="source">Lab realizado en CyberDefenders</p>
+  <a href="posts/t1595.html" aria-label="Ver análisis: Análisis de red: T1595">Ver análisis →</a>
+</article>
+
+    <article class="card" data-case-type="Active Directory" data-date="2026-08-15">
+  <h2><a href="posts/shadowroast.html">Análisis de compromiso: ShadowRoast</a></h2>
+  <p class="date">15 Ago 2026</p>
+  <div class="tags" aria-label="Temas del post">
+    <span>Splunk</span>
+    <span>Sysmon</span>
+    <span>Active Directory</span>
+    <span>Threat Hunting</span>
+  </div>
+  <p class="card-summary">Investigación de un compromiso de Active Directory en Splunk: persistencia, Rubeus, Mimikatz, movimiento lateral y preparación de archivos.</p>
+  <p class="source">Lab realizado en CyberDefenders</p>
+  <a href="posts/shadowroast.html" aria-label="Ver análisis: Análisis de compromiso: ShadowRoast">Ver análisis →</a>
+</article>
+
+    <article class="card" data-case-type="Active Directory" data-date="2026-08-03">
+  <h2><a href="posts/golden-spray.html">Threat Hunting: Golden Spray</a></h2>
+  <p class="date">03 Ago 2026</p>
+  <div class="tags" aria-label="Temas del post">
+    <span>Splunk</span>
+    <span>Windows</span>
+    <span>Threat Hunting</span>
+  </div>
+  <p class="card-summary">Análisis de password spraying en Splunk: cuentas comprometidas, movimiento lateral, tareas programadas y preparación para exfiltración.</p>
+  <p class="source">Lab realizado en CyberDefenders</p>
+  <a href="posts/golden-spray.html" aria-label="Ver análisis: Threat Hunting: Golden Spray">Ver análisis →</a>
+</article>
+
+    <article class="card" data-case-type="Ransomware" data-date="2026-07-15">
+  <h2><a href="posts/ransomware-analysis.html">Análisis de ransomware: TeslaCrypt Infection</a></h2>
+  <p class="date">15 Jul 2026</p>
+  <div class="tags" aria-label="Temas del post">
+    <span>Network</span>
+    <span>Wireshark</span>
+    <span>Ransomware</span>
+  </div>
+  <p class="card-summary">Análisis de TeslaCrypt con Wireshark: descarga del ransomware, indicadores de compromiso, hash de la muestra y descifrado del archivo.</p>
+  <p class="source">Lab realizado en Blue Team Labs</p>
+  <a href="posts/ransomware-analysis.html" aria-label="Ver análisis: Análisis de ransomware: TeslaCrypt Infection">Ver análisis →</a>
+</article>
+
+    <article class="card" data-case-type="Explotación de vulnerabilidades" data-date="2026-07-07">
+      <h2><a href="posts/web-shell-analysis.html">Análisis de intrusión: Network Analysis – Web Shell</a></h2>
+      <p class="date">07 Jul 2026</p>
+      <div class="tags" aria-label="Temas del post">
+      <span>Network</span>
+      <span>Wireshark</span>
+      <span>Web Shell</span>
+      </div>
+        <p class="card-summary">Análisis de una intrusión web: escaneo, Gobuster, SQLMap, carga de un web shell y ejecución de comandos mediante tráfico de red.</p>
+        <p class="source">Lab realizado en Blue Team Labs</p>
+        <a href="posts/web-shell-analysis.html" aria-label="Ver análisis: Análisis de intrusión: Network Analysis – Web Shell">Ver análisis →</a>
+      </article>
+
+      <article class="card" data-case-type="Malware y C2" data-date="2026-07-03">
+        <h2><a href="posts/malware-compromise-analysis.html">Análisis de malware: Network Analysis – Malware Compromise</a></h2>
+        <p class="date">03 Jul 2026</p>
+        <div class="tags" aria-label="Temas del post">
+          <span>Network</span>
+          <span>Wireshark</span>
+          <span>Malware</span>
+        </div>
+        <p class="card-summary">Análisis de un compromiso por malware con Wireshark: conexiones sospechosas, tráfico HTTP y evidencias del host afectado.</p>
+        <p class="source">Lab realizado en Blue Team Labs</p>
+        <a href="posts/malware-compromise-analysis.html" aria-label="Ver análisis: Análisis de malware: Network Analysis – Malware Compromise">Ver análisis →</a>
+      </article>
+
+     <article class="card" data-case-type="Phishing" data-date="2026-06-08">
+      <h2><a href="posts/phishing-analysis.html">Análisis de phishing: Website Contact Form Submission</a></h2>
+      <p class="date">08 Jun 2026</p>
+      <div class="tags" aria-label="Temas del post">
+        <span>Phishing</span>
+        <span>Email</span>
+        <span>OSINT</span>
+      </div>
+      <p class="card-summary">Investigación de un correo de phishing: encabezados, direcciones IP, dominios, adjuntos y enlaces relacionados con la campaña.</p>
+      <p class="source">Lab realizado en Blue Team Labs Online</p>
+      <a href="posts/phishing-analysis.html" aria-label="Ver análisis: Análisis de phishing: Website Contact Form Submission">Ver análisis →</a>
+    </article>
+
+    <article class="card" data-case-type="Explotación de vulnerabilidades" data-date="2026-06-03">
+      <h2><a href="posts/web-investigation-analysis.html">Análisis de SQL Injection: Web Investigation Lab</a></h2>
+      <p class="date">03 Jun 2026</p>
+      <div class="tags" aria-label="Temas del post">
+        <span>Wireshark</span>
+        <span>SQL Injection</span>
+        <span>Network</span>
+      </div>
+      <p class="card-summary">Investigación de SQL Injection con Wireshark: consultas maliciosas, acceso a datos, autenticación administrativa y carga de archivos.</p>
+      <p class="source">Lab realizado en CyberDefenders</p>
+      <a href="posts/web-investigation-analysis.html" aria-label="Ver análisis: Análisis de SQL Injection: Web Investigation Lab">Ver análisis →</a>
+    </article>
+
+    <article class="card" data-case-type="Explotación de vulnerabilidades" data-date="2026-05-23">
+      <h2><a href="posts/xxe-infiltration-analysis.html">Análisis forense: XXE Infiltration Lab</a></h2>
+      <p class="date">23 May 2026</p>
+      <div class="tags" aria-label="Temas del post">
+        <span>Network</span>
+        <span>Wireshark</span>
+        <span>XXE</span>
+      </div>
+      <p class="card-summary">Investigación de XXE con Wireshark: solicitudes XML, lectura de archivos, exposición de credenciales y persistencia mediante web shell.</p>
+      <p class="source">Lab realizado en CyberDefenders</p>
+      <a href="posts/xxe-infiltration-analysis.html" aria-label="Ver análisis: Análisis forense: XXE Infiltration Lab">Ver análisis →</a>
+    </article>
+
+    <article class="card" data-case-type="Ransomware" data-date="2026-05-16">
+      <h2><a href="posts/revil-analysis.html">Análisis de ransomware: REvil - GOLD SOUTHFIELD</a></h2>
+      <p class="date">16 May 2026</p>
+      <div class="tags" aria-label="Temas del post">
+        <span>Ransomware</span>
+        <span>Splunk</span>
+        <span>Sysmon</span>
+      </div>
+      <p class="card-summary">Investigación de REvil con Splunk y Sysmon: notas de rescate, procesos sospechosos, eliminación de Shadow Copies e indicadores de compromiso.</p>
+      <p class="source">Lab realizado en CyberDefenders</p>
+      <a href="posts/revil-analysis.html" aria-label="Ver análisis: Análisis de ransomware: REvil - GOLD SOUTHFIELD">Ver análisis →</a>
+    </article>
+
+    <article class="card" data-case-type="Seguridad cloud" data-date="2026-05-09">
+      <h2><a href="posts/aws-raid-analysis.html">Análisis de actividad maliciosa en: AWS Raid</a></h2>
+      <p class="date">9 May 2026</p>
+      <div class="tags" aria-label="Temas del post">
+        <span>Cloud</span>
+        <span>AWS</span>
+        <span>Splunk</span>
+      </div>
+      <p class="card-summary">Investigación de AWS CloudTrail con Splunk para analizar una cuenta comprometida, accesos a S3 y creación de usuarios para persistencia.</p>
+      <p class="source">Lab realizado en CyberDefenders</p>
+      <a href="posts/aws-raid-analysis.html" aria-label="Ver análisis: Análisis de actividad maliciosa en: AWS Raid">Ver análisis →</a>
+    </article>
+
+    <article class="card" data-case-type="Simulación SOC" data-date="2026-05-02">
+      <h2><a href="posts/soc-simulation.html">Simulación de SOC: detección y análisis de amenazas</a></h2>
+      <p class="date">2 May 2026</p>
+      <div class="tags" aria-label="Temas del post">
+        <span>SOC</span>
+        <span>Wazuh</span>
+        <span>Suricata</span>
+      </div>
+      <p class="card-summary">Laboratorio SOC con Wazuh y Suricata: simulación de actividad desde Kali Linux, detección de alertas y correlación de eventos.</p>
+      <p class="source">Lab realizado en entorno propio</p>
+      <a href="posts/soc-simulation.html" aria-label="Ver análisis: Simulación de SOC: detección y análisis de amenazas">Ver análisis →</a>
+    </article>
+
+    <article class="card" data-case-type="Explotación de vulnerabilidades" data-date="2026-04-30">
+      <h2><a href="posts/retail-breach-analysis.html">Análisis de incidente: Retail Breach</a></h2>
+      <p class="date">30 Abr 2026</p>
+      <div class="tags" aria-label="Temas del post">
+        <span>Network</span>
+        <span>Wireshark</span>
+        <span>XSS</span>
+      </div>
+      <p class="card-summary">Investigación de Retail Breach con Wireshark: reconocimiento de directorios, explotación XSS y reconstrucción de la actividad observada.</p>
+      <p class="source">Lab realizado en CyberDefenders</p>
+      <a href="posts/retail-breach-analysis.html" aria-label="Ver análisis: Análisis de incidente: Retail Breach">Ver análisis →</a>
+    </article>
+
+
+    <article class="card" data-case-type="Explotación de vulnerabilidades" data-date="2026-04-25">
+      <h2><a href="posts/jetbrains-analysis.html">Explotación de vulnerabilidades: JetBrains</a></h2>
+      <p class="date">25 Abr 2026</p>
+      <div class="tags" aria-label="Temas del post">
+        <span>Exploit</span>
+        <span>Web</span>
+        <span>RCE</span>
+      </div>
+      <p class="card-summary">Análisis de una intrusión en JetBrains: tráfico web, bypass de autenticación, creación de usuarios y ejecución remota de comandos.</p>
+      <p class="source">Lab realizado en CyberDefenders</p>
+      <a href="posts/jetbrains-analysis.html" aria-label="Ver análisis: Explotación de vulnerabilidades: JetBrains">Ver análisis →</a>
+    </article>
+
+    <article class="card" data-case-type="Malware y C2" data-date="2026-04-21">
+      <h2><a href="posts/nerisbot-analysis.html">Detección de actividad maliciosa en tráfico de red: NerisBot</a></h2>
+      <p class="date">21 Abr 2026</p>
+      <div class="tags" aria-label="Temas del post">
+        <span>Network</span>
+        <span>IDS</span>
+        <span>Malware</span>
+      </div>
+      <p class="card-summary">Investigación de NerisBot mediante tráfico de red y eventos IDS para identificar comunicaciones sospechosas y descargas maliciosas.</p>
+      <p class="source">Lab realizado en CyberDefenders</p>
+      <a href="posts/nerisbot-analysis.html" aria-label="Ver análisis: Detección de actividad maliciosa en tráfico de red: NerisBot">Ver análisis →</a>
+    </article>
+
+    <article class="card" data-case-type="Phishing" data-date="2026-04-10">
+      <h2><a href="posts/grabthephisher-analysis.html">Análisis de campaña de phishing: GrabThePhisher</a></h2>
+      <p class="date">10 Abr 2026</p>
+      <div class="tags" aria-label="Temas del post">
+        <span>Phishing</span>
+        <span>OSINT</span>
+        <span>Credenciales</span>
+      </div>
+      <p class="card-summary">Análisis de un kit de phishing: código PHP, robo de credenciales y uso de Telegram para recibir información capturada.</p>
+        <p class="source">Lab realizado en CyberDefenders</p>
+        <a href="posts/grabthephisher-analysis.html" aria-label="Ver análisis: Análisis de campaña de phishing: GrabThePhisher">Ver análisis →</a>
+    </article>
+
+    <article class="card" data-case-type="Malware y C2" data-date="2026-04-01">
+      <h2><a href="posts/icedid-analysis.html">Investigación de actividad maliciosa: IcedID</a></h2>
+      <p class="date">01 Abr 2026</p>
+      <div class="tags" aria-label="Temas del post">
+        <span>Malware</span>
+        <span>Network</span>
+        <span>IcedID</span>
+      </div>
+      <p class="card-summary">Investigación de IcedID mediante tráfico de red: descargas sospechosas, indicadores de compromiso y técnicas observadas en el laboratorio.</p>
+        <p class="source">Lab realizado en CyberDefenders</p>
+      <a href="posts/icedid-analysis.html" aria-label="Ver análisis: Investigación de actividad maliciosa: IcedID">Ver análisis →</a>
+    </article>
+
+    <article class="card" data-case-type="Malware y C2" data-date="2026-03-02">
+      <h2><a href="posts/xlmrat-analysis.html">Detección de C2 en tráfico de red: XLMRat</a></h2>
+      <p class="date">02 Mar 2026</p>
+      <div class="tags" aria-label="Temas del post">
+        <span>C2</span>
+        <span>RAT</span>
+        <span>Network</span>
+      </div>
+      <p class="card-summary">Análisis de XLMRat en un PCAP: descargas, reconstrucción de un ejecutable, hash SHA256 y revisión del cargador malicioso.</p>
+      <p class="source">Lab realizado en CyberDefenders</p>
+      <a href="posts/xlmrat-analysis.html" aria-label="Ver análisis: Detección de C2 en tráfico de red: XLMRat">Ver análisis →</a>
+    </article>
+
+  </section>
+
+  <p id="lab-empty" class="filter-empty" hidden>No hay laboratorios de este tipo. Cambia los filtros o usa «Limpiar» para ver el catálogo completo.</p>
+</main>
+
+<footer>
+  <div class="footer-content">
+    <p>© 2026 Jose Luis Reyes | Cybersecurity Blog</p>
+    <nav class="footer-links" aria-label="Enlaces del sitio">
+      <a href="https://github.com/JLReyes13" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="https://www.linkedin.com/in/jos%C3%A9-luis-reyes-791198334" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </nav>
+  </div>
+</footer>
+
+
+
+<script src="script.js"></script>
+</body>
+</html>

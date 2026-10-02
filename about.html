@@ -4,34 +4,57 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="author" content="Jose Luis Reyes">
-  <meta name="description" content="Blog de ciberseguridad enfocado en análisis de malware, tráfico de red y SOC.">
+  <meta name="description" content="Conoce a Jose Luis Reyes, su enfoque en análisis SOC, certificación CC de ISC2 y proyectos de investigación de incidentes y tráfico de red.">
   <title>Sobre mí | Jose Luis Reyes</title>
   <link rel="icon" type="image/png" href="images/general/icono.png">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="canonical" href="https://jlreyes13.github.io/cybersec-blog/about.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Cybersecurity Blog | Jose Luis Reyes">
+  <meta property="og:locale" content="es_MX">
+  <meta property="og:title" content="Sobre mí | Jose Luis Reyes">
+  <meta property="og:description" content="Conoce a Jose Luis Reyes, su enfoque en análisis SOC, certificación CC de ISC2 y proyectos de investigación de incidentes y tráfico de red.">
+  <meta property="og:url" content="https://jlreyes13.github.io/cybersec-blog/about.html">
+  <meta property="og:image" content="https://jlreyes13.github.io/cybersec-blog/images/general/personal_image.png">
+  <meta property="og:image:width" content="610">
+  <meta property="og:image:height" content="608">
+  <meta property="og:image:alt" content="Jose Luis Reyes">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sobre mí | Jose Luis Reyes">
+  <meta name="twitter:description" content="Conoce a Jose Luis Reyes, su enfoque en análisis SOC, certificación CC de ISC2 y proyectos de investigación de incidentes y tráfico de red.">
+  <meta name="twitter:image" content="https://jlreyes13.github.io/cybersec-blog/images/general/personal_image.png">
+  <meta name="twitter:image:alt" content="Jose Luis Reyes">
 </head>
 <body class="scanlines">
-  <canvas id="bg"></canvas>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <canvas id="bg" aria-hidden="true"></canvas>
 
 <header>
   <div class="container header-content">
-    <h1 class="hacker-title-terminal" >Cybersecurity Blog</h1>
-    <nav>
-      <a href="index.html">Inicio</a>
-      <a href="about.html">Sobre mí</a>
-    </nav>
+    <p class="site-brand"><a href="index.html">Cybersecurity Blog<span aria-hidden="true">_</span></a></p>
+    <nav aria-label="Navegación principal">
+        <a href="index.html">Inicio</a>
+        <a href="laboratorios.html">Laboratorios</a>
+        <a href="personal-soc.html">SOC personal</a>
+        <a href="about.html" aria-current="page">Sobre mí</a>
+      </nav>
   </div>
 </header>
 
-<main class="container">
+<main id="contenido" class="container">
 
   <section class="about reveal">
 
     <div class="about-container">
 
       <aside class="about-profile">
-        <img src="images/general/personal_image.png" alt="Foto de perfil" class="about-img">
-        <p class="about-role">Analista SOC Jr. en formación</p>
+        <img src="images/general/personal_image.png" alt="Jose Luis Reyes" class="about-img" width="610" height="608" decoding="async">
+        <p class="about-role">Analista SOC Jr.</p>
+        <nav class="profile-links" aria-label="Contacto profesional">
+          <a href="https://www.linkedin.com/in/jos%C3%A9-luis-reyes-791198334" target="_blank" rel="noopener noreferrer">Contactar en LinkedIn ↗</a>
+          <a href="https://github.com/JLReyes13" target="_blank" rel="noopener noreferrer">Ver GitHub ↗</a>
+        </nav>
         <div class="skill-tags" aria-label="Herramientas y habilidades">
           <span>Wireshark</span>
           <span>Linux</span>
@@ -43,54 +66,30 @@
       </aside>
 
       <div class="about-text">
-        <h2 class="about-title">👨‍💻 Sobre mí</h2>
-  
-        <p>
-          Soy una persona interesada en la ciberseguridad, actualmente en formación con enfoque en el área de Security Operations Center (SOC). 
-          Me interesa analizar el tráfico de red, comprender cómo funcionan los ataques y estudiar el comportamiento detrás de scripts maliciosos.
-        </p>
-  
-        <p>
-          En este blog documento prácticas, laboratorios y análisis técnicos orientados a escenarios reales. 
-          Exploro desde la identificación de actividad sospechosa en red hasta el análisis básico de malware, buscando comprender patrones de ataque, técnicas utilizadas y comportamientos anómalos.
-        </p>
-  
-        <p>
-          Actualmente trabajo con herramientas como Wireshark y entornos Linux, desarrollando habilidades en investigación
-          de incidentes y análisis de evidencias digitales. Además, cuento con conocimientos en python, desarrollo web,
-          bases de datos y redes, lo que complementa mi enfoque en seguridad.
-        </p>
+        <h1 class="about-title">Sobre mí</h1>
 
-        <p>
-          Cuento con la certificación Certified in Cybersecurity (CC) de ISC2, que valida mis conocimientos fundamentales en seguridad de la información, gestión de riesgos y principios de defensa.
-        </p>
-
-        <p>
-          Este espacio funciona como una bitácora técnica de aprendizaje continuo, donde comparto hallazgos, procesos de análisis y lecciones adquiridas durante mi formación.
-        </p>
-  
-        <p>
-          Mi objetivo es seguir creciendo en el área hasta convertirme en analista SOC y enfrentar amenazas reales
-          con un enfoque práctico y analítico.
-        </p>
+        <p>Soy Jose Luis Reyes, analista SOC Jr. en formación. Me enfoco en investigar incidentes, analizar tráfico de red y detectar actividad sospechosa con Wireshark, Linux, Splunk y Wazuh.</p>
+        <p>Documento laboratorios con evidencias y conclusiones prácticas. Complemento mi formación en seguridad con conocimientos de Python, desarrollo web, bases de datos y redes.</p>
+        <p>Cuento con la certificación Certified in Cybersecurity (CC) de ISC2. Mi objetivo es seguir desarrollando experiencia práctica en detección y respuesta a incidentes.</p>
 
         <div class="focus-grid" aria-label="Áreas de enfoque">
           <div>
-            <h3>Enfoque actual</h3>
+            <h2>Enfoque actual</h2>
             <p>Investigación de incidentes, análisis de tráfico de red y detección de actividad sospechosa.</p>
           </div>
           <div>
-            <h3>Bitácora técnica</h3>
+            <h2>Bitácora técnica</h2>
             <p>Laboratorios documentados con evidencias, preguntas de análisis y conclusiones prácticas.</p>
           </div>
         </div>
       </div>
-  
+
     </div>
 
 
   </section>
 
+<section class="credentials" aria-labelledby="credentials-title"><div class="section-heading"><p class="eyebrow">Formación acreditada</p><h2 id="credentials-title">Certificaciones e insignias</h2></div><div class="credentials-grid"><article class="credential-card"><div class="credential-art"><img src="images/certifications/isc2.png" alt="Insignia de Certified in Cybersecurity (CC)" width="672" height="352" loading="lazy" decoding="async"></div><p class="eyebrow">ISC2</p><h3>Certified in Cybersecurity (CC)</h3><a href="https://www.credly.com/badges/aceb6faa-ca5c-422e-ab5e-44e94cd08c2b/public_url" target="_blank" rel="noopener noreferrer" aria-label="Verificar Certified in Cybersecurity (CC) en Credly">Verificar credencial ↗</a></article><article class="credential-card"><div class="credential-art"><img src="images/certifications/google.png" alt="Insignia de Certificado de Ciberseguridad de Google" width="672" height="352" loading="lazy" decoding="async"></div><p class="eyebrow">Google · Coursera</p><h3>Certificado de Ciberseguridad de Google</h3><a href="https://www.credly.com/badges/7166276b-635a-420b-b900-b7356c9e4934/public_url" target="_blank" rel="noopener noreferrer" aria-label="Verificar Certificado de Ciberseguridad de Google en Credly">Verificar credencial ↗</a></article><article class="credential-card"><div class="credential-art"><img src="images/certifications/cisco.png" alt="Insignia de Junior Cybersecurity Analyst Career Path" width="672" height="352" loading="lazy" decoding="async"></div><p class="eyebrow">Cisco</p><h3>Junior Cybersecurity Analyst Career Path</h3><a href="https://www.credly.com/badges/a53baaf5-9526-45b9-955c-83efdd737ddc/public_url" target="_blank" rel="noopener noreferrer" aria-label="Verificar Junior Cybersecurity Analyst Career Path en Credly">Verificar credencial ↗</a></article><article class="credential-card"><div class="credential-art"><img src="images/certifications/oracle.png" alt="Insignia de Oracle Cloud Infrastructure 2025 Certified Foundations Associate" width="552" height="276" loading="lazy" decoding="async"></div><p class="eyebrow">Oracle</p><h3>Oracle Cloud Infrastructure 2025 Certified Foundations Associate</h3><a href="https://catalog-education.oracle.com/ords/certview/sharebadge_m?id=E2CD73AABF363006DD9DCAA637866A28AD65F33FB304C46B6A7B07C5F416599A" target="_blank" rel="noopener noreferrer" aria-label="Verificar Oracle Cloud Infrastructure 2025 Certified Foundations Associate en Oracle">Verificar credencial ↗</a></article></div></section>
 </main>
 
 <footer>
@@ -98,12 +97,13 @@
     <p>© 2026 Jose Luis Reyes | Cybersecurity Blog</p>
     <nav class="footer-links" aria-label="Enlaces del sitio">
       <a href="https://github.com/JLReyes13" target="_blank" rel="noopener noreferrer">GitHub</a>
-      <a href="https://www.linkedin.com/in/tu-perfil" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="https://www.linkedin.com/in/jos%C3%A9-luis-reyes-791198334" target="_blank" rel="noopener noreferrer">LinkedIn</a>
     </nav>
   </div>
 </footer>
 
 <script src="script.js"></script>
+
 
 </body>
 </html>
