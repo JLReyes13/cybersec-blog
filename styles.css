@@ -252,4 +252,4 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); ou
 
 /* Contador de visitas compartido. */
 .footer-content { flex-wrap: wrap; }
-.footer-content .visitor-count { flex-basis: 100%; color: var(--muted); font-size: 12px; }
+.footer-content .visitor-count { order: 1; flex-basis: 100%; color: var(--muted); font-size: 12px; }

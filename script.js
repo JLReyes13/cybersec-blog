@@ -177,8 +177,9 @@
   script.src = 'https://gc.zgo.at/count.js';
   document.head.append(script);
 
-  const footer = document.querySelector('.footer-content');
-  if (!footer) return;
+  const counter = document.querySelector('.visitor-count');
+  if (!counter) return;
+  counter.textContent = 'Visitas al blog: cargando…';
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 8000);
 
@@ -191,15 +192,14 @@
       return response.json();
     })
     .then(data => {
-      if (typeof data.count !== 'string' || !data.count.trim()) return;
-      const counter = document.createElement('p');
-      counter.className = 'visitor-count';
+      if (typeof data.count !== 'string' || !data.count.trim()) {
+        throw new Error('Cifra no disponible');
+      }
       counter.textContent = 'Visitas al blog: ' + data.count;
       counter.title = 'Total registrado por GoatCounter; puede tardar hasta cuatro horas en actualizarse.';
-      footer.append(counter);
     })
     .catch(() => {
-      // Sin cifra pública disponible, se conserva el pie de página habitual.
+      counter.textContent = 'Visitas al blog: no disponible';
     })
     .finally(() => clearTimeout(timeout));
 })();
