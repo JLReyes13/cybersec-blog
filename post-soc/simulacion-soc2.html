@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Jose Luis Reyes">
+  <meta name="description" content="Investigación con Suricata IDS en un laboratorio propio: alertas de escaneo TCP y SQL Injection, análisis de tráfico de DVWA y documentación en un ticket SOC.">
+  <title>Investigación con Suricata IDS | SOC personal</title>
+  <link rel="icon" type="image/png" href="../images/general/icono.png">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="canonical" href="https://jlreyes13.github.io/cybersec-blog/post-soc/simulacion-soc2.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Cybersecurity Blog | Jose Luis Reyes">
+  <meta property="og:locale" content="es_MX">
+  <meta property="og:title" content="Investigación con Suricata IDS | SOC personal">
+  <meta property="og:description" content="Investigación con Suricata IDS en un laboratorio propio: alertas de escaneo TCP y SQL Injection, análisis de tráfico de DVWA y documentación en un ticket SOC.">
+  <meta property="og:url" content="https://jlreyes13.github.io/cybersec-blog/post-soc/simulacion-soc2.html">
+  <meta property="og:image" content="https://jlreyes13.github.io/cybersec-blog/images/images-SOC/post2/foto_6.png">
+  <meta property="og:image:width" content="1301">
+  <meta property="og:image:height" content="519">
+  <meta property="og:image:alt" content="Solicitudes HTTP GET a DVWA analizadas en Wireshark">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Investigación con Suricata IDS | SOC personal">
+  <meta name="twitter:description" content="Investigación con Suricata IDS en un laboratorio propio: alertas de escaneo TCP y SQL Injection, análisis de tráfico de DVWA y documentación en un ticket SOC.">
+  <meta name="twitter:image" content="https://jlreyes13.github.io/cybersec-blog/images/images-SOC/post2/foto_6.png">
+  <meta name="twitter:image:alt" content="Solicitudes HTTP GET a DVWA analizadas en Wireshark">
+</head>
+<body class="scanlines">
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <canvas id="bg" aria-hidden="true"></canvas>
+
+  <header>
+    <div class="container header-content">
+      <p class="site-brand"><a href="../index.html">Cybersecurity Blog<span aria-hidden="true">_</span></a></p>
+      <nav aria-label="Navegación principal">
+        <a href="../index.html">Inicio</a>
+        <a href="../laboratorios.html">Laboratorios</a>
+        <a href="../personal-soc.html" aria-current="location">SOC personal</a>
+        <a href="../about.html">Sobre mí</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido" class="container soc-page">
+    <article class="post reveal">
+  <div class="post-heading">
+    <p class="eyebrow">Laboratorio propio</p>
+    <h1 class="post-title">Detección e investigación de actividad sospechosa con Suricata IDS</h1>
+    <p class="date">09 Oct 2026</p>
+  <div class="tags" aria-label="Temas del análisis">
+      <span>Suricata</span>
+      <span>IDS</span>
+      <span>Network Analysis</span>
+      <span>SQL Injection</span>
+    </div>
+  </div>
+
+
+<h2>Objetivo</h2>
+
+<p>
+  Detectar e investigar actividad sospechosa en un servidor
+  Ubuntu mediante Suricata IDS, utilizando reglas de detección
+  para identificar posibles amenazas. Durante la investigación,
+  se analizarán las alertas generadas y se correlacionarán con
+  los registros del servidor y el tráfico capturado con Wireshark
+  para determinar el posible impacto de la actividad detectada.
+</p>
+
+<section class="lab-environment">
+  <h2>Entorno del laboratorio</h2>
+
+  <p>
+    Para realizar el análisis se utilizó un entorno controlado
+    compuesto por una máquina Kali Linux y un servidor Ubuntu,
+    donde se alojó la aplicación web vulnerable DVWA y se
+    implementó Suricata IDS para monitorear el tráfico de red.
+  </p>
+
+  <div class="lab-diagram">
+
+    <div class="lab-device">
+      <span class="device-icon">💻</span>
+      <h3>Kali Linux</h3>
+      <p>192.168.100.174</p>
+      <small>Equipo de pruebas</small>
+    </div>
+
+    <div class="lab-arrow">
+      <span>Tráfico de red</span>
+      <strong>→</strong>
+    </div>
+
+    <div class="lab-device">
+      <span class="device-icon">🖥️</span>
+      <h3>Ubuntu Server</h3>
+      <p>192.168.100.177</p>
+      <small>DVWA + Suricata IDS</small>
+    </div>
+
+    <div class="lab-arrow">
+      <span>Alertas y captura</span>
+      <strong>→</strong>
+    </div>
+
+    <div class="lab-device">
+      <span class="device-icon">🔎</span>
+      <h3>Análisis SOC</h3>
+      <p>Suricata + Wireshark</p>
+      <small>Alertas, PCAP y logs</small>
+    </div>
+
+  </div>
+</section>
+    <h2>Investigación</h2>
+    <p class="answer" >Anteriormente, se implementó un sistema de detección de intrusiones (IDS) con Suricata para monitorear el tráfico de red e identificar posibles actividades sospechosas dirigidas al servidor y sus servicios.</p>
+            <a class="evidence-link" href="../images/images-SOC/post2/foto_1.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Versión 8.0.7 de Suricata instalada en el servidor"><img class="img-post" src="../images/images-SOC/post2/foto_1.png" alt="Versión 8.0.7 de Suricata instalada en el servidor" width="352" height="41" decoding="async" loading="lazy"></a>
+             <a class="evidence-link" href="../images/images-SOC/post2/foto_2.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Servicio Suricata activo en Ubuntu Server"><img class="img-post" src="../images/images-SOC/post2/foto_2.png" alt="Servicio Suricata activo en Ubuntu Server" width="1282" height="345" decoding="async" loading="lazy"></a>
+
+        <p class="answer" >Se implementaron 10 reglas de detección en Suricata, tomando como referencia los incidentes analizados anteriormente y los riesgos de seguridad web contemplados en OWASP Top 10.</p>
+            <a class="evidence-link" href="../images/images-SOC/post2/foto_3.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Diez reglas personalizadas de detección del SOC en Suricata"><img class="img-post" src="../images/images-SOC/post2/foto_3.png" alt="Diez reglas personalizadas de detección del SOC en Suricata" width="1440" height="760" decoding="async" loading="lazy"></a>
+
+        <p class="answer" >Durante el monitoreo del tráfico de red, se identificaron cuatro alertas generadas por Suricata, relacionadas con un posible escaneo de puertos TCP e intentos de SQL Injection dirigidos al servidor y a la aplicación web. Estas actividades provenían de la dirección IP <code>192.168.100.174</code>, correspondiente al equipo Kali Linux del laboratorio.</p>
+            <a class="evidence-link" href="../images/images-SOC/post2/foto_4.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Cuatro alertas de Suricata por posible escaneo TCP e inyección SQL"><img class="img-post" src="../images/images-SOC/post2/foto_4.png" alt="Cuatro alertas de Suricata por posible escaneo TCP e inyección SQL" width="670" height="56" decoding="async" loading="lazy"></a>
+
+        <p class="answer" >Primero, se revisaron los registros de acceso del servidor Apache para investigar si el intento de SQL Injection tuvo éxito, ya que una posible exposición de información representa un riesgo mayor que el reconocimiento de puertos. Durante el análisis, se identificaron solicitudes HTTP relacionadas con SQL Injection que recibieron una respuesta con código 200 (OK).</p>
+            <a class="evidence-link" href="../images/images-SOC/post2/foto_5.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Registros de Apache con solicitudes a DVWA y respuestas HTTP 200"><img class="img-post" src="../images/images-SOC/post2/foto_5.png" alt="Registros de Apache con solicitudes a DVWA y respuestas HTTP 200" width="957" height="98" decoding="async" loading="lazy"></a>
+
+        <p class="answer" >Enseguida, se procedió a analizar el tráfico de red con Wireshark para investigar si hubo una posible exposición de información. Para ello, se filtró el tráfico de la dirección IP sospechosa, considerando únicamente las solicitudes HTTP con el método GET.</p>
+            <a class="evidence-link" href="../images/images-SOC/post2/foto_6.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Solicitudes HTTP GET de 192.168.100.174 filtradas en Wireshark"><img class="img-post" src="../images/images-SOC/post2/foto_6.png" alt="Solicitudes HTTP GET de 192.168.100.174 filtradas en Wireshark" width="1301" height="519" decoding="async" loading="lazy"></a>
+
+        <p class="answer" >A través del análisis del flujo TCP (Follow TCP Stream) en Wireshark, se logró confirmar la exposición de información, ya que la respuesta HTTP del servidor contenía datos de cinco usuarios de la aplicación DVWA.</p>
+            <a class="evidence-link" href="../images/images-SOC/post2/foto_7.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Respuesta de DVWA con nombres y apellidos de cinco usuarios"><img class="img-post" src="../images/images-SOC/post2/foto_7.png" alt="Respuesta de DVWA con nombres y apellidos de cinco usuarios" width="1001" height="97" decoding="async" loading="lazy"></a>
+
+        <p class="answer" >Por último, se logró correlacionar la hora del posible escaneo de puertos con el tráfico de red capturado en Wireshark. Se identificaron múltiples paquetes TCP con la bandera SYN dirigidos a diferentes puertos del servidor, provenientes de la misma dirección IP que generó las alertas en Suricata.</p>
+            <a class="evidence-link" href="../images/images-SOC/post2/foto_8.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Paquetes TCP SYN dirigidos a distintos puertos de Ubuntu Server"><img class="img-post" src="../images/images-SOC/post2/foto_8.png" alt="Paquetes TCP SYN dirigidos a distintos puertos de Ubuntu Server" width="1004" height="429" decoding="async" loading="lazy"></a>
+            <a class="evidence-link" href="../images/images-SOC/post2/foto_9.png" target="_blank" rel="noopener noreferrer" aria-label="Abrir a tamaño completo en otra pestaña: Conversación IPv4 entre 192.168.100.174 y 192.168.100.177 en Wireshark"><img class="img-post" src="../images/images-SOC/post2/foto_9.png" alt="Conversación IPv4 entre 192.168.100.174 y 192.168.100.177 en Wireshark" width="827" height="69" decoding="async" loading="lazy"></a>
+
+<section class="ticket-evidence" aria-labelledby="ticket-title">
+        <h2 id="ticket-title">Ticket SOC</h2>
+        <p>Con base en la evidencia recopilada durante la investigación, se documentó el incidente en un ticket SOC para registrar los hallazgos, la clasificación y las acciones recomendadas.</p>
+        <figure class="ticket-preview">
+          <a href="../documents/ticket-2.pdf" target="_blank" rel="noopener noreferrer" aria-label="Abrir ticket de escalamiento en PDF">
+            <img src="../images/soc/ticket-2.png" alt="Vista previa del ticket SOC de la investigación con Suricata IDS" width="1132" height="1600" decoding="async" loading="lazy">
+          </a>
+          <figcaption>Vista previa del ticket de escalamiento. Selecciona el documento para verlo a tamaño completo.</figcaption>
+        </figure>
+
+      </section>
+
+      <div class="post-actions">
+        <a href="../personal-soc.html">← Volver a SOC personal</a>
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <p>© 2026 Jose Luis Reyes | Cybersecurity Blog</p>
+      <nav class="footer-links" aria-label="Enlaces del sitio">
+        <a href="https://github.com/JLReyes13" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://www.linkedin.com/in/jos%C3%A9-luis-reyes-791198334" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+</body>
+</html>

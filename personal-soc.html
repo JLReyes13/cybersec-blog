@@ -55,12 +55,25 @@
     <section id="investigaciones" class="soc-investigations reveal" aria-labelledby="investigations-title">
       <div class="section-heading">
         <p class="eyebrow">Escenarios</p>
-        <h2 id="investigations-title">Investigaciones SOC</h2>
+        <h2 id="investigations-title">Proyectos e investigaciones SOC</h2>
       </div>
       <div class="posts">
         <article class="card soc-case-card">
+          <p class="eyebrow">Laboratorio propio · Caso 02</p>
+          <h3><a href="post-soc/simulacion-soc2.html">Detección e investigación de actividad sospechosa con Suricata IDS</a></h3>
+          <p class="date">09 Oct 2026</p>
+          <div class="tags" aria-label="Temas de la investigación">
+            <span>Suricata</span>
+            <span>Wireshark</span>
+            <span>SQL Injection</span>
+          </div>
+          <p>Análisis de alertas de Suricata, registros de Apache y tráfico de DVWA para investigar un posible escaneo de puertos e intentos de inyección SQL.</p>
+          
+          <a href="post-soc/simulacion-soc2.html" aria-label="Ver análisis: Investigación con Suricata IDS">Ver análisis →</a>
+        </article>
+        <article class="card soc-case-card">
           <p class="eyebrow">Laboratorio propio · Caso 01</p>
-          <h3><a href="posts/soc-escalamiento.html">Investigación de actividad sospechosa en SSH</a></h3>
+          <h3><a href="post-soc/soc-escalamiento.html">Investigación de actividad sospechosa en SSH</a></h3>
           <p class="date">30 Sep 2026</p>
           <div class="tags" aria-label="Temas de la investigación">
             <span>Wireshark</span>
@@ -71,8 +84,7 @@
             Investigación de tráfico entre una máquina Kali Linux y un servidor Ubuntu. Se identificaron un posible escaneo de puertos y múltiples intentos fallidos
             de autenticación SSH, correlacionados con los registros <code>auth.log</code> del servidor.
           </p>
-          <p class="case-result"><strong>Resultado:</strong> 70 intentos fallidos de autenticación; no se encontraron accesos exitosos en los registros revisados.</p>
-          <a href="posts/soc-escalamiento.html" aria-label="Ver análisis: Investigación de actividad sospechosa en SSH">Ver análisis →</a>
+          <a href="post-soc/soc-escalamiento.html" aria-label="Ver análisis: Investigación de actividad sospechosa en SSH">Ver análisis →</a>
         </article>
       </div>
     </section>

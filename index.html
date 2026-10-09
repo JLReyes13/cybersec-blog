@@ -44,7 +44,7 @@
   </div>
 </header>
 
-<main id="contenido" class="container">
+<main id="contenido" class="container home-page">
 
   <section class="hero">
     <p class="eyebrow">Jose Luis Reyes · Portafolio de ciberseguridad</p>
@@ -53,14 +53,59 @@
     <div class="hero-actions"><a class="button" href="#proyectos">Explorar proyectos</a><a class="text-link" href="about.html">Sobre mí y certificaciones →</a></div>
   </section>
 
-<section class="featured" id="proyectos" aria-labelledby="featured-title"><div class="section-heading"><h2 id="featured-title">Proyectos destacados</h2></div><div class="posts">
-  <article class="card featured-card"><p class="eyebrow">Investigación · Laboratorio propio</p><h3><a href="posts/soc-escalamiento.html">Detección de intentos de acceso SSH</a></h3><p class="card-summary">Correlación de tráfico y registros: 70 intentos fallidos y documentación de los hallazgos en un ticket SOC.</p><a href="posts/soc-escalamiento.html">Ver investigación →</a></article>
-  <article class="card featured-card"><p class="eyebrow">Monitoreo · Wazuh y Suricata</p><h3><a href="posts/soc-simulation.html">Simulación de un entorno SOC</a></h3><p class="card-summary">Generación de actividad desde Kali Linux y análisis de las alertas del IDS y el SIEM en un laboratorio propio.</p><a href="posts/soc-simulation.html">Ver laboratorio →</a></article>
-  <article class="card featured-card"><p class="eyebrow">Investigación · Splunk</p><h3><a href="posts/shadowroast.html">Compromiso de Active Directory</a></h3><p class="card-summary">Análisis de ShadowRoast: persistencia, herramientas de credenciales y movimiento lateral a partir de eventos.</p><a href="posts/shadowroast.html">Ver análisis →</a></article>
-  </div></section>
-  <div class="catalog-link">
-    <a class="button" href="laboratorios.html">Ver todos los laboratorios →</a>
+<section class="home-section" id="proyectos" aria-labelledby="soc-title">
+  <div class="section-heading home-section-heading">
+    <div><p class="eyebrow">01 · Entorno propio</p><h2 id="soc-title">SOC personal</h2><p>De la alerta a la evidencia: investigaciones documentadas en mi laboratorio.</p></div>
+    <a class="text-link" href="personal-soc.html">Explorar SOC personal →</a>
   </div>
+  <div class="posts home-soc-grid">
+    <article class="card home-case">
+      <p class="eyebrow">Caso 02 · Detección de amenazas</p>
+      <h3><a href="post-soc/simulacion-soc2.html">Investigación con Suricata IDS</a></h3>
+      <p class="date"><time datetime="2026-10-09">09 Oct 2026</time></p>
+      <div class="tags" aria-label="Herramientas y temas"><span>Suricata</span><span>Wireshark</span><span>SQL Injection</span></div>
+      <p class="card-summary">Correlación de alertas del IDS, registros de Apache y tráfico de DVWA para investigar un escaneo de puertos e inyección SQL.</p>
+      <a href="post-soc/simulacion-soc2.html" aria-label="Ver investigación con Suricata IDS">Ver investigación →</a>
+    </article>
+    <article class="card home-case">
+      <p class="eyebrow">Caso 01 · Investigación de accesos</p>
+      <h3><a href="post-soc/soc-escalamiento.html">Actividad sospechosa en SSH</a></h3>
+      <p class="date"><time datetime="2026-09-30">30 Sep 2026</time></p>
+      <div class="tags" aria-label="Herramientas y temas"><span>Wireshark</span><span>SSH</span><span>PCAP</span></div>
+      <p class="card-summary">Análisis de tráfico entre Kali Linux y Ubuntu, correlacionado con los registros de autenticación y documentado en un ticket SOC.</p>
+      <a href="post-soc/soc-escalamiento.html" aria-label="Ver investigación de actividad sospechosa en SSH">Ver investigación →</a>
+    </article>
+  </div>
+</section>
+<section class="home-section home-labs" aria-labelledby="labs-title">
+  <div class="section-heading home-section-heading">
+    <div><p class="eyebrow">02 · Práctica y análisis</p><h2 id="labs-title">Laboratorios destacados</h2><p>Casos de CyberDefenders para profundizar en la investigación de incidentes.</p></div>
+    <a class="text-link" href="laboratorios.html">Ver todos los laboratorios →</a>
+  </div>
+  <div class="posts home-lab-grid">
+    <article class="card">
+      <p class="eyebrow">Active Directory</p>
+      <h3><a href="posts/shadowroast.html">ShadowRoast</a></h3>
+      <div class="tags" aria-label="Herramientas"><span>Splunk</span><span>Sysmon</span></div>
+      <p class="card-summary">Persistencia, herramientas de credenciales y movimiento lateral a partir de eventos de Windows.</p>
+      <a href="posts/shadowroast.html" aria-label="Ver análisis de ShadowRoast">Ver análisis →</a>
+    </article>
+    <article class="card">
+      <p class="eyebrow">Explotación de vulnerabilidades</p>
+      <h3><a href="posts/openwire.html">OpenWire</a></h3>
+      <div class="tags" aria-label="Herramientas y evidencias"><span>Wireshark</span><span>PCAP</span></div>
+      <p class="card-summary">Explotación de Apache ActiveMQ: conexiones C2, descarga de malware y evidencias en el tráfico de red.</p>
+      <a href="posts/openwire.html" aria-label="Ver análisis de OpenWire">Ver análisis →</a>
+    </article>
+    <article class="card">
+      <p class="eyebrow">Reconocimiento de red</p>
+      <h3><a href="posts/t1595.html">T1595</a></h3>
+      <div class="tags" aria-label="Herramientas y evidencias"><span>Wireshark</span><span>PCAP</span></div>
+      <p class="card-summary">Identificación de hosts, puertos y conexiones sospechosas hacia servicios internos mediante análisis de red.</p>
+      <a href="posts/t1595.html" aria-label="Ver análisis de T1595">Ver análisis →</a>
+    </article>
+  </div>
+</section>
 </main>
 
 <footer>

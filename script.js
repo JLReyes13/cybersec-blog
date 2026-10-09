@@ -163,3 +163,43 @@
   mobile.addEventListener('change', () => setOpen(false));
   setOpen(false);
 })();
+
+/* Analítica compartida y contador público del total del blog. */
+(() => {
+  if (!['http:', 'https:'].includes(location.protocol)) return;
+  const local = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
+  if (local) return;
+
+  const endpoint = 'https://luisfo13.goatcounter.com';
+  const script = document.createElement('script');
+  script.dataset.goatcounter = endpoint + '/count';
+  script.async = true;
+  script.src = 'https://gc.zgo.at/count.js';
+  document.head.append(script);
+
+  const footer = document.querySelector('.footer-content');
+  if (!footer) return;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 8000);
+
+  fetch(endpoint + '/counter/TOTAL.json', {
+    signal: controller.signal,
+    credentials: 'omit'
+  })
+    .then(response => {
+      if (!response.ok) throw new Error('Contador no disponible');
+      return response.json();
+    })
+    .then(data => {
+      if (typeof data.count !== 'string' || !data.count.trim()) return;
+      const counter = document.createElement('p');
+      counter.className = 'visitor-count';
+      counter.textContent = 'Visitas al blog: ' + data.count;
+      counter.title = 'Total registrado por GoatCounter; puede tardar hasta cuatro horas en actualizarse.';
+      footer.append(counter);
+    })
+    .catch(() => {
+      // Sin cifra pública disponible, se conserva el pie de página habitual.
+    })
+    .finally(() => clearTimeout(timeout));
+})();
